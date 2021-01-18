@@ -1,12 +1,11 @@
-# OpenSAFELY Research Template
+# OpenSAFELY Absolute Risks repository
 
-This is a template repository for making new OpenSAFELY resarch projects.
+This repository explores absolute risks of various COVID-19 outcomes (mortality, hospitalisation) using the OpenSAFELY data.
 
-# _title goes here_
+# Absolute risks of COVID-19 outcomes
 
-This is the code and configuration for our paper, _name goes here_
+This is the code and configuration for our paper, details of which will be available here. 
 
-* The paper is [here]()
 * Raw model outputs, including charts, crosstabs, etc, are in `released_outputs/`
 * If you are interested in how we defined our variables, take a look at the [study definition](analysis/study_definition.py); this is written in `python`, but non-programmers should be able to understand what is going on there
 * If you are interested in how we defined our code lists, look in the [codelists folder](./codelists/).
