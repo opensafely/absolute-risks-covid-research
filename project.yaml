@@ -5,15 +5,15 @@ expectations:
 
 actions:
 
-  generate_study_population:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition
+  generate_cohort1:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2020-03-01"
     outputs:
       highly_sensitive:
-        cohort: output/input.csv
+        cohort: output/input-2020-03-01.csv
 
   run_model:
     run: stata-mp:latest analysis/model.do
-    needs: [generate_study_population]
+    needs: [generate_cohort1]
     outputs:
       moderately_sensitive:
         log: logs/model.log
