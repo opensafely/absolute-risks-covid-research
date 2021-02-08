@@ -21,6 +21,7 @@ from codelists import *
 
 
 study = StudyDefinition(
+    index_date="2020-03-01",
     default_expectations={
         "date": {"earliest": "1970-01-01", "latest": "today"},
         "rate": "uniform",
@@ -40,24 +41,44 @@ study = StudyDefinition(
     # OUTCOME: Death and whether or not due to COVID
     died_ons_covid_flag_any=patients.with_these_codes_on_death_certificate(
         covid_codelist,
-        on_or_before="index_date",
+        on_or_after="index_date",
         match_only_underlying_cause=False,
         return_expectations={"date": {"earliest": "index_date"}},
     ),
     died_date_ons=patients.died_from_any_cause(
-        on_or_before="index_date",
         returning="date_of_death",
         include_month=True,
         include_day=True,
+        return_expectations={"date": {"earliest": "index_date"}},
     ),
     covid_admission_date=patients.admitted_to_hospital(
-            returning= "date_admitted" ,
-            with_these_diagnoses=covid_codelist,
-            on_or_after="index_date",
-            find_first_match_in_period=True,
-            date_format="YYYY-MM-DD",
-            return_expectations={"date": {"earliest": "index_date"}},
+        returning= "date_admitted" ,
+        with_these_diagnoses=covid_codelist,
+        on_or_after="index_date",
+        find_first_match_in_period=True,
+        date_format="YYYY-MM-DD",
+        return_expectations={"date": {"earliest": "index_date"}},
     ),
+    sgss_first_positive_test_date=patients.with_test_result_in_sgss(
+        pathogen="SARS-CoV-2",
+        test_result="positive",
+        find_first_match_in_period=True,
+        returning="date",
+        date_format="YYYY-MM-DD",
+        return_expectations={"date": {"earliest": "index_date"}},
+    ),
+    covid_positive_test=patients.with_these_clinical_events(
+        covid_positive_test_codes,
+        returning="category",
+        find_first_match_in_period=True,
+        include_date_of_match=True,
+        date_format="YYYY-MM-DD",
+        return_expectations={
+            "date": {"earliest": "index_date"},
+            "category": {"ratios": {"XaLTE":0.5, "Y20d1":0.5}},
+            },
+    ),
+
     ### GEOGRAPHICAL AREA AND DEPRIVATION
     # RURAL/URBAN
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/37
@@ -266,8 +287,10 @@ study = StudyDefinition(
             on_or_before="index_date",
             minimum_age_at_measurement=0,
             include_measurement_date=True,
+            include_month=True,
             return_expectations={
                 "float": {"distribution": "normal", "mean": 35, "stddev": 10},
+                "date": {"latest": "index_date"},
                 "incidence": 0.95,
             },
     ),
