@@ -17,10 +17,10 @@ actions:
       highly_sensitive:
         cohort: output/input_2020-09-01.csv
 
-  run_model:
-    run: stata-mp:latest analysis/model.do
-    needs: [generate_cohort1]
+  clean:
+    run: stata-mp:latest analysis/001_clean_input_data.do
+    needs: [generate_cohort1, generate_cohort2]
     outputs:
       moderately_sensitive:
-        log: logs/model.log
+        log: logs/001_clean_input_data.log
 

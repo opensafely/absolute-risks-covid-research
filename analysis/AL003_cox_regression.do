@@ -1,24 +1,24 @@
 ********************************************************************************
 *
-*	Do-file:		AL004_cox_regression.do
+*	Do-file:		AL003_cox_regression.do
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
 *	Data used:		analysis/
-*						data_base_cohort1.dta 
-*						data_base_cohort2.dta 
-*
-*	Data created:   analysis/
 *							analysis/data_ldanalysis_cohort1.dta
 *							analysis/data_ldanalysis_cohort2.dta
 *
-*	Other output:	Log file:  logs/AL004_cox_regression.log
+*	Data created:	None
+*
+*	Other output:	Log file:  logs/AL003_cox_regression.log
+*					Estimates:	output/
+*									output_hrs_main
+*									output/output_rates
 *
 ********************************************************************************
 *
-*	Purpose:		This do-file creates the variables required for the 
-*					learning disability analysis and creates the survival
-*					settings required for Stata to analyse.
+*	Purpose:		This do-file fits a series of adjusted Cox models for the
+*					learning disability work and obtains the crude rates.
 *  
 ********************************************************************************
 
@@ -30,7 +30,7 @@ set more off
 
 * Open a log file
 cap log close
-log using "logs/AL004_cox_regression", replace t
+log using "logs/AL003_cox_regression", replace t
 
 
 * Categories of various exposures
@@ -82,8 +82,8 @@ forvalues i = 1 (1) 2 {
 		
 			/*  Obtain rates  */
 			
-			strate `exp', 										///
-				output(analysis/data_temp`out'_`exp', replace) 	///
+			strate `exp', 											///
+				output(analysis/data_temp`out'_`exp'_`i', replace) 	///
 				per(10000)
 		
 		
@@ -184,14 +184,14 @@ label values exposure exposure
 drop exp
 
 * Categories of exposure
-gen category     = "No" if expcat==0
-replace category = "Yes" if inlist(exposure, 1, 4, 5) & expcat==1
+gen category     = "No" 					if expcat==0
+replace category = "Yes" 					if inlist(exposure, 1, 4, 5) & expcat==1
 
-replace category = "LDR, mild" if inlist(exposure, 2) & expcat==1
-replace category = "LDR, profound" if inlist(exposure, 2) & expcat==2
+replace category = "LDR, mild" 				if inlist(exposure, 2) & expcat==1
+replace category = "LDR, profound" 			if inlist(exposure, 2) & expcat==2
 
-replace category = "LDR, community" if inlist(exposure, 3) & expcat==1
-replace category = "LDR, residential care" if inlist(exposure, 3) & expcat==2
+replace category = "LDR, community" 		if inlist(exposure, 3) & expcat==1
+replace category = "LDR, residential care" 	if inlist(exposure, 3) & expcat==2
 
 replace category = "DS but not LDR" 		if inlist(exposure, 6) & expcat==1
 replace category = "DS and LDR" 			if inlist(exposure, 6) & expcat==2
@@ -234,36 +234,48 @@ order wave outcome exposure category hr*
 sort wave outcome exposure expcat
 
 * Save data
-save "analysis/output_hrs_main", replace
+outsheet using "output/output_hrs_main", replace
+
 
 
 ***************************
 *  Tidy output for rates  *
 ***************************
 
-foreach out in coviddeath covidadmission composite  {
-	local expnow = "ldr"
-	use "analysis/data_temp`out'_`expnow'", clear
-	gen exp = "`expnow'"
-	foreach exp in ldr_cat ldr_carecat ds cp ldr_group {
-		rename `expnow' `exp'
-		append using "analysis/data_temp`out'_`exp'"
-		erase "analysis/data_temp`out'_`expnow'.dta"
-		replace exp = "`exp'" if exp==""
-		local expnow = "`exp'"
+forvalues i = 1 (1) 2 {
+	foreach out in coviddeath covidadmission composite  {
+		local expnow = "ldr"
+		use "analysis/data_temp`out'_`expnow'_`i'", clear
+		gen exp = "`expnow'"
+		foreach exp in ldr_cat ldr_carecat ds cp ldr_group {
+			rename `expnow' `exp'
+			append using "analysis/data_temp`out'_`exp'_`i'"
+			erase "analysis/data_temp`out'_`expnow'_`i'.dta"
+			replace exp = "`exp'" if exp==""
+			local expnow = "`exp'"
+		}
+		erase "analysis/data_temp`out'_`expnow'_`i'.dta"
+		gen out = "`out'"
+		save "analysis/data_temp`out'_`i'", replace
 	}
-	erase "analysis/data_temp`out'_`expnow'.dta"
-	gen out = "`out'"
-	save "analysis/data_temp`out'", replace
-}
-use "analysis/data_tempcoviddeath"
-append using "analysis/data_tempcovidadmission"
-append using "analysis/data_tempcomposite"
+	use "analysis/data_tempcoviddeath_`i'"
+	append using "analysis/data_tempcovidadmission_`i'"
+	append using "analysis/data_tempcomposite_`i'"
 
-* Delete unneeded datasets
-erase "analysis/data_tempcoviddeath.dta"
-erase "analysis/data_tempcovidadmission.dta"
-erase "analysis/data_tempcomposite.dta"
+	* Delete unneeded datasets
+	erase "analysis/data_tempcoviddeath_`i'.dta"
+	erase "analysis/data_tempcovidadmission_`i'.dta"
+	erase "analysis/data_tempcomposite_`i'.dta"
+
+	gen wave = `i'
+	save "analysis/data_temp_`i'.dta"
+}
+use "analysis/data_temp_1.dta"
+append using "analysis/data_temp_2.dta"
+
+erase "analysis/data_temp_1.dta"
+erase "analysis/data_temp_2.dta"
+
 
 
 * Outcome
@@ -294,8 +306,36 @@ label define exposure 	1 "Learning disability register"	///
 label values exposure exposure						
 drop exp
 
+* Categories of exposure
+rename ldr_group expcat
+gen category     = "No" 					if expcat==0
+replace category = "Yes" 					if inlist(exposure, 1, 4, 5) & expcat==1
+
+replace category = "LDR, mild" 				if inlist(exposure, 2) & expcat==1
+replace category = "LDR, profound" 			if inlist(exposure, 2) & expcat==2
+
+replace category = "LDR, community" 		if inlist(exposure, 3) & expcat==1
+replace category = "LDR, residential care" 	if inlist(exposure, 3) & expcat==2
+
+replace category = "DS but not LDR" 		if inlist(exposure, 6) & expcat==1
+replace category = "DS and LDR" 			if inlist(exposure, 6) & expcat==2
+replace category = "CP but not LDR" 		if inlist(exposure, 6) & expcat==3
+replace category = "CP and LDR" 			if inlist(exposure, 6) & expcat==4
+replace category = "LDR with no DS or CP" 	if inlist(exposure, 6) & expcat==5
+
+* Rename remaining variables
+rename _D events
+rename _Y pyr_10000
+rename _Rate rate_per_10000
+rename _Lower rate_cl
+rename _Upper rate_cu
+
+order wave outcome exposure category events pyr rate*
+sort wave outcome exposure expcat
+
+
 * Save data
-save "analysis/output_rates", replace
+outsheet using "output/output_rates", replace
 
 
 

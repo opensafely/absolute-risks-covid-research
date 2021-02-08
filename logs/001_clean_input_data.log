@@ -3,7 +3,7 @@
        log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/001_clean_input_data.l
 > og
   log type:  text
- opened on:   8 Feb 2021, 18:00:20
+ opened on:   8 Feb 2021, 19:17:40
 
 . 
 . 
@@ -560,8 +560,8 @@
 2020-03-01
 (63 vars, 1,000 obs)
 (0 real changes made)
-(379 differences between num_old and resid_care_old)
-(639 differences between num_ldr and resid_care_ldr)
+(382 differences between num_old and resid_care_old)
+(655 differences between num_ldr and resid_care_ldr)
 STARTING COUNT FROM IMPORT:
   1,000
 DROPPING AGE>105:
@@ -580,217 +580,216 @@ DROPPING IF DIED BEFORE INDEX DATE
 (0 observations deleted)
 variable cf was str7 now str10
 (999 real changes made)
-(804 real changes made)
-(804 missing values generated)
+(801 real changes made)
+(801 missing values generated)
 variable respiratory was str7 now str10
 (999 real changes made)
-(802 real changes made)
-(802 missing values generated)
+(803 real changes made)
+(803 missing values generated)
 variable cardiac was str7 now str10
 (999 real changes made)
-(805 real changes made)
-(805 missing values generated)
+(803 real changes made)
+(803 missing values generated)
 variable hypertension was str7 now str10
-(999 real changes made)
-(801 real changes made)
-(801 missing values generated)
-variable af was str7 now str10
-(999 real changes made)
-(805 real changes made)
-(805 missing values generated)
-variable dvt_pe was str7 now str10
 (999 real changes made)
 (804 real changes made)
 (804 missing values generated)
-variable pad_surg was str7 now str10
+variable af was str7 now str10
 (999 real changes made)
 (802 real changes made)
 (802 missing values generated)
+variable dvt_pe was str7 now str10
+(999 real changes made)
+(803 real changes made)
+(803 missing values generated)
+variable pad_surg was str7 now str10
+(999 real changes made)
+(803 real changes made)
+(803 missing values generated)
 variable amputate was str7 now str10
 (999 real changes made)
-(799 real changes made)
-(799 missing values generated)
+(803 real changes made)
+(803 missing values generated)
 variable diabetes was str7 now str10
+(999 real changes made)
+(802 real changes made)
+(802 missing values generated)
+variable tia was str7 now str10
 (999 real changes made)
 (801 real changes made)
 (801 missing values generated)
-variable tia was str7 now str10
-(999 real changes made)
-(808 real changes made)
-(808 missing values generated)
 variable stroke was str7 now str10
 (999 real changes made)
 (803 real changes made)
 (803 missing values generated)
 variable dementia was str7 now str10
 (999 real changes made)
-(802 real changes made)
-(802 missing values generated)
-variable neuro was str7 now str10
-(999 real changes made)
-(805 real changes made)
-(805 missing values generated)
-variable lung_cancer was str7 now str10
-(999 real changes made)
-(805 real changes made)
-(805 missing values generated)
-variable haem_cancer was str7 now str10
-(999 real changes made)
-(803 real changes made)
-(803 missing values generated)
-variable other_cancer was str7 now str10
-(999 real changes made)
-(802 real changes made)
-(802 missing values generated)
-variable liver was str7 now str10
-(999 real changes made)
-(803 real changes made)
-(803 missing values generated)
-variable transplant_notkidney was str7 now str10
-(999 real changes made)
-(805 real changes made)
-(805 missing values generated)
-variable transplant_kidney was str7 now str10
-(999 real changes made)
 (801 real changes made)
 (801 missing values generated)
-variable dialysis was str7 now str10
+variable neuro was str7 now str10
 (999 real changes made)
 (804 real changes made)
 (804 missing values generated)
+variable lung_cancer was str7 now str10
+(999 real changes made)
+(802 real changes made)
+(802 missing values generated)
+variable haem_cancer was str7 now str10
+(999 real changes made)
+(805 real changes made)
+(805 missing values generated)
+variable other_cancer was str7 now str10
+(999 real changes made)
+(805 real changes made)
+(805 missing values generated)
+variable liver was str7 now str10
+(999 real changes made)
+(804 real changes made)
+(804 missing values generated)
+variable transplant_notkidney was str7 now str10
+(999 real changes made)
+(804 real changes made)
+(804 missing values generated)
+variable transplant_kidney was str7 now str10
+(999 real changes made)
+(808 real changes made)
+(808 missing values generated)
+variable dialysis was str7 now str10
+(999 real changes made)
+(801 real changes made)
+(801 missing values generated)
 variable dysplenia was str7 now str10
 (999 real changes made)
 (805 real changes made)
 (805 missing values generated)
 variable sickle_cell was str7 now str10
 (999 real changes made)
-(804 real changes made)
-(804 missing values generated)
+(802 real changes made)
+(802 missing values generated)
 variable hiv was str7 now str10
 (999 real changes made)
-(801 real changes made)
-(801 missing values generated)
+(807 real changes made)
+(807 missing values generated)
 variable perm_immuno was str7 now str10
 (999 real changes made)
 (802 real changes made)
 (802 missing values generated)
 variable aplastic_anaemia was str7 now str10
 (999 real changes made)
-(995 real changes made)
-(995 missing values generated)
-variable temp_immuno was str7 now str10
-(999 real changes made)
-(996 real changes made)
-(996 missing values generated)
+(998 real changes made)
+(998 missing values generated)
 variable autoimmune was str7 now str10
+(999 real changes made)
+(804 real changes made)
+(804 missing values generated)
+variable ibd was str7 now str10
 (999 real changes made)
 (806 real changes made)
 (806 missing values generated)
-variable ibd was str7 now str10
-(999 real changes made)
-(802 real changes made)
-(802 missing values generated)
 variable fracture was str7 now str10
 (999 real changes made)
-(997 real changes made)
-(997 missing values generated)
+(986 real changes made)
+(986 missing values generated)
 variable smi was str7 now str10
-(999 real changes made)
-(804 real changes made)
-(804 missing values generated)
-variable ldr was str7 now str10
-(999 real changes made)
-(605 real changes made)
-(605 missing values generated)
-variable ld_profound was str7 now str10
 (999 real changes made)
 (802 real changes made)
 (802 missing values generated)
-variable ds was str7 now str10
+variable ldr was str7 now str10
 (999 real changes made)
-(804 real changes made)
-(804 missing values generated)
-variable cp was str7 now str10
+(608 real changes made)
+(608 missing values generated)
+variable ld_profound was str7 now str10
 (999 real changes made)
 (803 real changes made)
 (803 missing values generated)
-(966 missing values generated)
-(14 real changes made)
-(132 real changes made)
-(21 real changes made, 21 to missing)
+variable ds was str7 now str10
+(999 real changes made)
+(801 real changes made)
+(801 missing values generated)
+variable cp was str7 now str10
+(999 real changes made)
+(804 real changes made)
+(804 missing values generated)
+(960 missing values generated)
+(16 real changes made)
+(121 real changes made)
+(24 real changes made, 24 to missing)
 (799 real changes made, 799 to missing)
 (250 real changes made, 250 to missing)
 (250 real changes made, 250 to missing)
-(190 real changes made, 190 to missing)
-(214 real changes made, 214 to missing)
+(184 real changes made, 184 to missing)
+(205 real changes made, 205 to missing)
 variable bmi_child_date_measured was str7 now str10
 (999 real changes made)
 (50 real changes made)
 (50 missing values generated)
-(785 real changes made, 785 to missing)
-(748 real changes made, 748 to missing)
+(794 real changes made, 794 to missing)
+(752 real changes made, 752 to missing)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-   bmi_adult |        785    33.23327    11.64328          0   66.15446
-   bmi_child |        214    33.05862    12.78692          0   54.95944
-(214 missing values generated)
-(214 real changes made)
-(117 real changes made, 117 to missing)
+   bmi_adult |        794    32.77703    12.54188          0   67.79285
+   bmi_child |        205    34.62541    11.02958          0   56.47743
+(205 missing values generated)
+(205 real changes made)
+(143 real changes made, 143 to missing)
 (968 missing values generated)
 (998 real changes made)
-(901 missing values generated)
-(180 real changes made)
-(184 real changes made)
-(109 real changes made)
-(91 real changes made)
-(100 real changes made)
-(121 real changes made)
-(116 real changes made)
+(904 missing values generated)
+(191 real changes made)
+(203 real changes made)
+(105 real changes made)
+(115 real changes made)
+(106 real changes made)
+(104 real changes made)
+(80 real changes made)
 (0 real changes made)
 (rural_urban: 23 changes made)
+Warning: at least one group contains all missing values or contains multiple modes.  Generating missing values for the mode of these
+groups.  Use the missing, maxmode, minmode, or nummode() options to control this behavior.
+(22 missing values generated)
 (23 real changes made)
 (999 differences between rural_urban and rural)
 (asthmacat: 200 changes made)
-(52 real changes made, 52 to missing)
-(52 missing values generated)
+(56 real changes made, 56 to missing)
+(56 missing values generated)
 (999 missing values generated)
-(471 real changes made)
-(476 real changes made)
-(471 real changes made)
-(476 real changes made)
-(261 real changes made)
+(494 real changes made)
+(449 real changes made)
+(494 real changes made)
+(449 real changes made)
+(269 real changes made)
 (999 missing values generated)
-(471 real changes made)
-(476 real changes made)
-(947 real changes made)
-(738 real changes made)
-(52 missing values generated)
-(934 real changes made)
-(471 real changes made)
+(494 real changes made)
+(449 real changes made)
+(943 real changes made)
+(730 real changes made)
+(56 missing values generated)
+(935 real changes made)
+(494 real changes made)
 (0 real changes made)
-(53 real changes made, 53 to missing)
-(76 real changes made, 76 to missing)
+(57 real changes made, 57 to missing)
+(74 real changes made, 74 to missing)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-hba1c_perc~e |        946    5.006791    2.003014   .0351405   11.21712
-hba1c_mmol~l |        923    40.50524    19.34531   .5795707   104.0087
-(53 missing values generated)
-(923 real changes made)
+hba1c_perc~e |        942    5.120511    1.985078   .1839577   10.65956
+hba1c_mmol~l |        925    40.59331    18.28111   .0554168   95.01129
+(57 missing values generated)
+(925 real changes made)
 (0 real changes made)
-(995 real changes made)
+(991 real changes made)
 (799 missing values generated)
-(951 missing values generated)
-(847 missing values generated)
+(958 missing values generated)
+(840 missing values generated)
 (799 missing values generated)
-(799 missing values generated)
+(800 missing values generated)
 file analysis/data_base_cohort1.dta saved
 2020-09-01
 (63 vars, 1,000 obs)
 (0 real changes made)
-(393 differences between num_old and resid_care_old)
-(394 differences between num_ldr and resid_care_ldr)
+(322 differences between num_old and resid_care_old)
+(652 differences between num_ldr and resid_care_ldr)
 STARTING COUNT FROM IMPORT:
   1,000
 DROPPING AGE>105:
@@ -809,214 +808,214 @@ DROPPING IF DIED BEFORE INDEX DATE
 (117 observations deleted)
 variable cf was str7 now str10
 (883 real changes made)
-(712 real changes made)
-(712 missing values generated)
+(707 real changes made)
+(707 missing values generated)
 variable respiratory was str7 now str10
 (883 real changes made)
 (711 real changes made)
 (711 missing values generated)
 variable cardiac was str7 now str10
 (883 real changes made)
-(709 real changes made)
-(709 missing values generated)
+(708 real changes made)
+(708 missing values generated)
 variable hypertension was str7 now str10
-(883 real changes made)
-(702 real changes made)
-(702 missing values generated)
-variable af was str7 now str10
-(883 real changes made)
-(707 real changes made)
-(707 missing values generated)
-variable dvt_pe was str7 now str10
-(883 real changes made)
-(704 real changes made)
-(704 missing values generated)
-variable pad_surg was str7 now str10
-(883 real changes made)
-(711 real changes made)
-(711 missing values generated)
-variable amputate was str7 now str10
-(883 real changes made)
-(709 real changes made)
-(709 missing values generated)
-variable diabetes was str7 now str10
-(883 real changes made)
-(712 real changes made)
-(712 missing values generated)
-variable tia was str7 now str10
-(883 real changes made)
-(702 real changes made)
-(702 missing values generated)
-variable stroke was str7 now str10
-(883 real changes made)
-(713 real changes made)
-(713 missing values generated)
-variable dementia was str7 now str10
 (883 real changes made)
 (715 real changes made)
 (715 missing values generated)
+variable af was str7 now str10
+(883 real changes made)
+(709 real changes made)
+(709 missing values generated)
+variable dvt_pe was str7 now str10
+(883 real changes made)
+(710 real changes made)
+(710 missing values generated)
+variable pad_surg was str7 now str10
+(883 real changes made)
+(718 real changes made)
+(718 missing values generated)
+variable amputate was str7 now str10
+(883 real changes made)
+(707 real changes made)
+(707 missing values generated)
+variable diabetes was str7 now str10
+(883 real changes made)
+(719 real changes made)
+(719 missing values generated)
+variable tia was str7 now str10
+(883 real changes made)
+(706 real changes made)
+(706 missing values generated)
+variable stroke was str7 now str10
+(883 real changes made)
+(709 real changes made)
+(709 missing values generated)
+variable dementia was str7 now str10
+(883 real changes made)
+(712 real changes made)
+(712 missing values generated)
 variable neuro was str7 now str10
 (883 real changes made)
 (710 real changes made)
 (710 missing values generated)
 variable lung_cancer was str7 now str10
 (883 real changes made)
-(711 real changes made)
-(711 missing values generated)
+(713 real changes made)
+(713 missing values generated)
 variable haem_cancer was str7 now str10
 (883 real changes made)
-(702 real changes made)
-(702 missing values generated)
+(716 real changes made)
+(716 missing values generated)
 variable other_cancer was str7 now str10
+(883 real changes made)
+(708 real changes made)
+(708 missing values generated)
+variable liver was str7 now str10
+(883 real changes made)
+(709 real changes made)
+(709 missing values generated)
+variable transplant_notkidney was str7 now str10
+(883 real changes made)
+(722 real changes made)
+(722 missing values generated)
+variable transplant_kidney was str7 now str10
+(883 real changes made)
+(709 real changes made)
+(709 missing values generated)
+variable dialysis was str7 now str10
+(883 real changes made)
+(716 real changes made)
+(716 missing values generated)
+variable dysplenia was str7 now str10
+(883 real changes made)
+(711 real changes made)
+(711 missing values generated)
+variable sickle_cell was str7 now str10
 (883 real changes made)
 (703 real changes made)
 (703 missing values generated)
-variable liver was str7 now str10
+variable hiv was str7 now str10
+(883 real changes made)
+(718 real changes made)
+(718 missing values generated)
+variable perm_immuno was str7 now str10
 (883 real changes made)
 (707 real changes made)
 (707 missing values generated)
-variable transplant_notkidney was str7 now str10
-(883 real changes made)
-(712 real changes made)
-(712 missing values generated)
-variable transplant_kidney was str7 now str10
-(883 real changes made)
-(705 real changes made)
-(705 missing values generated)
-variable dialysis was str7 now str10
-(883 real changes made)
-(701 real changes made)
-(701 missing values generated)
-variable dysplenia was str7 now str10
-(883 real changes made)
-(704 real changes made)
-(704 missing values generated)
-variable sickle_cell was str7 now str10
-(883 real changes made)
-(714 real changes made)
-(714 missing values generated)
-variable hiv was str7 now str10
-(883 real changes made)
-(708 real changes made)
-(708 missing values generated)
-variable perm_immuno was str7 now str10
-(883 real changes made)
-(708 real changes made)
-(708 missing values generated)
 variable aplastic_anaemia was str7 now str10
 (883 real changes made)
 (878 real changes made)
 (878 missing values generated)
 variable temp_immuno was str7 now str10
 (883 real changes made)
-(882 real changes made)
-(882 missing values generated)
+(878 real changes made)
+(878 missing values generated)
 variable autoimmune was str7 now str10
 (883 real changes made)
-(713 real changes made)
-(713 missing values generated)
+(706 real changes made)
+(706 missing values generated)
 variable ibd was str7 now str10
 (883 real changes made)
-(705 real changes made)
-(705 missing values generated)
+(719 real changes made)
+(719 missing values generated)
 variable fracture was str7 now str10
 (883 real changes made)
-(880 real changes made)
-(880 missing values generated)
+(876 real changes made)
+(876 missing values generated)
 variable smi was str7 now str10
-(883 real changes made)
-(709 real changes made)
-(709 missing values generated)
-variable ldr was str7 now str10
-(883 real changes made)
-(712 real changes made)
-(712 missing values generated)
-variable ld_profound was str7 now str10
 (883 real changes made)
 (711 real changes made)
 (711 missing values generated)
+variable ldr was str7 now str10
+(883 real changes made)
+(525 real changes made)
+(525 missing values generated)
+variable ld_profound was str7 now str10
+(883 real changes made)
+(708 real changes made)
+(708 missing values generated)
 variable ds was str7 now str10
 (883 real changes made)
-(710 real changes made)
-(710 missing values generated)
+(702 real changes made)
+(702 missing values generated)
 variable cp was str7 now str10
 (883 real changes made)
-(715 real changes made)
-(715 missing values generated)
-(856 missing values generated)
-(21 real changes made)
-(111 real changes made)
-(18 real changes made, 18 to missing)
-(706 real changes made, 706 to missing)
-(217 real changes made, 217 to missing)
-(217 real changes made, 217 to missing)
-(154 real changes made, 154 to missing)
-(170 real changes made, 170 to missing)
+(702 real changes made)
+(702 missing values generated)
+(845 missing values generated)
+(14 real changes made)
+(106 real changes made)
+(17 real changes made, 17 to missing)
+(708 real changes made, 708 to missing)
+(210 real changes made, 210 to missing)
+(210 real changes made, 210 to missing)
+(166 real changes made, 166 to missing)
+(172 real changes made, 172 to missing)
 variable bmi_child_date_measured was str7 now str10
 (883 real changes made)
-(46 real changes made)
-(46 missing values generated)
-(713 real changes made, 713 to missing)
-(680 real changes made, 680 to missing)
+(42 real changes made)
+(42 missing values generated)
+(711 real changes made, 711 to missing)
+(677 real changes made, 677 to missing)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-   bmi_adult |        713    33.19478    12.33728  -2.620086   62.88037
-   bmi_child |        170     31.3665    12.45191          0   58.22521
-(170 missing values generated)
-(170 real changes made)
-(125 real changes made, 125 to missing)
+   bmi_adult |        711    33.24419    12.09058          0   61.11536
+   bmi_child |        172    32.48191     12.4346          0   66.28869
+(172 missing values generated)
+(172 real changes made)
+(111 real changes made, 111 to missing)
 (852 missing values generated)
 (882 real changes made)
-(806 missing values generated)
-(191 real changes made)
-(178 real changes made)
-(82 real changes made)
-(81 real changes made)
-(108 real changes made)
-(85 real changes made)
+(793 missing values generated)
+(165 real changes made)
+(192 real changes made)
+(86 real changes made)
+(80 real changes made)
+(89 real changes made)
+(100 real changes made)
 (81 real changes made)
 (0 real changes made)
-(rural_urban: 23 changes made)
+(rural_urban: 25 changes made)
 Warning: at least one group contains all missing values or contains multiple modes.  Generating missing values for the mode of these
 groups.  Use the missing, maxmode, minmode, or nummode() options to control this behavior.
-(20 missing values generated)
-(23 real changes made)
-(883 differences between rural_urban and rural)
-(asthmacat: 173 changes made)
-(48 real changes made, 48 to missing)
-(48 missing values generated)
+(76 missing values generated)
+(21 real changes made)
+(879 differences between rural_urban and rural)
+(asthmacat: 174 changes made)
+(45 real changes made, 45 to missing)
+(45 missing values generated)
 (883 missing values generated)
-(425 real changes made)
-(410 real changes made)
-(425 real changes made)
-(410 real changes made)
-(232 real changes made)
+(422 real changes made)
+(416 real changes made)
+(422 real changes made)
+(416 real changes made)
+(239 real changes made)
 (883 missing values generated)
-(425 real changes made)
-(410 real changes made)
-(835 real changes made)
-(651 real changes made)
-(48 missing values generated)
-(826 real changes made)
-(425 real changes made)
+(422 real changes made)
+(416 real changes made)
+(838 real changes made)
+(644 real changes made)
+(45 missing values generated)
+(829 real changes made)
+(422 real changes made)
 (0 real changes made)
-(49 real changes made, 49 to missing)
-(59 real changes made, 59 to missing)
+(55 real changes made, 55 to missing)
+(66 real changes made, 66 to missing)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-hba1c_perc~e |        834    4.947423    1.950932    .069461   11.53121
-hba1c_mmol~l |        824    40.42078    17.98125   .0505364   97.06688
-(49 missing values generated)
-(824 real changes made)
+hba1c_perc~e |        828    5.014897    1.983849   .3515907   11.57545
+hba1c_mmol~l |        817    40.74076    18.93019    .220412   116.6338
+(55 missing values generated)
+(817 real changes made)
 (0 real changes made)
-(881 real changes made)
+(880 real changes made)
 (800 missing values generated)
-(864 missing values generated)
-(819 missing values generated)
+(865 missing values generated)
+(818 missing values generated)
 (704 missing values generated)
-(702 missing values generated)
+(713 missing values generated)
 file analysis/data_base_cohort2.dta saved
 
 . log close
@@ -1024,5 +1023,5 @@ file analysis/data_base_cohort2.dta saved
        log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/001_clean_input_data.l
 > og
   log type:  text
- closed on:   8 Feb 2021, 18:00:20
+ closed on:   8 Feb 2021, 19:17:40
 ---------------------------------------------------------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
        log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/002_create_ld_analysis
 > _dataset.log
   log type:  text
- opened on:   8 Feb 2021, 18:00:22
+ opened on:   8 Feb 2021, 19:17:42
 
 . 
 . * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
@@ -479,8 +479,8 @@
 169. 
 . 
 .         * Learning disabilities
-.         label var ldr                                   "Learning disability or Down's Syndrome"
-170.         label var ld_profound                   "Severe-profound learning disability or Down's Syndrome"
+.         label var ldr                                   "Learning disability"
+170.         label var ld_profound                   "Severe-profound learning disability"
 171.         label var ldr_cat                               "Learning disability split into mild-moderate and severe-profound" 
 172.         label var ldr_carecat                   "Learning disability split into residential vs non-residential setting" 
 173.         label var ds                                    "Down's Syndrome"
@@ -588,48 +588,48 @@
 (Base cohort dataset (wave 1), index date 1st March 2020)
 2020-03-01
 21975
-(979 differences between age and agegroup)
+(982 differences between age and agegroup)
 (999 differences between agegroup and agebroad)
-(979 differences between age and child)
-(179 real changes made, 179 to missing)
-(703 differences between bmi and obese40)
-(296 real changes made)
+(982 differences between age and child)
+(172 real changes made, 172 to missing)
+(684 differences between bmi and obese40)
+(315 real changes made)
 (999 real changes made)
 (0 real changes made)
 (imd: 999 changes made)
 (200 differences between asthmacat and asthma_severe)
-(641 missing values generated)
-(643 missing values generated)
-(823 missing values generated)
-(15 real changes made)
-(5 real changes made)
-(cancerHaem: 803 changes made)
-(21 real changes made)
-(642 missing values generated)
-(52 missing values generated)
-(egfr_cat: 947 changes made)
-(934 differences between egfr_cat and kidneyfn)
-(52 real changes made)
-(174 real changes made)
+(646 missing values generated)
+(650 missing values generated)
+(827 missing values generated)
+(16 real changes made)
+(6 real changes made)
+(cancerHaem: 805 changes made)
+(19 real changes made)
+(649 missing values generated)
+(56 missing values generated)
+(egfr_cat: 943 changes made)
+(936 differences between egfr_cat and kidneyfn)
+(56 real changes made)
 (179 real changes made)
-(356 missing values generated)
-(159 real changes made)
-(62 real changes made)
-(87 real changes made)
-(44 real changes made)
-(198 missing values generated)
-(155 real changes made)
-(43 real changes made)
-(0 real changes made)
+(174 real changes made)
+(353 missing values generated)
+(177 real changes made)
+(60 real changes made)
+(78 real changes made)
+(30 real changes made)
+(197 missing values generated)
+(168 real changes made)
+(28 real changes made)
+(1 real change made)
 
            |      ld_profound
        ldr |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       481        124 |       605 
-         1 |       321         73 |       394 
+         0 |       483        125 |       608 
+         1 |       320         71 |       391 
 -----------+----------------------+----------
-     Total |       802        197 |       999 
-(ldr_cat: 73 changes made)
+     Total |       803        196 |       999 
+(ldr_cat: 71 changes made)
 
            | Residentia
            |  l care,
@@ -637,42 +637,42 @@
            | disability
        ldr |         0 |     Total
 -----------+-----------+----------
-         0 |       605 |       605 
-         1 |       394 |       394 
+         0 |       608 |       608 
+         1 |       391 |       391 
 -----------+-----------+----------
      Total |       999 |       999 
 (ldr: 0 changes made)
-(118 real changes made)
-(77 real changes made)
-(120 real changes made)
-(76 real changes made)
-(255 real changes made)
+(119 real changes made)
+(79 real changes made)
+(111 real changes made)
+(84 real changes made)
+(246 real changes made)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-coviddeath~e |         48   17jul2020    84.62516  07mar2020  03feb2021
+coviddeath~e |         41   09aug2020    84.22446  16mar2020  31jan2021
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-covidadmis~e |        200   08aug2020    100.1284  02mar2020  08feb2021
-(758 missing values generated)
+covidadmis~e |        200   27aug2020    100.6276  02mar2020  08feb2021
+(767 missing values generated)
   0
   0
-(14 real changes made)
+(15 real changes made)
 (0 real changes made)
-(77 real changes made)
-(0 real changes made)
-(1 real change made)
-(4 real changes made)
-(87 real changes made)
+(97 real changes made)
 (0 real changes made)
 (1 real change made)
+(2 real changes made)
+(108 real changes made)
 (0 real changes made)
+(1 real change made)
+(0 real changes made)
+(5 real changes made)
 (3 real changes made)
-(4 real changes made)
-(4 real changes made)
-(13 real changes made)
-(4 real changes made)
+(3 real changes made)
+(10 real changes made)
+(5 real changes made)
 (4 real changes made)
 (999 real changes made)
 (999 real changes made)
@@ -684,48 +684,48 @@ file analysis/data_ldanalysis_cohort1.dta saved
 (Base cohort dataset (wave 2), index date 1st September 2020)
 2020-09-01
 22159
-(878 differences between age and agegroup)
+(872 differences between age and agegroup)
 (883 differences between agegroup and agebroad)
-(878 differences between age and child)
-(145 real changes made, 145 to missing)
-(613 differences between bmi and obese40)
-(270 real changes made)
+(872 differences between age and child)
+(147 real changes made, 147 to missing)
+(625 differences between bmi and obese40)
+(258 real changes made)
 (883 real changes made)
 (0 real changes made)
 (imd: 883 changes made)
-(173 differences between asthmacat and asthma_severe)
-(568 missing values generated)
-(565 missing values generated)
-(717 missing values generated)
-(11 real changes made)
-(4 real changes made)
-(cancerHaem: 702 changes made)
-(20 real changes made)
-(566 missing values generated)
-(48 missing values generated)
-(egfr_cat: 835 changes made)
-(827 differences between egfr_cat and kidneyfn)
-(48 real changes made)
-(162 real changes made)
-(156 real changes made)
-(309 missing values generated)
-(149 real changes made)
-(62 real changes made)
-(76 real changes made)
-(20 real changes made)
-(171 missing values generated)
-(143 real changes made)
-(28 real changes made)
+(174 differences between asthmacat and asthma_severe)
+(561 missing values generated)
+(570 missing values generated)
+(736 missing values generated)
+(17 real changes made)
+(3 real changes made)
+(cancerHaem: 716 changes made)
+(13 real changes made)
+(583 missing values generated)
+(45 missing values generated)
+(egfr_cat: 838 changes made)
+(830 differences between egfr_cat and kidneyfn)
+(45 real changes made)
+(154 real changes made)
+(161 real changes made)
+(304 missing values generated)
+(148 real changes made)
+(47 real changes made)
+(65 real changes made)
+(41 real changes made)
+(164 missing values generated)
+(133 real changes made)
+(31 real changes made)
 (0 real changes made)
 
            |      ld_profound
        ldr |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       584        128 |       712 
-         1 |       127         44 |       171 
+         0 |       425        100 |       525 
+         1 |       283         75 |       358 
 -----------+----------------------+----------
-     Total |       711        172 |       883 
-(ldr_cat: 44 changes made)
+     Total |       708        175 |       883 
+(ldr_cat: 75 changes made)
 
            | Residentia
            |  l care,
@@ -733,42 +733,42 @@ file analysis/data_ldanalysis_cohort1.dta saved
            | disability
        ldr |         0 |     Total
 -----------+-----------+----------
-         0 |       712 |       712 
-         1 |       171 |       171 
+         0 |       525 |       525 
+         1 |       358 |       358 
 -----------+-----------+----------
      Total |       883 |       883 
 (ldr: 0 changes made)
-(147 real changes made)
-(26 real changes made)
-(140 real changes made)
-(28 real changes made)
-(118 real changes made)
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-coviddeath~e |         19   28nov2020    45.33882  08sep2020  08feb2021
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-covidadmis~e |        179   20aug2020    97.92287  03mar2020  08feb2021
-(690 missing values generated)
-  0
-  97
-(19 real changes made)
-(0 real changes made)
+(109 real changes made)
+(72 real changes made)
+(99 real changes made)
 (82 real changes made)
+(219 real changes made)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+coviddeath~e |         18   27nov2020    49.41329  16sep2020  07feb2021
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+covidadmis~e |        179   20aug2020     97.4119  02mar2020  04feb2021
+(689 missing values generated)
+  0
+  95
+(18 real changes made)
+(0 real changes made)
+(84 real changes made)
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
-(96 real changes made)
-(0 real changes made)
-(1 real change made)
+(99 real changes made)
 (0 real changes made)
 (2 real changes made)
 (0 real changes made)
-(1 real change made)
-(3 real changes made)
-(3 real changes made)
+(4 real changes made)
+(0 real changes made)
+(0 real changes made)
+(5 real changes made)
+(7 real changes made)
 (0 real changes made)
 (883 real changes made)
 (883 real changes made)
@@ -784,5 +784,5 @@ file analysis/data_ldanalysis_cohort2.dta saved
        log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/002_create_ld_analysis
 > _dataset.log
   log type:  text
- closed on:   8 Feb 2021, 18:00:22
+ closed on:   8 Feb 2021, 19:17:42
 ---------------------------------------------------------------------------------------------------------------------------------------
