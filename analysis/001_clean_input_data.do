@@ -532,7 +532,7 @@ forvalues i = 1 (1) 2 {
 	sort patient_id
 	order 	patient_id stp* region_7 imd* rural 						///
 			household* resid_care_old resid_care_ldr			 		///
-			age male													///
+			age agegroup child male										///
 			bmi* smoke* 												///
 			ethnicity*													/// 
 			respiratory* asthma* cf* cardiac* diabetes* hba1c* 			///
