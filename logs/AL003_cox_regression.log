@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /workspace/logs/AL003_cox_regression.log
   log type:  text
- opened on:   8 Feb 2021, 19:54:55
+ opened on:   8 Feb 2021, 20:00:25
 
 . 
 . 
@@ -10061,6 +10061,7 @@ xij variables:
 . 
 . * Save data
 . outsheet using "output/output_hrs_main", replace
+(note: file output/output_hrs_main.out not found)
 
 . 
 . 
@@ -10317,5 +10318,5 @@ variable category was str14 now str20
       name:  <unnamed>
        log:  /workspace/logs/AL003_cox_regression.log
   log type:  text
- closed on:   8 Feb 2021, 19:55:21
+ closed on:   8 Feb 2021, 20:00:47
 -------------------------------------------------------------------------------

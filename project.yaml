@@ -45,4 +45,5 @@ actions:
       moderately_sensitive:
         log: logs/AL003_cox_regression.log
         model: output/output_hrs_main.out
+        model2: output/output_rates.out
 
