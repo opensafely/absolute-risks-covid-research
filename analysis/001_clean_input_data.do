@@ -103,7 +103,7 @@ forvalues i = 1 (1) 2 {
 
 
 	* People who had an event prior to our start date
-	* (this should not occur in the real data)
+	* (this should not occur (much) in the real data)
 	noi di "DROPPING IF DIED BEFORE INDEX DATE" 
 	confirm string variable died_date_ons
 	gen temp = date(died_date_ons, "YMD")
