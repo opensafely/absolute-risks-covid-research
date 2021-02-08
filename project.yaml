@@ -38,4 +38,12 @@ actions:
       moderately_sensitive:
         log: logs/AL001_describe_cohort.log
 
+  cox_regression:
+    run: stata-mp:latest analysis/AL003_cox_regression.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL003_cox_regression.log
+        model: output/output_hrs_main.out
+       model: output/output_rates.out
 

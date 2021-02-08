@@ -1,9 +1,8 @@
----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/AL001_describe_cohort.
-> log
+       log:  /workspace/logs/AL001_describe_cohort.log
   log type:  text
- opened on:   8 Feb 2021, 12:08:59
+ opened on:   8 Feb 2021, 19:51:42
 
 . 
 . 
@@ -44,7 +43,12 @@
 .         tab cp ldr, m
  14.         tab cp
  15. 
-.          
+.         tab ldr_group ldr, m
+ 16.         tab ldr_group cp,  m
+ 17.         tab ldr_group ds,  m
+ 18.         tab ldr_group 
+ 19. 
+.         
 . 
 . 
 .         ***********************************
@@ -53,19 +57,19 @@
 . 
 .         * Area
 .         tab region_7,           m
- 16.         tab stp,                        m
- 17. 
+ 20.         tab stp,                        m
+ 21. 
 .         * Age, sex and ethnicity
 .         summ age,                       d 
- 18.         tab agegroup,           m
- 19.         tab child,                      m
- 20.         bysort child: summ age, d
- 21.         tab male,                       m
- 22. 
+ 22.         tab agegroup,           m
+ 23.         tab child,                      m
+ 24.         bysort child: summ age, d
+ 25.         tab male,                       m
+ 26. 
 .         * Ethnicity
 .         tab ethnicity_5,        m
- 23.         tab ethnicity_16,       m
- 24. 
+ 27.         tab ethnicity_16,       m
+ 28. 
 .         
 . 
 . 
@@ -75,14 +79,14 @@
 . 
 .         * Deprivation
 .         tab imd,                        m
- 25. 
+ 29. 
 .         
 .         * Residential care 
 .         tab resid_care_old,     m
- 26.         tab resid_care_ldr,     m
- 27.         sum household_size, d
- 28.         tab resid_care_old resid_care_ldr
- 29.         
+ 30.         tab resid_care_ldr,     m
+ 31.         sum household_size, d
+ 32.         tab resid_care_old resid_care_ldr
+ 33.         
 . 
 .         
 .         
@@ -90,23 +94,23 @@
 .         *  Describe comorbidities (adjusted for)  *
 .         *******************************************
 .         
-.         * BMI, smoking and blood pressure
+.         * BMI
 .         summ bmi,                       d
- 30.         tab obese40,            m
- 31. 
+ 34.         tab obese40,            m
+ 35. 
 .         
 .         * Physical comorbidities, also indicators for vaccination
 .         tab1    asthma_severe cf respiratory            ///
 >                         cardiac  af dvt_pe diabcat                      ///
 >                         liver stroke tia dementia                       ///
 >                         kidneyfn, m
- 32. 
+ 36. 
 .                         
 .         * Indicators for immunosuppression (an indication for vaccination)
-.         tab1    spleen transplant                                       ///
+.         tab1    spleen transplant dialysis                      ///
 >                         immunosuppression cancerHaem            ///
 >                         autoimmune ibd cancerExhaem1yr, m
- 33. 
+ 37. 
 .         
 .         
 .         *****************************************************
@@ -114,73 +118,74 @@
 .         *****************************************************
 .         
 .         tab1 smi neuro dialysis, m
- 34.         
+ 38.         
 . 
 .                         
 .         ********************************
 .         *  Describe outcome variables  *
 .         ********************************
 .                 
-.         summ coviddeath_date otherdeath_date covidadmission_date composite_date, d format
- 35. 
+.         summ coviddeath_date otherdeath_date covidadmission_date composite_da
+> te, d format
+ 39. 
 .         if `i'==1 {     
- 36.                 tab coviddeath1 
- 37.                 tab covidadmission1 
- 38.                 tab coviddeath1 covidadmission1
- 39.                 tab composite1
- 40.         }
- 41.         tab coviddeath2 
- 42.         tab covidadmission2 
- 43.         tab coviddeath2 covidadmission2
- 44.         tab composite2
- 45. 
+ 40.                 tab coviddeath1 
+ 41.                 tab covidadmission1 
+ 42.                 tab coviddeath1 covidadmission1
+ 43.                 tab composite1
+ 44.         }
+ 45.         tab coviddeath2 
+ 46.         tab covidadmission2 
+ 47.         tab coviddeath2 covidadmission2
+ 48.         tab composite2
+ 49. 
 . 
 .         summ stime*
- 46. 
+ 50. 
 . }
 (Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                 White |        600       80.00       80.00
-Asian or Asian British |         84       11.20       91.20
-                 Other |         66        8.80      100.00
+                 White |        167       22.30       22.30
+                 Mixed |        144       19.23       41.52
+Asian or Asian British |        159       21.23       62.75
+                 Black |        137       18.29       81.04
+                 Other |        142       18.96      100.00
 -----------------------+-----------------------------------
-                 Total |        750      100.00
+                 Total |        749      100.00
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                 White |        600       60.00       60.00
-Asian or Asian British |         84        8.40       68.40
-                 Other |         66        6.60       75.00
-               Unknown |        250       25.00      100.00
+                 White |        167       16.72       16.72
+                 Mixed |        144       14.41       31.13
+Asian or Asian British |        159       15.92       47.05
+                 Black |        137       13.71       60.76
+                 Other |        142       14.21       74.97
+               Unknown |        250       25.03      100.00
 -----------------------+-----------------------------------
-                 Total |      1,000      100.00
+                 Total |        999      100.00
 (250 observations deleted)
 
    Learning |
- disability |
-  or Down's |
-   Syndrome |      Freq.     Percent        Cum.
+ disability |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        601       80.13       80.13
-          1 |        149       19.87      100.00
+          0 |        456       60.88       60.88
+          1 |        293       39.12      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 Severe-pro |
      found |
-  learning |
-disability |  Learning disability
- or Down's |  or Down's Syndrome
-  Syndrome |         0          1 |     Total
+  learning |  Learning disability
+disability |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       480        129 |       609 
-         1 |       121         20 |       141 
+         0 |       360        235 |       595 
+         1 |        96         58 |       154 
 -----------+----------------------+----------
-     Total |       601        149 |       750 
+     Total |       456        293 |       749 
 
      Learning |
    disability |
@@ -190,77 +195,131 @@ mild-moderate |
 severe-profou |
            nd |      Freq.     Percent        Cum.
 --------------+-----------------------------------
-   Not on LDR |        601       80.13       80.13
-    LDR, mild |        129       17.20       97.33
-LDR, profound |         20        2.67      100.00
+   Not on LDR |        456       60.88       60.88
+    LDR, mild |        235       31.38       92.26
+LDR, profound |         58        7.74      100.00
 --------------+-----------------------------------
-        Total |        750      100.00
+        Total |        749      100.00
 
   Learning disability |
            split into |
-       residential vs |  Learning disability
-      non-residential |  or Down's Syndrome
+       residential vs |
+      non-residential |  Learning disability
               setting |         0          1 |     Total
 ----------------------+----------------------+----------
-           Not on LDR |       601          0 |       601 
-LDR, not in residenti |         0        149 |       149 
+           Not on LDR |       456          0 |       456 
+LDR, not in residenti |         0        293 |       293 
 ----------------------+----------------------+----------
-                Total |       601        149 |       750 
+                Total |       456        293 |       749 
 
    Learning disability split |
          into residential vs |
      non-residential setting |      Freq.     Percent        Cum.
 -----------------------------+-----------------------------------
-                  Not on LDR |        601       80.13       80.13
-LDR, not in residential care |        149       19.87      100.00
+                  Not on LDR |        456       60.88       60.88
+LDR, not in residential care |        293       39.12      100.00
 -----------------------------+-----------------------------------
-                       Total |        750      100.00
+                       Total |        749      100.00
 
-           |  Learning disability
-    Down's |  or Down's Syndrome
+    Down's |  Learning disability
   Syndrome |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       473        125 |       598 
-         1 |       128         24 |       152 
+         0 |       365        229 |       594 
+         1 |        91         64 |       155 
 -----------+----------------------+----------
-     Total |       601        149 |       750 
+     Total |       456        293 |       749 
 
      Down's |
    Syndrome |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        598       79.73       79.73
-          1 |        152       20.27      100.00
+          0 |        594       79.31       79.31
+          1 |        155       20.69      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
-           |  Learning disability
-  Cerebral |  or Down's Syndrome
+  Cerebral |  Learning disability
      Palsy |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       485        118 |       603 
-         1 |       116         31 |       147 
+         0 |       364        236 |       600 
+         1 |        92         57 |       149 
 -----------+----------------------+----------
-     Total |       601        149 |       750 
+     Total |       456        293 |       749 
 
    Cerebral |
       Palsy |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        603       80.40       80.40
-          1 |        147       19.60      100.00
+          0 |        600       80.11       80.11
+          1 |        149       19.89      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |  Learning disability
+            register |         0          1 |     Total
+---------------------+----------------------+----------
+No DS, no CP, no LDR |       295          0 |       295 
+      DS but not LDR |        69          0 |        69 
+          DS and LDR |         0         53 |        53 
+      CP but not LDR |        92          0 |        92 
+          CP and LDR |         0         57 |        57 
+ LD with no DS or CP |         0        183 |       183 
+---------------------+----------------------+----------
+               Total |       456        293 |       749 
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |    Cerebral Palsy
+            register |         0          1 |     Total
+---------------------+----------------------+----------
+No DS, no CP, no LDR |       295          0 |       295 
+      DS but not LDR |        69          0 |        69 
+          DS and LDR |        53          0 |        53 
+      CP but not LDR |         0         92 |        92 
+          CP and LDR |         0         57 |        57 
+ LD with no DS or CP |       183          0 |       183 
+---------------------+----------------------+----------
+               Total |       600        149 |       749 
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |    Down's Syndrome
+            register |         0          1 |     Total
+---------------------+----------------------+----------
+No DS, no CP, no LDR |       295          0 |       295 
+      DS but not LDR |         0         69 |        69 
+          DS and LDR |         0         53 |        53 
+      CP but not LDR |        70         22 |        92 
+          CP and LDR |        46         11 |        57 
+ LD with no DS or CP |       183          0 |       183 
+---------------------+----------------------+----------
+               Total |       594        155 |       749 
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |
+            register |      Freq.     Percent        Cum.
+---------------------+-----------------------------------
+No DS, no CP, no LDR |        295       39.39       39.39
+      DS but not LDR |         69        9.21       48.60
+          DS and LDR |         53        7.08       55.67
+      CP but not LDR |         92       12.28       67.96
+          CP and LDR |         57        7.61       75.57
+ LD with no DS or CP |        183       24.43      100.00
+---------------------+-----------------------------------
+               Total |        749      100.00
 
   Geographical region (7 |
         England regions) |      Freq.     Percent        Cum.
 -------------------------+-----------------------------------
-                    East |         67        8.93        8.93
-                  London |        152       20.27       29.20
-                Midlands |        238       31.73       60.93
-North East and Yorkshire |        147       19.60       80.53
-              North West |         66        8.80       89.33
-              South East |         80       10.67      100.00
+                    East |         69        9.21        9.21
+                  London |        136       18.16       27.37
+                Midlands |        236       31.51       58.88
+North East and Yorkshire |        159       21.23       80.11
+              North West |         82       10.95       91.05
+              South East |         67        8.95      100.00
 -------------------------+-----------------------------------
-                   Total |        750      100.00
+                   Total |        749      100.00
 
 Sustainabil |
     ity and |
@@ -268,77 +327,77 @@ Transformat |
         ion |
 Partnership |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |         33        4.40        4.40
-          2 |         33        4.40        8.80
-          3 |         29        3.87       12.67
-          4 |         35        4.67       17.33
-          5 |         30        4.00       21.33
-          6 |         27        3.60       24.93
-          7 |         34        4.53       29.47
-          8 |         13        1.73       31.20
-          9 |         20        2.67       33.87
-         10 |         20        2.67       36.53
-         11 |         32        4.27       40.80
-         12 |         24        3.20       44.00
-         13 |         24        3.20       47.20
-         14 |         26        3.47       50.67
-         15 |         24        3.20       53.87
-         16 |         25        3.33       57.20
-         17 |         29        3.87       61.07
-         18 |         18        2.40       63.47
-         19 |         23        3.07       66.53
-         20 |         26        3.47       70.00
-         21 |         18        2.40       72.40
-         22 |         21        2.80       75.20
-         23 |         20        2.67       77.87
-         24 |         15        2.00       79.87
-         25 |         19        2.53       82.40
-         26 |         27        3.60       86.00
-         27 |         19        2.53       88.53
-         28 |         13        1.73       90.27
-         29 |         25        3.33       93.60
-         30 |         26        3.47       97.07
-         31 |         22        2.93      100.00
+          1 |         44        5.87        5.87
+          2 |         31        4.14       10.01
+          3 |         31        4.14       14.15
+          4 |         26        3.47       17.62
+          5 |         29        3.87       21.50
+          6 |         30        4.01       25.50
+          7 |         32        4.27       29.77
+          8 |         13        1.74       31.51
+          9 |         20        2.67       34.18
+         10 |         13        1.74       35.91
+         11 |         25        3.34       39.25
+         12 |         24        3.20       42.46
+         13 |         25        3.34       45.79
+         14 |         27        3.60       49.40
+         15 |         22        2.94       52.34
+         16 |         23        3.07       55.41
+         17 |         24        3.20       58.61
+         18 |         18        2.40       61.01
+         19 |         21        2.80       63.82
+         20 |         25        3.34       67.16
+         21 |          9        1.20       68.36
+         22 |         27        3.60       71.96
+         23 |         19        2.54       74.50
+         24 |         17        2.27       76.77
+         25 |         25        3.34       80.11
+         26 |         29        3.87       83.98
+         27 |         24        3.20       87.18
+         28 |         25        3.34       90.52
+         29 |         27        3.60       94.13
+         30 |         20        2.67       96.80
+         31 |         24        3.20      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
                          Age (years)
 -------------------------------------------------------------
       Percentiles      Smallest
  1%            1              0
  5%            4              0
-10%          7.5              0       Obs                 750
-25%           21              1       Sum of Wgt.         750
+10%            7              0       Obs                 749
+25%           19              0       Sum of Wgt.         749
 
-50%           41                      Mean             41.156
-                        Largest       Std. Dev.      24.12016
-75%           61             93
-90%           73             93       Variance        581.782
-95%           81             97       Skewness       .0617928
-99%           91             99       Kurtosis       1.987869
+50%           39                      Mean           40.16956
+                        Largest       Std. Dev.      24.26479
+75%           59             94
+90%           73             94       Variance         588.78
+95%           81             96       Skewness        .154436
+99%           93            103       Kurtosis       2.050146
 
 Grouped age |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-      0-<16 |        143       19.07       19.07
-     16-<45 |        259       34.53       53.60
-     45-<65 |        200       26.67       80.27
-     65-<70 |         45        6.00       86.27
-     70-<75 |         51        6.80       93.07
-        80+ |         12        1.60       94.67
-          7 |         40        5.33      100.00
+      0-<16 |        157       20.96       20.96
+     16-<45 |        265       35.38       56.34
+     45-<65 |        185       24.70       81.04
+     65-<70 |         41        5.47       86.52
+     70-<75 |         38        5.07       91.59
+     75-<80 |         20        2.67       94.26
+        80+ |         43        5.74      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
       Child |
   indicator |
 (<16 years) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        607       80.93       80.93
-          1 |        143       19.07      100.00
+          0 |        592       79.04       79.04
+          1 |        157       20.96      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -> child = 0
 
                          Age (years)
@@ -346,17 +405,17 @@ Grouped age |      Freq.     Percent        Cum.
       Percentiles      Smallest
  1%           16             16
  5%           19             16
-10%           23             16       Obs                 607
-25%           32             16       Sum of Wgt.         607
+10%           23             16       Obs                 592
+25%           33             16       Sum of Wgt.         592
 
-50%           49                      Mean           49.15157
-                        Largest       Std. Dev.       19.4675
-75%           64             93
-90%           74             93       Variance       378.9836
-95%           82             97       Skewness       .1523597
-99%           91             99       Kurtosis        2.11194
+50%           48                      Mean           48.80743
+                        Largest       Std. Dev.      19.58037
+75%           63             94
+90%           75             94       Variance       383.3909
+95%           82             96       Skewness       .2534162
+99%           94            103       Kurtosis       2.200917
 
----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -> child = 1
 
                          Age (years)
@@ -364,84 +423,86 @@ Grouped age |      Freq.     Percent        Cum.
       Percentiles      Smallest
  1%            0              0
  5%            1              0
-10%            1              0       Obs                 143
-25%            4              1       Sum of Wgt.         143
+10%            1              0       Obs                 157
+25%            4              0       Sum of Wgt.         157
 
-50%            7                      Mean           7.216783
-                        Largest       Std. Dev.       4.25282
-75%           11             15
-90%           13             15       Variance       18.08648
-95%           14             15       Skewness       .1039365
-99%           15             15       Kurtosis        1.97626
+50%            7                      Mean           7.598726
+                        Largest       Std. Dev.      4.456139
+75%           12             15
+90%           13             15       Variance       19.85718
+95%           15             15       Skewness       .0194949
+99%           15             15       Kurtosis       1.777297
 
 
        Male |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        400       53.33       53.33
-          1 |        350       46.67      100.00
+          0 |        383       51.13       51.13
+          1 |        366       48.87      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                 White |        600       80.00       80.00
-Asian or Asian British |         84       11.20       91.20
-                 Other |         66        8.80      100.00
+                 White |        167       22.30       22.30
+                 Mixed |        144       19.23       41.52
+Asian or Asian British |        159       21.23       62.75
+                 Black |        137       18.29       81.04
+                 Other |        142       18.96      100.00
 -----------------------+-----------------------------------
-                 Total |        750      100.00
+                 Total |        749      100.00
 
         Ethnicity in 16 categories |      Freq.     Percent        Cum.
 -----------------------------------+-----------------------------------
-          British or Mixed British |        459       61.20       61.20
-                       Other White |         53        7.07       68.27
-             White + Black African |         44        5.87       74.13
-                           Unknown |        194       25.87      100.00
+          British or Mixed British |        447       59.68       59.68
+                       Other White |         66        8.81       68.49
+             White + Black African |         52        6.94       75.43
+                           Unknown |        184       24.57      100.00
 -----------------------------------+-----------------------------------
-                             Total |        750      100.00
+                             Total |        749      100.00
 
         Index of |
         Multiple |
      Deprivation |
            (IMD) |      Freq.     Percent        Cum.
 -----------------+-----------------------------------
-1 least deprived |        517       68.93       68.93
-               4 |        160       21.33       90.27
- 5 most deprived |         73        9.73      100.00
+1 least deprived |        528       70.49       70.49
+               4 |        136       18.16       88.65
+ 5 most deprived |         85       11.35      100.00
 -----------------+-----------------------------------
-           Total |        750      100.00
+           Total |        749      100.00
 
 Residential |
       care, |
     elderly |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        750      100.00      100.00
+          0 |        749      100.00      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 Residential |
       care, |
    learning |
  disability |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        750      100.00      100.00
+          0 |        749      100.00      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
                        Household size
 -------------------------------------------------------------
       Percentiles      Smallest
  1%            0              0
  5%            1              0
-10%            1              0       Obs                 750
-25%            2              0       Sum of Wgt.         750
+10%            1              0       Obs                 749
+25%            2              0       Sum of Wgt.         749
 
-50%            3                      Mean           2.550667
-                        Largest       Std. Dev.      1.078727
+50%            3                      Mean           2.538051
+                        Largest       Std. Dev.      1.044572
 75%            3              5
-90%            4              5       Variance       1.163651
-95%            4              5       Skewness       .1212511
-99%            5              6       Kurtosis       2.793443
+90%            4              5       Variance        1.09113
+95%            4              5       Skewness       .0574156
+99%            5              6       Kurtosis       2.805717
 
            | Residentia
            |  l care,
@@ -449,43 +510,43 @@ Residentia |  learning
    l care, | disability
    elderly |         0 |     Total
 -----------+-----------+----------
-         0 |       750 |       750 
+         0 |       749 |       749 
 -----------+-----------+----------
-     Total |       750 |       750 
+     Total |       749 |       749 
 
                 Body Mass Index (BMI, kg/m2)
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     16.70881       15.36431
- 5%     20.36102       15.94435
-10%     23.58664       16.00525       Obs                 520
-25%     27.96056       16.03615       Sum of Wgt.         520
+ 1%     16.27769       15.46317
+ 5%     20.81009       15.52695
+10%     23.75503       15.61556       Obs                 513
+25%     28.10672       15.77385       Sum of Wgt.         513
 
-50%     33.33536                      Mean           33.70194
-                        Largest       Std. Dev.      7.882452
-75%     39.69206       49.30637
-90%     44.68708       49.34253       Variance       62.13305
-95%     46.90249       49.41836       Skewness       -.037428
-99%     48.88201       49.78553       Kurtosis       2.320936
+50%     33.84454                      Mean            33.8854
+                        Largest       Std. Dev.      7.910842
+75%     40.12244       49.49587
+90%     44.12358       49.51208       Variance       62.58142
+95%     46.84472       49.54319       Skewness      -.0875456
+99%     49.39231        49.9908       Kurtosis       2.301457
 
 Evidence of |
      BMI>40 |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        627       83.60       83.60
-          1 |        123       16.40      100.00
+          0 |        618       82.51       82.51
+          1 |        131       17.49      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of asthma_severe  
 
      Severe |
      asthma |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        147       19.60       19.60
-          1 |          9        1.20       20.80
-          . |        594       79.20      100.00
+          0 |        139       18.56       18.56
+          1 |         14        1.87       20.43
+          . |        596       79.57      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of cf  
 
@@ -493,10 +554,10 @@ Evidence of |
 Fibrosis (& |
    related) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        600       80.00       80.00
-          1 |        150       20.00      100.00
+          0 |        599       79.97       79.97
+          1 |        150       20.03      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of respiratory  
 
@@ -505,20 +566,20 @@ Respiratory |
      (excl. |
     asthma) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        609       81.20       81.20
-          1 |        141       18.80      100.00
+          0 |        594       79.31       79.31
+          1 |        155       20.69      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of cardiac  
 
       Heart |
     disease |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        593       79.07       79.07
-          1 |        157       20.93      100.00
+          0 |        591       78.91       78.91
+          1 |        158       21.09      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of af  
 
@@ -526,10 +587,10 @@ Respiratory |
 fibrillatio |
           n |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        594       79.20       79.20
-          1 |        156       20.80      100.00
+          0 |        607       81.04       81.04
+          1 |        142       18.96      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of dvt_pe  
 
@@ -538,39 +599,40 @@ thrombosis/ |
   pulmonary |
    embolism |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        614       81.87       81.87
-          1 |        136       18.13      100.00
+          0 |        592       79.04       79.04
+          1 |        157       20.96      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of diabcat  
 
                   Diabetes |      Freq.     Percent        Cum.
 ---------------------------+-----------------------------------
-               No diabetes |        590       78.67       78.67
-       Controlled diabetes |        128       17.07       95.73
-     Uncontrolled diabetes |         32        4.27      100.00
+               No diabetes |        600       80.11       80.11
+       Controlled diabetes |        126       16.82       96.93
+     Uncontrolled diabetes |         22        2.94       99.87
+Diabetes, no hba1c measure |          1        0.13      100.00
 ---------------------------+-----------------------------------
-                     Total |        750      100.00
+                     Total |        749      100.00
 
 -> tabulation of liver  
 
       Liver |
     disease |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        601       80.13       80.13
-          1 |        149       19.87      100.00
+          0 |        597       79.71       79.71
+          1 |        152       20.29      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of stroke  
 
      Stroke |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        609       81.20       81.20
-          1 |        141       18.80      100.00
+          0 |        603       80.51       80.51
+          1 |        146       19.49      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of tia  
 
@@ -578,29 +640,29 @@ thrombosis/ |
    ischemic |
      attack |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        606       80.80       80.80
-          1 |        144       19.20      100.00
+          0 |        607       81.04       81.04
+          1 |        142       18.96      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of dementia  
 
    Dementia |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        608       81.07       81.07
-          1 |        142       18.93      100.00
+          0 |        605       80.77       80.77
+          1 |        144       19.23      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of kidneyfn  
 
        Kidney function |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                  None |        487       64.93       64.93
-Stage 3a/3b egfr 30-60 |          4        0.53       65.47
-     Stage 4/5 egfr<30 |        259       34.53      100.00
+                  None |        483       64.49       64.49
+Stage 3a/3b egfr 30-60 |          5        0.67       65.15
+     Stage 4/5 egfr<30 |        261       34.85      100.00
 -----------------------+-----------------------------------
-                 Total |        750      100.00
+                 Total |        749      100.00
 
 -> tabulation of spleen  
 
@@ -610,10 +672,10 @@ Stage 3a/3b egfr 30-60 |          4        0.53       65.47
      sickle |
       cell) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        489       65.20       65.20
-          1 |        261       34.80      100.00
+          0 |        493       65.82       65.82
+          1 |        256       34.18      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of transplant  
 
@@ -621,10 +683,19 @@ Stage 3a/3b egfr 30-60 |          4        0.53       65.47
  transplant |
   recipient |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        482       64.27       64.27
-          1 |        268       35.73      100.00
+          0 |        492       65.69       65.69
+          1 |        257       34.31      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
+
+-> tabulation of dialysis  
+
+   Dialysis |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        610       81.44       81.44
+          1 |        139       18.56      100.00
+------------+-----------------------------------
+      Total |        749      100.00
 
 -> tabulation of immunosuppression  
 
@@ -636,22 +707,22 @@ Stage 3a/3b egfr 30-60 |          4        0.53       65.47
 immunosuppr |
      ession |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        487       64.93       64.93
-          1 |        263       35.07      100.00
+          0 |        497       66.36       66.36
+          1 |        252       33.64      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of cancerHaem  
 
 Haematologica |
      l cancer |      Freq.     Percent        Cum.
 --------------+-----------------------------------
-        Never |        606       80.80       80.80
-    Last year |          4        0.53       81.33
-2-5 years ago |         10        1.33       82.67
-     5+ years |        130       17.33      100.00
+        Never |        603       80.51       80.51
+    Last year |          6        0.80       81.31
+2-5 years ago |          9        1.20       82.51
+     5+ years |        131       17.49      100.00
 --------------+-----------------------------------
-        Total |        750      100.00
+        Total |        749      100.00
 
 -> tabulation of autoimmune  
 
@@ -660,19 +731,19 @@ Haematologica |
 (autoimmune |
    disease) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        597       79.60       79.60
-          1 |        153       20.40      100.00
+          0 |        603       80.51       80.51
+          1 |        146       19.49      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of ibd  
 
         IBD |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        604       80.53       80.53
-          1 |        146       19.47      100.00
+          0 |        601       80.24       80.24
+          1 |        148       19.76      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of cancerExhaem1yr  
 
@@ -680,10 +751,10 @@ Haematologica |
 haematologi |
  cal cancer |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        744       99.20       99.20
-          1 |          6        0.80      100.00
+          0 |        745       99.47       99.47
+          1 |          4        0.53      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of smi  
 
@@ -691,10 +762,10 @@ haematologi |
      mental |
     illness |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        598       79.73       79.73
-          1 |        152       20.27      100.00
+          0 |        610       81.44       81.44
+          1 |        139       18.56      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of neuro  
 
@@ -704,80 +775,80 @@ haematologi |
 stroke/deme |
        ntia |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        601       80.13       80.13
-          1 |        149       19.87      100.00
+          0 |        603       80.51       80.51
+          1 |        146       19.49      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
 -> tabulation of dialysis  
 
    Dialysis |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        622       82.93       82.93
-          1 |        128       17.07      100.00
+          0 |        610       81.44       81.44
+          1 |        139       18.56      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
                  Date of ONS COVID-19 death
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    11mar2020      11mar2020
- 5%    11mar2020      11mar2020
-10%    17mar2020      17mar2020       Obs                  33
-25%    30apr2020      17mar2020       Sum of Wgt.          33
+ 1%    16mar2020      16mar2020
+ 5%    06apr2020      06apr2020
+10%    08apr2020      08apr2020       Obs                  23
+25%    28may2020      18apr2020       Sum of Wgt.          23
 
-50%    21jun2020                      Mean          30jun2020
-                        Largest       Std. Dev.      87.25125
-75%    28aug2020      30nov2020
-90%    30nov2020      01dec2020       Variance        7612.78
-95%    12dec2020      12dec2020       Skewness       .5749788
-99%    05jan2021      05jan2021       Kurtosis        2.42199
+50%    11jul2020                      Mean          24jul2020
+                        Largest       Std. Dev.      90.80714
+75%    14oct2020      06nov2020
+90%    29nov2020      29nov2020       Variance       8245.937
+95%    08jan2021      08jan2021       Skewness       .4774319
+99%    21jan2021      21jan2021       Kurtosis       2.183462
 
                Date of ONS non-COVID-19 death
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    04mar2020      03mar2020
- 5%    11mar2020      04mar2020
-10%    03apr2020      04mar2020       Obs                 116
-25%    16may2020      07mar2020       Sum of Wgt.         116
+ 1%    11mar2020      04mar2020
+ 5%    23mar2020      11mar2020
+10%    03apr2020      14mar2020       Obs                 121
+25%    04jun2020      15mar2020       Sum of Wgt.         121
 
-50%    03aug2020                      Mean          31jul2020
-                        Largest       Std. Dev.       91.0055
-75%    24sep2020      15jan2021
-90%    18dec2020      16jan2021       Variance       8282.002
-95%    14jan2021      19jan2021       Skewness       .2295431
-99%    19jan2021      08feb2021       Kurtosis        2.18361
+50%    27aug2020                      Mean          25aug2020
+                        Largest       Std. Dev.      102.1567
+75%    20nov2020      06feb2021
+90%    23jan2021      07feb2021       Variance          10436
+95%    30jan2021      08feb2021       Skewness      -.0129624
+99%    08feb2021      08feb2021       Kurtosis       1.769583
 
              Date of COVID-19 hospital admission
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    08mar2020      03mar2020
- 5%    16mar2020      08mar2020
-10%    07apr2020      10mar2020       Obs                 151
-25%    23may2020      11mar2020       Sum of Wgt.         151
+ 1%    04mar2020      02mar2020
+ 5%    17mar2020      04mar2020
+10%    18apr2020      09mar2020       Obs                 151
+25%    12jun2020      10mar2020       Sum of Wgt.         151
 
-50%    29aug2020                      Mean          27aug2020
-                        Largest       Std. Dev.      103.5117
-75%    30nov2020      03feb2021
-90%    09jan2021      05feb2021       Variance       10714.67
-95%    29jan2021      06feb2021       Skewness       -.076918
-99%    06feb2021      08feb2021       Kurtosis       1.703252
+50%    29aug2020                      Mean          29aug2020
+                        Largest       Std. Dev.      98.28003
+75%    21nov2020      02feb2021
+90%    17jan2021      03feb2021       Variance       9658.965
+95%    23jan2021      07feb2021       Skewness      -.0712734
+99%    07feb2021      08feb2021       Kurtosis       1.900526
 
        Date of first of COVID-19 hospital admission or
                             death
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    08mar2020      03mar2020
- 5%    15mar2020      08mar2020
-10%    24mar2020      10mar2020       Obs                 179
-25%    16may2020      11mar2020       Sum of Wgt.         179
+ 1%    04mar2020      02mar2020
+ 5%    17mar2020      04mar2020
+10%    08apr2020      09mar2020       Obs                 169
+25%    01jun2020      10mar2020       Sum of Wgt.         169
 
-50%    13aug2020                      Mean          15aug2020
-                        Largest       Std. Dev.       103.207
-75%    25nov2020      03feb2021
-90%    08jan2021      05feb2021       Variance       10651.69
-95%    25jan2021      06feb2021       Skewness       .0733555
-99%    06feb2021      08feb2021       Kurtosis       1.726846
+50%    15aug2020                      Mean          23aug2020
+                        Largest       Std. Dev.      97.90048
+75%    16nov2020      02feb2021
+90%    16jan2021      03feb2021       Variance       9584.504
+95%    22jan2021      07feb2021       Skewness       .0078538
+99%    07feb2021      08feb2021       Kurtosis       1.876689
 
    COVID-19 |
       death |
@@ -785,10 +856,10 @@ stroke/deme |
 censored 31 |
      Aug 20 |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        723       96.40       96.40
-          1 |         27        3.60      100.00
+          0 |        733       97.86       97.86
+          1 |         16        2.14      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
    COVID-19 |
    hospital |
@@ -796,10 +867,10 @@ censored 31 |
 censored 31 |
      Aug 20 |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        678       90.40       90.40
-          1 |         72        9.60      100.00
+          0 |        675       90.12       90.12
+          1 |         74        9.88      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
   COVID-19 |
      death |   COVID-19 hospital
@@ -807,10 +878,10 @@ censored 31 |
   censored |       31 Aug 20
  31 Aug 20 |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       653         70 |       723 
-         1 |        25          2 |        27 
+         0 |       661         72 |       733 
+         1 |        14          2 |        16 
 -----------+----------------------+----------
-     Total |       678         72 |       750 
+     Total |       675         74 |       749 
 
    COVID-19 |
    hospital |
@@ -819,10 +890,10 @@ censored 31 |
 censored 31 |
      Aug 20 |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        649       86.53       86.53
-          1 |        101       13.47      100.00
+          0 |        659       87.98       87.98
+          1 |         90       12.02      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
    COVID-19 |
       death |
@@ -830,10 +901,10 @@ censored 31 |
    censored |
 latest date |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        718       95.73       95.73
-          1 |         32        4.27      100.00
+          0 |        726       96.93       96.93
+          1 |         23        3.07      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
    COVID-19 |
    hospital |
@@ -841,10 +912,10 @@ latest date |      Freq.     Percent        Cum.
    censored |
 latest date |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        628       83.73       83.73
-          1 |        122       16.27      100.00
+          0 |        613       81.84       81.84
+          1 |        136       18.16      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
   COVID-19 |
      death |
@@ -853,10 +924,10 @@ latest date |      Freq.     Percent        Cum.
     latest |      latest date
       date |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       599        119 |       718 
-         1 |        29          3 |        32 
+         0 |       593        133 |       726 
+         1 |        20          3 |        23 
 -----------+----------------------+----------
-     Total |       628        122 |       750 
+     Total |       613        136 |       749 
 
    COVID-19 |
    hospital |
@@ -865,63 +936,63 @@ latest date |      Freq.     Percent        Cum.
    censored |
 latest date |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        592       78.93       78.93
-          1 |        158       21.07      100.00
+          0 |        586       78.24       78.24
+          1 |        163       21.76      100.00
 ------------+-----------------------------------
-      Total |        750      100.00
+      Total |        749      100.00
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-stime_cov~h1 |        750   -21801.81    36.15857     -21971     -21790
-stime_cov~n1 |        750   -21810.36    45.82477     -21971     -21790
-stime_comp~1 |        750   -21810.36    45.82477     -21971     -21790
-stime_cov~h2 |        750     272.548    74.49983          3        304
-stime_cov~n2 |        750    249.5347    91.04799          3        304
+stime_cov~h1 |        749    174.5007    32.22641          4        184
+stime_cov~n1 |        749    166.4179    42.31133          2        184
+stime_comp~1 |        749    166.4179    42.31133          2        184
+stime_cov~h2 |        749    299.8385    75.72476          4        330
+stime_cov~n2 |        749    273.1495    95.96439          2        330
 -------------+---------------------------------------------------------
-stime_comp~2 |        750    249.5347    91.04799          3        304
+stime_comp~2 |        749    273.1495    95.96439          2        330
 (Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                 White |        534       80.18       80.18
-Asian or Asian British |         60        9.01       89.19
-                 Other |         72       10.81      100.00
+                 White |        127       18.87       18.87
+                 Mixed |        140       20.80       39.67
+Asian or Asian British |        141       20.95       60.62
+                 Black |        135       20.06       80.68
+                 Other |        130       19.32      100.00
 -----------------------+-----------------------------------
-                 Total |        666      100.00
+                 Total |        673      100.00
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                 White |        534       60.48       60.48
-Asian or Asian British |         60        6.80       67.27
-                 Other |         72        8.15       75.42
-               Unknown |        217       24.58      100.00
+                 White |        127       14.38       14.38
+                 Mixed |        140       15.86       30.24
+Asian or Asian British |        141       15.97       46.21
+                 Black |        135       15.29       61.49
+                 Other |        130       14.72       76.22
+               Unknown |        210       23.78      100.00
 -----------------------+-----------------------------------
                  Total |        883      100.00
-(217 observations deleted)
+(210 observations deleted)
 
    Learning |
- disability |
-  or Down's |
-   Syndrome |      Freq.     Percent        Cum.
+ disability |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        542       81.38       81.38
-          1 |        124       18.62      100.00
+          0 |        402       59.73       59.73
+          1 |        271       40.27      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 Severe-pro |
      found |
-  learning |
-disability |  Learning disability
- or Down's |  or Down's Syndrome
-  Syndrome |         0          1 |     Total
+  learning |  Learning disability
+disability |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       450         90 |       540 
-         1 |        92         34 |       126 
+         0 |       324        213 |       537 
+         1 |        78         58 |       136 
 -----------+----------------------+----------
-     Total |       542        124 |       666 
+     Total |       402        271 |       673 
 
      Learning |
    disability |
@@ -931,77 +1002,131 @@ mild-moderate |
 severe-profou |
            nd |      Freq.     Percent        Cum.
 --------------+-----------------------------------
-   Not on LDR |        542       81.38       81.38
-    LDR, mild |         90       13.51       94.89
-LDR, profound |         34        5.11      100.00
+   Not on LDR |        402       59.73       59.73
+    LDR, mild |        213       31.65       91.38
+LDR, profound |         58        8.62      100.00
 --------------+-----------------------------------
-        Total |        666      100.00
+        Total |        673      100.00
 
   Learning disability |
            split into |
-       residential vs |  Learning disability
-      non-residential |  or Down's Syndrome
+       residential vs |
+      non-residential |  Learning disability
               setting |         0          1 |     Total
 ----------------------+----------------------+----------
-           Not on LDR |       542          0 |       542 
-LDR, not in residenti |         0        124 |       124 
+           Not on LDR |       402          0 |       402 
+LDR, not in residenti |         0        271 |       271 
 ----------------------+----------------------+----------
-                Total |       542        124 |       666 
+                Total |       402        271 |       673 
 
    Learning disability split |
          into residential vs |
      non-residential setting |      Freq.     Percent        Cum.
 -----------------------------+-----------------------------------
-                  Not on LDR |        542       81.38       81.38
-LDR, not in residential care |        124       18.62      100.00
+                  Not on LDR |        402       59.73       59.73
+LDR, not in residential care |        271       40.27      100.00
 -----------------------------+-----------------------------------
-                       Total |        666      100.00
+                       Total |        673      100.00
 
-           |  Learning disability
-    Down's |  or Down's Syndrome
+    Down's |  Learning disability
   Syndrome |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       427        104 |       531 
-         1 |       115         20 |       135 
+         0 |       325        217 |       542 
+         1 |        77         54 |       131 
 -----------+----------------------+----------
-     Total |       542        124 |       666 
+     Total |       402        271 |       673 
 
      Down's |
    Syndrome |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        531       79.73       79.73
-          1 |        135       20.27      100.00
+          0 |        542       80.53       80.53
+          1 |        131       19.47      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
-           |  Learning disability
-  Cerebral |  or Down's Syndrome
+  Cerebral |  Learning disability
      Palsy |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       434        104 |       538 
-         1 |       108         20 |       128 
+         0 |       323        218 |       541 
+         1 |        79         53 |       132 
 -----------+----------------------+----------
-     Total |       542        124 |       666 
+     Total |       402        271 |       673 
 
    Cerebral |
       Palsy |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        538       80.78       80.78
-          1 |        128       19.22      100.00
+          0 |        541       80.39       80.39
+          1 |        132       19.61      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |  Learning disability
+            register |         0          1 |     Total
+---------------------+----------------------+----------
+No DS, no CP, no LDR |       259          0 |       259 
+      DS but not LDR |        64          0 |        64 
+          DS and LDR |         0         45 |        45 
+      CP but not LDR |        79          0 |        79 
+          CP and LDR |         0         53 |        53 
+ LD with no DS or CP |         0        173 |       173 
+---------------------+----------------------+----------
+               Total |       402        271 |       673 
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |    Cerebral Palsy
+            register |         0          1 |     Total
+---------------------+----------------------+----------
+No DS, no CP, no LDR |       259          0 |       259 
+      DS but not LDR |        64          0 |        64 
+          DS and LDR |        45          0 |        45 
+      CP but not LDR |         0         79 |        79 
+          CP and LDR |         0         53 |        53 
+ LD with no DS or CP |       173          0 |       173 
+---------------------+----------------------+----------
+               Total |       541        132 |       673 
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |    Down's Syndrome
+            register |         0          1 |     Total
+---------------------+----------------------+----------
+No DS, no CP, no LDR |       259          0 |       259 
+      DS but not LDR |         0         64 |        64 
+          DS and LDR |         0         45 |        45 
+      CP but not LDR |        66         13 |        79 
+          CP and LDR |        44          9 |        53 
+ LD with no DS or CP |       173          0 |       173 
+---------------------+----------------------+----------
+               Total |       542        131 |       673 
+
+ Grouping of Down's, |
+  Cerebral Palsy and |
+ learning disability |
+            register |      Freq.     Percent        Cum.
+---------------------+-----------------------------------
+No DS, no CP, no LDR |        259       38.48       38.48
+      DS but not LDR |         64        9.51       47.99
+          DS and LDR |         45        6.69       54.68
+      CP but not LDR |         79       11.74       66.42
+          CP and LDR |         53        7.88       74.29
+ LD with no DS or CP |        173       25.71      100.00
+---------------------+-----------------------------------
+               Total |        673      100.00
 
   Geographical region (7 |
         England regions) |      Freq.     Percent        Cum.
 -------------------------+-----------------------------------
-                    East |         61        9.16        9.16
-                  London |        147       22.07       31.23
-                Midlands |        203       30.48       61.71
-North East and Yorkshire |        132       19.82       81.53
-              North West |         65        9.76       91.29
-              South East |         58        8.71      100.00
+                    East |         62        9.21        9.21
+                  London |        130       19.32       28.53
+                Midlands |        219       32.54       61.07
+North East and Yorkshire |        123       18.28       79.35
+              North West |         77       11.44       90.79
+              South East |         62        9.21      100.00
 -------------------------+-----------------------------------
-                   Total |        666      100.00
+                   Total |        673      100.00
 
 Sustainabil |
     ity and |
@@ -1009,180 +1134,182 @@ Transformat |
         ion |
 Partnership |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |         24        3.60        3.60
-          2 |         19        2.85        6.46
-          3 |         16        2.40        8.86
-          4 |         19        2.85       11.71
-          5 |         31        4.65       16.37
-          6 |         30        4.50       20.87
-          7 |         19        2.85       23.72
-          8 |         19        2.85       26.58
-          9 |         13        1.95       28.53
-         10 |         22        3.30       31.83
-         11 |         27        4.05       35.89
-         12 |         15        2.25       38.14
-         13 |         20        3.00       41.14
-         14 |         23        3.45       44.59
-         15 |         21        3.15       47.75
-         16 |         17        2.55       50.30
-         17 |         20        3.00       53.30
-         18 |         19        2.85       56.16
-         19 |         26        3.90       60.06
-         20 |         27        4.05       64.11
-         21 |         26        3.90       68.02
-         22 |         26        3.90       71.92
-         23 |         14        2.10       74.02
-         24 |         19        2.85       76.88
-         25 |         22        3.30       80.18
-         26 |         28        4.20       84.38
-         27 |         24        3.60       87.99
-         28 |         10        1.50       89.49
-         29 |         19        2.85       92.34
-         30 |         21        3.15       95.50
-         31 |         30        4.50      100.00
+          1 |         32        4.75        4.75
+          2 |         20        2.97        7.73
+          3 |         42        6.24       13.97
+          4 |         21        3.12       17.09
+          5 |         19        2.82       19.91
+          6 |         24        3.57       23.48
+          7 |         21        3.12       26.60
+          8 |         25        3.71       30.31
+          9 |         25        3.71       34.03
+         10 |         15        2.23       36.26
+         11 |         19        2.82       39.08
+         12 |         22        3.27       42.35
+         13 |         19        2.82       45.17
+         14 |         17        2.53       47.70
+         15 |         32        4.75       52.45
+         16 |         19        2.82       55.27
+         17 |         19        2.82       58.10
+         18 |         31        4.61       62.70
+         19 |         21        3.12       65.82
+         20 |         22        3.27       69.09
+         21 |         23        3.42       72.51
+         22 |         18        2.67       75.19
+         23 |         20        2.97       78.16
+         24 |         13        1.93       80.09
+         25 |         19        2.82       82.91
+         26 |         17        2.53       85.44
+         27 |          9        1.34       86.78
+         28 |         20        2.97       89.75
+         29 |         20        2.97       92.72
+         30 |         24        3.57       96.29
+         31 |         25        3.71      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
                          Age (years)
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%            0              0
- 5%            4              0
-10%            8              0       Obs                 666
-25%           19              0       Sum of Wgt.         666
+ 1%            1              0
+ 5%            5              0
+10%            9              0       Obs                 673
+25%           21              1       Sum of Wgt.         673
 
-50%           40                      Mean           40.10961
-                        Largest       Std. Dev.      24.26505
-75%           59             91
-90%           74             91       Variance       588.7925
-95%           81             98       Skewness       .1487121
-99%           89            102       Kurtosis       1.994814
+50%           42                      Mean           40.42348
+                        Largest       Std. Dev.      22.72868
+75%           57             92
+90%           71             92       Variance       516.5927
+95%           78             93       Skewness       .0708837
+99%           88             94       Kurtosis       2.119154
 
 Grouped age |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-      0-<16 |        137       20.57       20.57
-     16-<45 |        237       35.59       56.16
-     45-<65 |        165       24.77       80.93
-     65-<70 |         32        4.80       85.74
-     70-<75 |         35        5.26       90.99
-        80+ |         23        3.45       94.44
-          7 |         37        5.56      100.00
+      0-<16 |        128       19.02       19.02
+     16-<45 |        243       36.11       55.13
+     45-<65 |        196       29.12       84.25
+     65-<70 |         31        4.61       88.86
+     70-<75 |         33        4.90       93.76
+     75-<80 |         14        2.08       95.84
+        80+ |         28        4.16      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
       Child |
   indicator |
 (<16 years) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        529       79.43       79.43
-          1 |        137       20.57      100.00
+          0 |        545       80.98       80.98
+          1 |        128       19.02      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -> child = 0
 
                          Age (years)
 -------------------------------------------------------------
       Percentiles      Smallest
  1%           16             16
- 5%           18             16
-10%           22             16       Obs                 529
-25%           32             16       Sum of Wgt.         529
+ 5%           19             16
+10%           23             16       Obs                 545
+25%           34             16       Sum of Wgt.         545
 
-50%           48                      Mean           48.53308
-                        Largest       Std. Dev.       19.7805
-75%           63             91
-90%           77             91       Variance       391.2683
-95%           82             98       Skewness       .2037726
-99%           90            102       Kurtosis       2.123593
+50%           47                      Mean           47.97064
+                        Largest       Std. Dev.      18.25763
+75%           61             92
+90%           73             92       Variance        333.341
+95%           80             93       Skewness       .2170484
+99%           88             94       Kurtosis       2.340131
 
----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -> child = 1
 
                          Age (years)
 -------------------------------------------------------------
       Percentiles      Smallest
  1%            0              0
- 5%            0              0
-10%            2              0       Obs                 137
-25%            4              0       Sum of Wgt.         137
+ 5%            1              0
+10%            2              0       Obs                 128
+25%            4              1       Sum of Wgt.         128
 
-50%            8                      Mean           7.583942
-                        Largest       Std. Dev.      4.276547
-75%           11             15
-90%           14             15       Variance       18.28886
-95%           15             15       Skewness      -.0053374
-99%           15             15       Kurtosis       2.080391
+50%            9                      Mean           8.289063
+                        Largest       Std. Dev.       4.51969
+75%           12             15
+90%           14             15       Variance        20.4276
+95%           15             15       Skewness      -.1393751
+99%           15             15       Kurtosis       1.790932
 
 
        Male |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        336       50.45       50.45
-          1 |        330       49.55      100.00
+          0 |        349       51.86       51.86
+          1 |        324       48.14      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                 White |        534       80.18       80.18
-Asian or Asian British |         60        9.01       89.19
-                 Other |         72       10.81      100.00
+                 White |        127       18.87       18.87
+                 Mixed |        140       20.80       39.67
+Asian or Asian British |        141       20.95       60.62
+                 Black |        135       20.06       80.68
+                 Other |        130       19.32      100.00
 -----------------------+-----------------------------------
-                 Total |        666      100.00
+                 Total |        673      100.00
 
         Ethnicity in 16 categories |      Freq.     Percent        Cum.
 -----------------------------------+-----------------------------------
-          British or Mixed British |        402       60.36       60.36
-                       Other White |         62        9.31       69.67
-             White + Black African |         48        7.21       76.88
-                           Unknown |        154       23.12      100.00
+          British or Mixed British |        413       61.37       61.37
+                       Other White |         49        7.28       68.65
+             White + Black African |         45        6.69       75.33
+                           Unknown |        166       24.67      100.00
 -----------------------------------+-----------------------------------
-                             Total |        666      100.00
+                             Total |        673      100.00
 
         Index of |
         Multiple |
      Deprivation |
            (IMD) |      Freq.     Percent        Cum.
 -----------------+-----------------------------------
-1 least deprived |        466       69.97       69.97
-               4 |        125       18.77       88.74
- 5 most deprived |         75       11.26      100.00
+1 least deprived |        482       71.62       71.62
+               4 |        130       19.32       90.94
+ 5 most deprived |         61        9.06      100.00
 -----------------+-----------------------------------
-           Total |        666      100.00
+           Total |        673      100.00
 
 Residential |
       care, |
     elderly |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        666      100.00      100.00
+          0 |        673      100.00      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 Residential |
       care, |
    learning |
  disability |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        666      100.00      100.00
+          0 |        673      100.00      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
                        Household size
 -------------------------------------------------------------
       Percentiles      Smallest
  1%            0              0
  5%            1              0
-10%            1              0       Obs                 666
-25%            2              0       Sum of Wgt.         666
+10%            1              0       Obs                 673
+25%            2              0       Sum of Wgt.         673
 
-50%          2.5                      Mean           2.486486
-                        Largest       Std. Dev.      1.045131
+50%            2                      Mean            2.46211
+                        Largest       Std. Dev.      1.071328
 75%            3              5
-90%            4              5       Variance       1.092298
-95%            4              5       Skewness      -.1065141
-99%            5              5       Kurtosis       2.812895
+90%            4              5       Variance       1.147744
+95%            4              5       Skewness      -.0104961
+99%            5              6       Kurtosis       2.914406
 
            | Residentia
            |  l care,
@@ -1190,43 +1317,43 @@ Residentia |  learning
    l care, | disability
    elderly |         0 |     Total
 -----------+-----------+----------
-         0 |       666 |       666 
+         0 |       673 |       673 
 -----------+-----------+----------
-     Total |       666 |       666 
+     Total |       673 |       673 
 
                 Body Mass Index (BMI, kg/m2)
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     17.44767       15.00082
- 5%     21.11678       16.20281
-10%     23.90183       17.15629       Obs                 453
-25%     28.76667       17.30389       Sum of Wgt.         453
+ 1%     16.12973        15.0696
+ 5%     20.42415       15.49479
+10%     22.36432       15.53314       Obs                 482
+25%     27.74403       15.93306       Sum of Wgt.         482
 
-50%     34.43927                      Mean           34.27461
-                        Largest       Std. Dev.      7.849836
-75%     40.21187       49.50805
-90%     44.83121       49.54436       Variance       61.61992
-95%     47.58211       49.57554       Skewness       -.071499
-99%     49.49672       49.59282       Kurtosis       2.322363
+50%     35.35559                      Mean            34.3753
+                        Largest       Std. Dev.      8.454656
+75%     41.12582       49.47039
+90%     44.98058       49.47376       Variance       71.48121
+95%     47.24914       49.87366       Skewness      -.2139372
+99%     49.40646       49.96404       Kurtosis       2.109031
 
 Evidence of |
      BMI>40 |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        550       82.58       82.58
-          1 |        116       17.42      100.00
+          0 |        523       77.71       77.71
+          1 |        150       22.29      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of asthma_severe  
 
      Severe |
      asthma |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        110       16.52       16.52
-          1 |         14        2.10       18.62
-          . |        542       81.38      100.00
+          0 |        124       18.42       18.42
+          1 |         13        1.93       20.36
+          . |        536       79.64      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of cf  
 
@@ -1234,10 +1361,10 @@ Evidence of |
 Fibrosis (& |
    related) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        533       80.03       80.03
-          1 |        133       19.97      100.00
+          0 |        541       80.39       80.39
+          1 |        132       19.61      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of respiratory  
 
@@ -1246,20 +1373,20 @@ Respiratory |
      (excl. |
     asthma) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        539       80.93       80.93
-          1 |        127       19.07      100.00
+          0 |        547       81.28       81.28
+          1 |        126       18.72      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of cardiac  
 
       Heart |
     disease |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        536       80.48       80.48
-          1 |        130       19.52      100.00
+          0 |        538       79.94       79.94
+          1 |        135       20.06      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of af  
 
@@ -1267,10 +1394,10 @@ Respiratory |
 fibrillatio |
           n |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        529       79.43       79.43
-          1 |        137       20.57      100.00
+          0 |        535       79.49       79.49
+          1 |        138       20.51      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of dvt_pe  
 
@@ -1279,39 +1406,39 @@ thrombosis/ |
   pulmonary |
    embolism |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        527       79.13       79.13
-          1 |        139       20.87      100.00
+          0 |        541       80.39       80.39
+          1 |        132       19.61      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of diabcat  
 
                   Diabetes |      Freq.     Percent        Cum.
 ---------------------------+-----------------------------------
-               No diabetes |        534       80.18       80.18
-       Controlled diabetes |        112       16.82       97.00
-     Uncontrolled diabetes |         20        3.00      100.00
+               No diabetes |        543       80.68       80.68
+       Controlled diabetes |        105       15.60       96.29
+     Uncontrolled diabetes |         25        3.71      100.00
 ---------------------------+-----------------------------------
-                     Total |        666      100.00
+                     Total |        673      100.00
 
 -> tabulation of liver  
 
       Liver |
     disease |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        534       80.18       80.18
-          1 |        132       19.82      100.00
+          0 |        539       80.09       80.09
+          1 |        134       19.91      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of stroke  
 
      Stroke |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        534       80.18       80.18
-          1 |        132       19.82      100.00
+          0 |        544       80.83       80.83
+          1 |        129       19.17      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of tia  
 
@@ -1319,29 +1446,29 @@ thrombosis/ |
    ischemic |
      attack |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        524       78.68       78.68
-          1 |        142       21.32      100.00
+          0 |        535       79.49       79.49
+          1 |        138       20.51      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of dementia  
 
    Dementia |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        542       81.38       81.38
-          1 |        124       18.62      100.00
+          0 |        548       81.43       81.43
+          1 |        125       18.57      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of kidneyfn  
 
        Kidney function |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
-                  None |        418       62.76       62.76
-Stage 3a/3b egfr 30-60 |          4        0.60       63.36
-     Stage 4/5 egfr<30 |        244       36.64      100.00
+                  None |        430       63.89       63.89
+Stage 3a/3b egfr 30-60 |          6        0.89       64.78
+     Stage 4/5 egfr<30 |        237       35.22      100.00
 -----------------------+-----------------------------------
-                 Total |        666      100.00
+                 Total |        673      100.00
 
 -> tabulation of spleen  
 
@@ -1351,10 +1478,10 @@ Stage 3a/3b egfr 30-60 |          4        0.60       63.36
      sickle |
       cell) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        429       64.41       64.41
-          1 |        237       35.59      100.00
+          0 |        420       62.41       62.41
+          1 |        253       37.59      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of transplant  
 
@@ -1362,10 +1489,19 @@ Stage 3a/3b egfr 30-60 |          4        0.60       63.36
  transplant |
   recipient |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        426       63.96       63.96
-          1 |        240       36.04      100.00
+          0 |        448       66.57       66.57
+          1 |        225       33.43      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
+
+-> tabulation of dialysis  
+
+   Dialysis |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        566       84.10       84.10
+          1 |        107       15.90      100.00
+------------+-----------------------------------
+      Total |        673      100.00
 
 -> tabulation of immunosuppression  
 
@@ -1377,22 +1513,22 @@ Stage 3a/3b egfr 30-60 |          4        0.60       63.36
 immunosuppr |
      ession |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        418       62.76       62.76
-          1 |        248       37.24      100.00
+          0 |        425       63.15       63.15
+          1 |        248       36.85      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of cancerHaem  
 
 Haematologica |
      l cancer |      Freq.     Percent        Cum.
 --------------+-----------------------------------
-        Never |        524       78.68       78.68
-    Last year |          4        0.60       79.28
-2-5 years ago |          8        1.20       80.48
-     5+ years |        130       19.52      100.00
+        Never |        541       80.39       80.39
+    Last year |          2        0.30       80.68
+2-5 years ago |         16        2.38       83.06
+     5+ years |        114       16.94      100.00
 --------------+-----------------------------------
-        Total |        666      100.00
+        Total |        673      100.00
 
 -> tabulation of autoimmune  
 
@@ -1401,19 +1537,19 @@ Haematologica |
 (autoimmune |
    disease) |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        545       81.83       81.83
-          1 |        121       18.17      100.00
+          0 |        540       80.24       80.24
+          1 |        133       19.76      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of ibd  
 
         IBD |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        535       80.33       80.33
-          1 |        131       19.67      100.00
+          0 |        548       81.43       81.43
+          1 |        125       18.57      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of cancerExhaem1yr  
 
@@ -1421,10 +1557,10 @@ Haematologica |
 haematologi |
  cal cancer |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        665       99.85       99.85
+          0 |        672       99.85       99.85
           1 |          1        0.15      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of smi  
 
@@ -1432,10 +1568,10 @@ haematologi |
      mental |
     illness |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        527       79.13       79.13
-          1 |        139       20.87      100.00
+          0 |        551       81.87       81.87
+          1 |        122       18.13      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of neuro  
 
@@ -1445,80 +1581,80 @@ haematologi |
 stroke/deme |
        ntia |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        532       79.88       79.88
-          1 |        134       20.12      100.00
+          0 |        536       79.64       79.64
+          1 |        137       20.36      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
 -> tabulation of dialysis  
 
    Dialysis |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        545       81.83       81.83
-          1 |        121       18.17      100.00
+          0 |        566       84.10       84.10
+          1 |        107       15.90      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
                  Date of ONS COVID-19 death
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    21sep2020      21sep2020
- 5%    21sep2020      22sep2020
-10%    22sep2020      05oct2020       Obs                  12
-25%    10oct2020      15oct2020       Sum of Wgt.          12
+ 1%    16sep2020      16sep2020
+ 5%    16sep2020      18sep2020
+10%    18sep2020      25sep2020       Obs                  16
+25%    13oct2020      09oct2020       Sum of Wgt.          16
 
-50%    29nov2020                      Mean          25nov2020
-                        Largest       Std. Dev.      49.11482
-75%    07jan2021      05jan2021
-90%    26jan2021      10jan2021       Variance       2412.265
-95%    08feb2021      26jan2021       Skewness       .0597442
-99%    08feb2021      08feb2021       Kurtosis       1.672465
+50%    09dec2020                      Mean          26nov2020
+                        Largest       Std. Dev.      50.71078
+75%    03jan2021      08jan2021
+90%    05feb2021      31jan2021       Variance       2571.583
+95%    07feb2021      05feb2021       Skewness      -.0351558
+99%    07feb2021      07feb2021       Kurtosis       1.619084
 
                Date of ONS non-COVID-19 death
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    05sep2020      05sep2020
- 5%    10sep2020      06sep2020
-10%    14sep2020      10sep2020       Obs                  49
-25%    25sep2020      13sep2020       Sum of Wgt.          49
+ 1%    02sep2020      02sep2020
+ 5%    07sep2020      06sep2020
+10%    13sep2020      07sep2020       Obs                  46
+25%    16oct2020      09sep2020       Sum of Wgt.          46
 
-50%    02nov2020                      Mean          09nov2020
-                        Largest       Std. Dev.      48.41818
-75%    20dec2020      01feb2021
-90%    31jan2021      01feb2021       Variance        2344.32
-95%    01feb2021      03feb2021       Skewness       .4302383
-99%    03feb2021      03feb2021       Kurtosis       1.902214
+50%    18nov2020                      Mean          18nov2020
+                        Largest       Std. Dev.      47.01802
+75%    26dec2020      02feb2021
+90%    31jan2021      03feb2021       Variance       2210.694
+95%    03feb2021      04feb2021       Skewness       .1555407
+99%    08feb2021      08feb2021       Kurtosis       2.020182
 
              Date of COVID-19 hospital admission
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    03mar2020      03mar2020
- 5%    20mar2020      03mar2020
-10%    31mar2020      04mar2020       Obs                 133
-25%    28may2020      04mar2020       Sum of Wgt.         133
+ 1%    08mar2020      06mar2020
+ 5%    17mar2020      08mar2020
+10%    12apr2020      10mar2020       Obs                 142
+25%    24may2020      11mar2020       Sum of Wgt.         142
 
-50%    09aug2020                      Mean          16aug2020
-                        Largest       Std. Dev.      97.42736
-75%    11nov2020      25jan2021
-90%    21dec2020      26jan2021       Variance       9492.091
-95%    21jan2021      28jan2021       Skewness       .0038255
-99%    28jan2021      08feb2021       Kurtosis       1.862401
+50%    21aug2020                      Mean          18aug2020
+                        Largest       Std. Dev.      97.10296
+75%    08nov2020      20jan2021
+90%    06jan2021      25jan2021       Variance       9428.985
+95%    16jan2021      03feb2021       Skewness       .0450512
+99%    03feb2021      04feb2021       Kurtosis       1.809826
 
        Date of first of COVID-19 hospital admission or
                             death
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    03mar2020      03mar2020
- 5%    21mar2020      03mar2020
-10%    31mar2020      04mar2020       Obs                 142
-25%    01jun2020      04mar2020       Sum of Wgt.         142
+ 1%    08mar2020      06mar2020
+ 5%    17mar2020      08mar2020
+10%    14apr2020      10mar2020       Obs                 155
+25%    28may2020      11mar2020       Sum of Wgt.         155
 
-50%    22aug2020                      Mean          22aug2020
-                        Largest       Std. Dev.      98.75011
-75%    19nov2020      26jan2021
-90%    07jan2021      28jan2021       Variance       9751.584
-95%    22jan2021      08feb2021       Skewness       -.071087
-99%    08feb2021      08feb2021       Kurtosis       1.852308
+50%    09sep2020                      Mean          26aug2020
+                        Largest       Std. Dev.      97.82299
+75%    15nov2020      03feb2021
+90%    08jan2021      04feb2021       Variance       9569.337
+95%    18jan2021      05feb2021       Skewness      -.0530719
+99%    05feb2021      07feb2021       Kurtosis       1.823761
 
    COVID-19 |
       death |
@@ -1526,10 +1662,10 @@ stroke/deme |
    censored |
 latest date |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        655       98.35       98.35
-          1 |         11        1.65      100.00
+          0 |        659       97.92       97.92
+          1 |         14        2.08      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
    COVID-19 |
    hospital |
@@ -1537,10 +1673,10 @@ latest date |      Freq.     Percent        Cum.
    censored |
 latest date |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        536       80.48       80.48
-          1 |        130       19.52      100.00
+          0 |        537       79.79       79.79
+          1 |        136       20.21      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
   COVID-19 |
      death |
@@ -1549,10 +1685,10 @@ latest date |      Freq.     Percent        Cum.
     latest |      latest date
       date |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       528        127 |       655 
-         1 |         8          3 |        11 
+         0 |       526        133 |       659 
+         1 |        11          3 |        14 
 -----------+----------------------+----------
-     Total |       536        130 |       666 
+     Total |       537        136 |       673 
 
    COVID-19 |
    hospital |
@@ -1561,23 +1697,22 @@ latest date |      Freq.     Percent        Cum.
    censored |
 latest date |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |        526       78.98       78.98
-          1 |        140       21.02      100.00
+          0 |        523       77.71       77.71
+          1 |        150       22.29      100.00
 ------------+-----------------------------------
-      Total |        666      100.00
+      Total |        673      100.00
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-stime_cov~h2 |        666    146.6396    27.34721          5        154
-stime_cov~n2 |        666    114.3544    81.71237       -181        154
-stime_comp~2 |        666    114.3544    81.71237       -181        154
+stime_cov~h2 |        673    146.4056    25.08712          2        153
+stime_cov~n2 |        673    110.4948    80.75647       -178        150
+stime_comp~2 |        673    110.4948    80.75647       -178        150
 
 . 
 . * Close log file
 . log close
       name:  <unnamed>
-       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/AL001_describe_cohort.
-> log
+       log:  /workspace/logs/AL001_describe_cohort.log
   log type:  text
- closed on:   8 Feb 2021, 12:08:59
----------------------------------------------------------------------------------------------------------------------------------------
+ closed on:   8 Feb 2021, 19:51:42
+-------------------------------------------------------------------------------
