@@ -67,17 +67,7 @@ study = StudyDefinition(
         date_format="YYYY-MM-DD",
         return_expectations={"date": {"earliest": "index_date"}},
     ),
-    covid_positive_test=patients.with_these_clinical_events(
-        covid_positive_test_codes,
-        returning="category",
-        find_first_match_in_period=True,
-        include_date_of_match=True,
-        date_format="YYYY-MM-DD",
-        return_expectations={
-            "date": {"earliest": "index_date"},
-            "category": {"ratios": {"XaLTE":0.5, "Y20d1":0.5}},
-            },
-    ),
+
 
     ### GEOGRAPHICAL AREA AND DEPRIVATION
     # RURAL/URBAN
