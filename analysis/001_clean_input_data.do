@@ -443,7 +443,16 @@ forvalues i = 1 (1) 2 {
 	gen covidadmission_date = date(covid_admission_date_dstr, "YMD")
 	format covidadmission_date %td
 	drop covid_admission_date_dstr
+	
+	* SGSS positive test
+	confirm string variable sgss_first_positive_test_date
+	gen covidpostest_date = date(sgss_first_positive_test_date, "YMD")
+	format covidpostest_date %td
+	drop sgss_first_positive_test_date
 
+	
+	
+	
 
 	*********************
 	*  Label variables  *
@@ -519,11 +528,12 @@ forvalues i = 1 (1) 2 {
 
 
 	* Outcomes 
-	label var  coviddeath_date		"Date of ONS COVID-19 death"
-	label var  otherdeath_date 		"Date of ONS non-COVID-19 death"
-	label var  covidadmission_date	"Date of COVID-19 hospital admission"
-			
+	label var  coviddeath_date			"Date of ONS COVID-19 death"
+	label var  otherdeath_date 			"Date of ONS non-COVID-19 death"
+	label var  covidadmission_date		"Date of COVID-19 hospital admission"
+	label var  covidpostest_date		"SGSS first positive test"
 
+	
 
 	*********************
 	*  Order variables  *
@@ -532,7 +542,7 @@ forvalues i = 1 (1) 2 {
 	sort patient_id
 	order 	patient_id stp* region_7 imd* rural 						///
 			household* resid_care_old resid_care_ldr			 		///
-			age agegroup child male										///
+			age male													///
 			bmi* smoke* 												///
 			ethnicity*													/// 
 			respiratory* asthma* cf* cardiac* diabetes* hba1c* 			///
@@ -545,7 +555,8 @@ forvalues i = 1 (1) 2 {
 			dysplenia* sickle* hiv* perm* temp* aplastic*				///
 			autoimmune* ibd* smi* fracture*								///
 			smi* ld* fracture*											///
-			coviddeath_date otherdeath_date covidadmission_date
+			coviddeath_date otherdeath_date covidadmission_date			///
+			covidpostest_date
 
 
 

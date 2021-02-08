@@ -34,20 +34,14 @@ log using "logs/002_create_ld_analysis_dataset", replace t
 
 * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
 * Wave 2: i=2  (1 Sept 20 - latest)
-forvalues i = 2 (1) 2 {
-	 
-	* Open dataset
-	if `i'<=1 {
-		local j = 1
-	}
-	else {
-		local j = 2
-	}
-	use "analysis/data_base_cohort`j'.dta", clear 
+forvalues i = 1 (1) 2 {
+
+	* Open data
+	use "analysis/data_base_cohort`i'.dta", clear 
 
 
 	* Index date
-	if `i'<=1 {
+	if `i'==1 {
 		local index_date = "2020-03-01"
 	}
 	else if `i'==2 {
@@ -57,7 +51,7 @@ forvalues i = 2 (1) 2 {
 	* Display the input parameter (index date for cohort)
 	noi di "`index_date'"
 	local index = date(subinstr("`index_date'", "-", "/", .), "YMD")
-	
+	noi di `index'
 
 
 
@@ -84,22 +78,25 @@ forvalues i = 2 (1) 2 {
 							4 "65-<70" 		///
 							5 "70-<75" 		///
 							6 "75-<80" 		///
-							6 "80+"
+							7 "80+"
 	label values agegroup agegroup
-
 
 	* Check there are no missing ages
 	assert agegroup<.
 
-
-	*  Age splines 
-			
+	* Broader age strata
+	recode agegroup 1=. 2/3=1 4/5=2 6/7=3, gen(agebroad)
+	label define agebroad 	1 "16-<65" 		///
+							2 "65-<75" 		///
+							3 "75+"
+	label values agebroad agebroad
+	
+	*  Age splines 		
 	qui summ age
 	mkspline age = age, cubic nknots(4)
 	order age1 age2 age3, after(age)
 
 	* Child indicator
-
 	recode age min/15.999999=1 16/max=0, gen(child)
 
 
@@ -138,7 +135,11 @@ forvalues i = 2 (1) 2 {
 	label values imd imd 
 
 
+	/*  Severe asthma   */ 
 
+	recode asthmacat 3=1 1 2=0, gen(asthma_severe)
+	order asthma_severe, after(asthmacat)
+	
 
 
 	***************************
@@ -344,6 +345,7 @@ forvalues i = 2 (1) 2 {
 	*  Exposures: learning disability  *
 	************************************
 
+	
 	* Split LDR into moderate-mild and severe-profound
 	noi tab ldr ld_profound, m
 
@@ -368,18 +370,28 @@ forvalues i = 2 (1) 2 {
 	label values ldr_carecat ldcare
 
 
+	* Combined variable
+	gen 	ldr_group = 0
+	replace ldr_group = 1 if ds==1 & ldr==0
+	replace ldr_group = 2 if ds==1 & ldr==1
+	replace ldr_group = 3 if cp==1 & ldr==0
+	replace ldr_group = 4 if cp==1 & ldr==1
+	replace ldr_group = 5 if cp==0 & ds==0 & ldr==1
+	
+	label define ldr_group 	0 "No DS, no CP, no LDR" 	///
+							1 "DS but not LDR"			/// 
+							2 "DS and LDR" 				///
+							3 "CP but not LDR" 			///
+							4 "CP and LDR" 				///
+							5 "LD with no DS or CP" 
+	label values ldr_group ldr_group
+	
 
-
+	
 
 	***************************************
 	*  Binary outcomes and survival time  *
 	***************************************
-
-	* Check all dates are in future
-	assert coviddeath_date 		>= `index'
-	assert otherdeath_date 		>= `index'
-	assert covidadmission_date 	>= `index'
-
 
 
 	*** WAVE 1 CENSORING *** 31st August 2020
@@ -404,13 +416,17 @@ forvalues i = 2 (1) 2 {
 
 		
 	* Composite outcome date (either COVID-19 death or hospitalisation)
-	gen composite_date = min(coviddeath_date, covidadmission_date)
+	egen composite_date = rowmin(coviddeath_date covidadmission_date)
 		
 
 	/*  Binary outcome and survival time  */
 
+	* Events prior to index date (shouldn't happen in real data)
+	noi count if coviddeath_date     < `index'
+	noi count if covidadmission_date < `index'
+		
 	forvalues k = 1 (1) 2 {
-	    
+	 
 		* COVID-19 death
 		gen 	coviddeath`k' = (coviddeath_date<.)
 		replace coviddeath`k' = 0 if coviddeath_date > coviddeathcensor`k'
@@ -445,14 +461,13 @@ forvalues i = 2 (1) 2 {
 									covidadmissioncensor`k' 		///
 									coviddeathcensor`k')
 
-		* Convert to days since index date
-		foreach var of varlist stime* {
-			replace `var' = `var' - `index' + 1
-		}
 		drop coviddeathcensor`k' covidadmissioncensor`k' 
 	}
 	
-	
+	* Convert to days since index date
+	foreach var of varlist stime* {
+		replace `var' = `var' - `index' + 1
+	}	
 	
 	* Wave 1: Keep both outcomes (censored at Aug 31, and all time)
 	* Wave 2: Keep only outcome censored at end
@@ -476,6 +491,8 @@ forvalues i = 2 (1) 2 {
 	label var age2 					"Age spline term 2"
 	label var age3 					"Age spline term 3"
 	label var agegroup				"Grouped age"
+	label var agebroad				"Broad age strata"
+	label var child					"Child indicator (<16 years)"
 	label var male 					"Male"
 	label var imd 					"Index of Multiple Deprivation (IMD)"
 	label var ethnicity_5			"Ethnicity in 16 categories"
@@ -494,14 +511,15 @@ forvalues i = 2 (1) 2 {
 	label var ldr_carecat			"Learning disability split into residential vs non-residential setting" 
 	label var ds 					"Down's Syndrome"
 	label var cp 					"Cerebral Palsy"
-
+	label var ldr_group				"Grouping of Down's, Cerebral Palsy and learning disability register"
 
 	* Confounders and comorbidities 
 	label var bmi					"Body Mass Index (BMI, kg/m2)"
 	label var obese40				"Evidence of BMI>40"
-	label var asthmacat				"Severity of asthma"
+	label var asthma_severe			"Severe asthma"
 	label var respiratory 			"Respiratory disease (excl. asthma)"
 	label var cardiac				"Heart disease"
+	label var cf					"Cystic Fibrosis (& related)"
 	label var af					"Atrial fibrillation"
 	label var dvt					"Deep vein thrombosis/pulmonary embolism"
 	label var diabcat				"Diabetes"
@@ -514,6 +532,7 @@ forvalues i = 2 (1) 2 {
 	label var liver					"Liver disease"
 	label var kidneyfn				"Kidney function"
 	label var transplant			"Organ transplant recipient"
+	label var dialysis				"Dialysis"
 	label var spleen				"Spleen problems (dysplenia, sickle cell)"
 	label var autoimmune			"RA, SLE, Psoriasis (autoimmune disease)"
 	label var immunosuppression		"Conditions causing permanent or temporary immunosuppression"
@@ -545,32 +564,33 @@ forvalues i = 2 (1) 2 {
 	*********************
 
 	sort patient_id
-	order 	patient_id stp* region_7 imd rural 					 		///
+	order 	patient_id stp* region_7 imd 	 					 		///
 			household* resid_care_old resid_care_ldr			 		///
-			ldr ldr_cat ld_profound ldr_carecat ds cp					///
-			age age age1 age2 age3 agegroup child male					///
+			ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group			///
+			age age age1 age2 age3 agegroup agebroad child male			///
 			bmi* obese* ethnicity*										/// 
-			respiratory* asthma* cf* cardiac* diabcat*	 				///
+			respiratory* asthma_severe* cf* cardiac* diabcat*			///
 			af* dvt_pe* 												///
-			stroke* dementia* neuro* tia*								///
+			stroke* dementia* tia*										///
 			cancerExhaem* cancerHaem* 									///
-			kidneyfn* dialysis* liver* transplant* 						///
+			kidneyfn* liver* transplant* 								///
 			spleen* autoimmune* immunosuppression*	ibd*				///
-			smi* 														///
+			smi* dialysis neuro											///
 			coviddeath* otherdeath* covidadmission* composite*
 
-	keep 	patient_id stp* region_7 imd rural 					 		///
+	keep 	patient_id stp* region_7 imd 	 					 		///
 			household* resid_care_old resid_care_ldr			 		///
-			ldr ldr_cat ld_profound ldr_carecat ds cp					///
-			age age age1 age2 age3 agegroup child male					///
+			ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group			///
+			age age age1 age2 age3 agegroup agebroad child male			///
 			bmi* obese* ethnicity*										/// 
-			respiratory* asthmacat cf cardiac diabcat	 				///
-			af dvt_pe stroke dementia neuro tia							///
+			respiratory* asthma_severe cf cardiac diabcat	 			///
+			af dvt_pe stroke dementia tia								///
 			cancerExhaem* cancerHaem 									///
-			kidneyfn dialysis liver transplant 							///
+			kidneyfn liver transplant 									///
 			spleen autoimmune immunosuppression ibd						///
-			smi 														///
-			coviddeath* otherdeath* covidadmission* composite*
+			smi dialysis neuro											///
+			coviddeath* otherdeath* covidadmission* composite*			///
+			stime*
 
 
 			
@@ -587,7 +607,7 @@ forvalues i = 2 (1) 2 {
 	    label data "Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work"
 	}
 	* Save overall dataset
-	save "analysis/data_ldanalysis_cohort`j'.dta", replace 
+	save "analysis/data_ldanalysis_cohort`i'.dta", replace 
 }
 
 log close
