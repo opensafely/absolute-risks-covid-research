@@ -24,3 +24,10 @@ actions:
       moderately_sensitive:
         log: logs/001_clean_input_data.log
 
+  create_analysis:
+    run: stata-mp:latest analysis/002_create_ld_analysis_dataset.do
+    needs: [clean]
+    outputs:
+      moderately_sensitive:
+        log: logs/002_create_ld_analysis_dataset.log
+
