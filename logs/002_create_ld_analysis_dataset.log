@@ -3,7 +3,7 @@
        log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/002_create_ld_analysis
 > _dataset.log
   log type:  text
- opened on:   8 Feb 2021, 17:42:12
+ opened on:   8 Feb 2021, 18:00:22
 
 . 
 . * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
@@ -588,48 +588,48 @@
 (Base cohort dataset (wave 1), index date 1st March 2020)
 2020-03-01
 21975
-(984 differences between age and agegroup)
-(1000 differences between agegroup and agebroad)
-(984 differences between age and child)
-(155 real changes made, 155 to missing)
-(692 differences between bmi and obese40)
-(308 real changes made)
-(1,000 real changes made)
+(979 differences between age and agegroup)
+(999 differences between agegroup and agebroad)
+(979 differences between age and child)
+(179 real changes made, 179 to missing)
+(703 differences between bmi and obese40)
+(296 real changes made)
+(999 real changes made)
 (0 real changes made)
-(imd: 1000 changes made)
+(imd: 999 changes made)
 (200 differences between asthmacat and asthma_severe)
-(650 missing values generated)
+(641 missing values generated)
 (643 missing values generated)
-(822 missing values generated)
+(823 missing values generated)
 (15 real changes made)
 (5 real changes made)
-(cancerHaem: 802 changes made)
-(18 real changes made)
-(652 missing values generated)
-(54 missing values generated)
-(egfr_cat: 946 changes made)
-(938 differences between egfr_cat and kidneyfn)
-(54 real changes made)
-(177 real changes made)
-(175 real changes made)
-(389 missing values generated)
-(193 real changes made)
-(75 real changes made)
-(84 real changes made)
-(35 real changes made)
+(cancerHaem: 803 changes made)
+(21 real changes made)
+(642 missing values generated)
+(52 missing values generated)
+(egfr_cat: 947 changes made)
+(934 differences between egfr_cat and kidneyfn)
+(52 real changes made)
+(174 real changes made)
+(179 real changes made)
+(356 missing values generated)
+(159 real changes made)
+(62 real changes made)
+(87 real changes made)
+(44 real changes made)
 (198 missing values generated)
-(156 real changes made)
-(42 real changes made)
+(155 real changes made)
+(43 real changes made)
 (0 real changes made)
 
            |      ld_profound
        ldr |         0          1 |     Total
 -----------+----------------------+----------
-         0 |       636        165 |       801 
-         1 |       170         29 |       199 
+         0 |       481        124 |       605 
+         1 |       321         73 |       394 
 -----------+----------------------+----------
-     Total |       806        194 |     1,000 
-(ldr_cat: 29 changes made)
+     Total |       802        197 |       999 
+(ldr_cat: 73 changes made)
 
            | Residentia
            |  l care,
@@ -637,49 +637,49 @@
            | disability
        ldr |         0 |     Total
 -----------+-----------+----------
-         0 |       801 |       801 
-         1 |       199 |       199 
+         0 |       605 |       605 
+         1 |       394 |       394 
 -----------+-----------+----------
-     Total |     1,000 |     1,000 
+     Total |       999 |       999 
 (ldr: 0 changes made)
-(170 real changes made)
-(29 real changes made)
-(155 real changes made)
-(44 real changes made)
-(130 real changes made)
+(118 real changes made)
+(77 real changes made)
+(120 real changes made)
+(76 real changes made)
+(255 real changes made)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-coviddeath~e |         42   15jul2020    92.25316  11mar2020  05jan2021
+coviddeath~e |         48   17jul2020    84.62516  07mar2020  03feb2021
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-covidadmis~e |        200   23aug2020    105.6843  03mar2020  08feb2021
-(764 missing values generated)
+covidadmis~e |        200   08aug2020    100.1284  02mar2020  08feb2021
+(758 missing values generated)
   0
   0
-(11 real changes made)
+(14 real changes made)
 (0 real changes made)
-(98 real changes made)
+(77 real changes made)
 (0 real changes made)
-(0 real changes made)
+(1 real change made)
 (4 real changes made)
-(105 real changes made)
+(87 real changes made)
 (0 real changes made)
-(2 real changes made)
+(1 real change made)
 (0 real changes made)
-(9 real changes made)
-(20 real changes made)
-(2 real changes made)
-(8 real changes made)
-(9 real changes made)
-(22 real changes made)
-(1,000 real changes made)
-(1,000 real changes made)
-(1,000 real changes made)
-(1,000 real changes made)
-(1,000 real changes made)
-(1,000 real changes made)
+(3 real changes made)
+(4 real changes made)
+(4 real changes made)
+(13 real changes made)
+(4 real changes made)
+(4 real changes made)
+(999 real changes made)
+(999 real changes made)
+(999 real changes made)
+(999 real changes made)
+(999 real changes made)
+(999 real changes made)
 file analysis/data_ldanalysis_cohort1.dta saved
 (Base cohort dataset (wave 2), index date 1st September 2020)
 2020-09-01
@@ -784,5 +784,5 @@ file analysis/data_ldanalysis_cohort2.dta saved
        log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/002_create_ld_analysis
 > _dataset.log
   log type:  text
- closed on:   8 Feb 2021, 17:42:13
+ closed on:   8 Feb 2021, 18:00:22
 ---------------------------------------------------------------------------------------------------------------------------------------

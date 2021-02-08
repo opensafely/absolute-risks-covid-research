@@ -505,8 +505,8 @@ forvalues i = 1 (1) 2 {
 
 
 	* Learning disabilities
-	label var ldr 					"Learning disability or Down's Syndrome"
-	label var ld_profound 			"Severe-profound learning disability or Down's Syndrome"
+	label var ldr 					"Learning disability"
+	label var ld_profound 			"Severe-profound learning disability"
 	label var ldr_cat				"Learning disability split into mild-moderate and severe-profound" 
 	label var ldr_carecat			"Learning disability split into residential vs non-residential setting" 
 	label var ds 					"Down's Syndrome"
