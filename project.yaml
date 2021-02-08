@@ -31,3 +31,11 @@ actions:
       moderately_sensitive:
         log: logs/002_create_ld_analysis_dataset.log
 
+  describe_cohort:
+    run: stata-mp:latest analysis/AL001_describe_cohort.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL001_describe_cohort.log
+
+
