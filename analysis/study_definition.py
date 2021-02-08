@@ -616,6 +616,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.4,
+        },
     ),
     ld_profound=patients.with_these_clinical_events(
         ld_profound_codes,
