@@ -22,6 +22,9 @@
 ********************************************************************************
 
 
+clear all
+set more off
+
 * Open a log file
 cap log close
 log using "logs/001_clean_input_data", replace t

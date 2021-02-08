@@ -25,13 +25,16 @@
 
 
 
+clear all
+set more off
+
 * Open a log file
 cap log close
 log using "logs/002_create_ld_analysis_dataset", replace t
 
 * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
 * Wave 2: i=2  (1 Sept 20 - latest)
-forvalues i = 1 (1) 2 {
+forvalues i = 2 (1) 2 {
 	 
 	* Open dataset
 	if `i'<=1 {
