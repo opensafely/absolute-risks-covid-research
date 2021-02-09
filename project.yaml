@@ -38,12 +38,28 @@ actions:
       moderately_sensitive:
         log: logs/AL001_describe_cohort.log
 
+  tabulate_cohort:
+    run: stata-mp:latest analysis/AL002_tabulate_cohort_descriptives.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL002_tabulate_cohort_descriptives.log
+        model: output/basetable1.txt
+ 
   cox_regression:
     run: stata-mp:latest analysis/AL003_cox_regression.do
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
         log: logs/AL003_cox_regression.log
-        model: output/output_hrs_main.out
-        model2: output/output_rates.out
+        hrs_adult: output/output_hrs_main.out
+        rates_adult: output/output_rates.out
 
+  cox_regression_child:
+    run: stata-mp:latest analysis/AL004_cox_regression_child.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL004_cox_regression_child.log
+        hrs_child: output/output_hrs_main_child.out
+        rates_child: output/output_rates_child.out

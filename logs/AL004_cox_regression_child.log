@@ -1,0 +1,1267 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /workspace/logs/AL004_cox_regression_child.log
+  log type:  text
+ opened on:   9 Feb 2021, 11:05:45
+
+. 
+. 
+. * Categories of various exposures
+. local lo_ldr            = 0
+
+. local hi_ldr            = 1
+
+. local lo_ldr_cat        = 0
+
+. local hi_ldr_cat        = 2
+
+. local hi_ldr            = 1
+
+. local lo_ldr_carecat= 0
+
+. local hi_ldr_carecat= 2
+
+. local lo_ds             = 0
+
+. local hi_ds             = 1
+
+. local lo_cp             = 0
+
+. local hi_cp             = 1
+
+. local lo_ldr_group      = 0
+
+. local hi_ldr_group      = 5
+
+. 
+. * Open temporary file to post results
+. tempfile ldrfile
+
+. tempname ldrresults
+
+. 
+. postfile `ldrresults'   wave str15(outcome) str15(exposure) str20(model)     
+>    ///
+>                                                 expcat lnhr sehr using `ldrfi
+> le'
+
+. 
+. * Cycle over the two waves
+. *    Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
+. *    Wave 2: i=2  (1 Sept 20 - latest)
+. forvalues i = 1 (1) 2 {
+  2. 
+.         * Open dataset (complete case ethnicity)
+.         use "analysis/data_ldanalysis_cohort`i'.dta", clear 
+  3.         drop if ethnicity_5>=.
+  4. 
+.         * Only keep data for children (under 16)
+.         keep if child==1
+  5. 
+.         * Cycle over outcomes: mortality, hospitalisation, composite 
+.         foreach out in coviddeath covidadmission composite {
+  6. 
+. 
+.                 /*  Declare data to be survival  */
+. 
+.                 stset stime_`out'`i', fail(`out'`i') scale(365.25)
+  7. 
+. 
+.                 * Cycle over exposures: learning disability register, by seve
+> rity, 
+.                 *    Down's syndrome, Cerebral Palsy, and the combined groupi
+> ng
+.                 foreach exp in ldr ldr_cat ldr_carecat ds cp ldr_group {
+  8. 
+.                 
+.                         /*  Obtain rates  */
+.                         
+.                         strate `exp',                                        
+>                                            ///
+>                                 output(analysis/data_temp`out'_`exp'_`i', rep
+> lace)      ///
+>                                 per(10000)
+  9.                 
+.                 
+.                         /*  Fit Cox models  */
+.                         
+.                         * Confounder only model
+.                         capture stcox i.`exp' age1 age2 age3 male i.ethnicity
+> _5,        ///
+>                                 strata(stpcode) cluster(household_id) 
+ 10.                         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+ 11.                             capture qui di _b[`k'.`exp']
+ 12.                                 if _rc==0 {
+ 13.                                     post `ldrresults' (`i') ("`out'") ("`e
+> xp'")         ///
+>                                                 ("Confounders")              
+>                                            ///
+>                                                 (`k') (_b[`k'.`exp']) (_se[`k
+> '.`exp'])
+ 14.                                 }
+ 15.                         }
+ 16.                         
+.                         * Confounders with deprivation
+.                         capture stcox i.`exp' age1 age2 age3 male i.ethnicity
+> _5 imd, ///
+>                                 strata(stpcode) cluster(household_id) 
+ 17.                         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+ 18.                             capture qui di _b[`k'.`exp']
+ 19.                                 if _rc==0 {
+ 20.                                     post `ldrresults' (`i') ("`out'") ("`e
+> xp'")         ///
+>                                                 ("Confounders+IMD")          
+>                                    ///
+>                                                 (`k') (_b[`k'.`exp']) (_se[`k
+> '.`exp'])
+ 21.                                 }               
+ 22.                         }
+ 23.                         
+.                         * Confounders with residential care
+.                         capture stcox i.`exp' age1 age2 age3 male i.ethnicity
+> _5 resid_care_ldr, ///
+>                                 strata(stpcode) cluster(household_id) 
+ 24.                         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+ 25.                             capture qui di _b[`k'.`exp']
+ 26.                                 if _rc==0 {
+ 27.                                     post `ldrresults' (`i') ("`out'") ("`e
+> xp'")         ///
+>                                                 ("Confounders+Resid")        
+>                                    ///
+>                                                 (`k') (_b[`k'.`exp']) (_se[`k
+> '.`exp'])
+ 28.                                 }               
+ 29.                         }
+ 30.                         
+.                         * Confounders with physical comorbidities that are in
+> dicators for vaccination 
+.                         capture stcox i.`exp' age1 age2 age3 male i.ethnicity
+> _5         ///
+>                                                 cardiac af dvt_pe i.diabcat  
+>                            ///
+>                                                 liver stroke tia dementia    
+>                            ///
+>                                                 i.kidneyfn                   
+>                                            ///
+>                                                 spleen transplant dialysis   
+>                            ///
+>                                                 immunosuppression cancerHaem 
+>                    ///
+>                                                 autoimmune ibd cancerExhaem1y
+> r,                 ///
+>                                 strata(stpcode) cluster(household_id) 
+ 31.                         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+ 32.                             capture qui di _b[`k'.`exp']
+ 33.                                 if _rc==0 {
+ 34.                                     post `ldrresults' (`i') ("`out'") ("`e
+> xp'")         ///
+>                                         ("Confounders_Comorb")               
+>                            ///
+>                                         (`k') (_b[`k'.`exp']) (_se[`k'.`exp']
+> )
+ 35.                                 }
+ 36.                         }
+ 37.                 }
+ 38.         }
+ 39. }
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+(250 observations deleted)
+(592 observations deleted)
+
+     failure event:  coviddeath1 != 0 & coviddeath1 < .
+obs. time interval:  (0, stime_coviddeath1]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+        157  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+        157  observations remaining, representing
+          3  failures in single-record/single-failure data
+     75.535  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .5037645
+
+         failure _d:  coviddeath1
+   analysis time _t:  stime_coviddeath1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +-------------------------------------------------+
+  | ldr   D        Y      Rate     Lower      Upper |
+  |-------------------------------------------------|
+  |   0   1   0.0048   210.410    29.639   1493.713 |
+  |   1   2   0.0028   714.076   178.589   2855.190 |
+  +-------------------------------------------------+
+
+
+         failure _d:  coviddeath1
+   analysis time _t:  stime_coviddeath1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +-----------------------------------------------------------+
+  |       ldr_cat   D        Y      Rate     Lower      Upper |
+  |-----------------------------------------------------------|
+  |    Not on LDR   1   0.0048   210.410    29.639   1493.713 |
+  |     LDR, mild   2   0.0023   879.485   219.957   3516.565 |
+  | LDR, profound   0   0.0005     0.000         .          . |
+  +-----------------------------------------------------------+
+
+
+         failure _d:  coviddeath1
+   analysis time _t:  stime_coviddeath1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +--------------------------------------------------------------------------+
+  |                  ldr_carecat   D        Y      Rate     Lower      Upper |
+  |--------------------------------------------------------------------------|
+  |                   Not on LDR   1   0.0048   210.410    29.639   1493.713 |
+  | LDR, not in residential care   2   0.0028   714.076   178.589   2855.190 |
+  +--------------------------------------------------------------------------+
+
+
+         failure _d:  coviddeath1
+   analysis time _t:  stime_coviddeath1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +---------------------------------------------+
+  | ds   D        Y     Rate    Lower     Upper |
+  |---------------------------------------------|
+  |  0   3   0.0063   477.64   154.05   1480.95 |
+  |  1   0   0.0013     0.00        .         . |
+  +---------------------------------------------+
+
+
+         failure _d:  coviddeath1
+   analysis time _t:  stime_coviddeath1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +---------------------------------------------+
+  | cp   D        Y     Rate    Lower     Upper |
+  |---------------------------------------------|
+  |  0   3   0.0060   496.51   160.14   1539.47 |
+  |  1   0   0.0015     0.00        .         . |
+  +---------------------------------------------+
+
+
+         failure _d:  coviddeath1
+   analysis time _t:  stime_coviddeath1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +------------------------------------------------------------------+
+  |            ldr_group   D        Y      Rate     Lower      Upper |
+  |------------------------------------------------------------------|
+  | No DS, no CP, no LDR   1   0.0032   313.143    44.110   2223.025 |
+  |       DS but not LDR   0   0.0007     0.000         .          . |
+  |           DS and LDR   0   0.0002     0.000         .          . |
+  |       CP but not LDR   0   0.0009     0.000         .          . |
+  |           CP and LDR   0   0.0006     0.000         .          . |
+  |------------------------------------------------------------------|
+  |  LD with no DS or CP   2   0.0020   985.431   246.454   3940.185 |
+  +------------------------------------------------------------------+
+
+
+     failure event:  covidadmission1 != 0 & covidadmission1 < .
+obs. time interval:  (0, stime_covidadmission1]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+        157  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+        157  observations remaining, representing
+         13  failures in single-record/single-failure data
+     72.397  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .5037645
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +------------------------------------------------+
+  | ldr   D        Y      Rate     Lower     Upper |
+  |------------------------------------------------|
+  |   0   5   0.0047   1073.82    446.95   2579.89 |
+  |   1   8   0.0026   3096.65   1548.63   6192.09 |
+  +------------------------------------------------+
+
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +-----------------------------------------------------------+
+  |       ldr_cat   D        Y      Rate     Lower      Upper |
+  |-----------------------------------------------------------|
+  |    Not on LDR   5   0.0047   1073.82    446.95    2579.89 |
+  |     LDR, mild   7   0.0021   3362.38   1602.96    7052.94 |
+  | LDR, profound   1   0.0005   1993.72    280.84   14153.58 |
+  +-----------------------------------------------------------+
+
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +-------------------------------------------------------------------------+
+  |                  ldr_carecat   D        Y      Rate     Lower     Upper |
+  |-------------------------------------------------------------------------|
+  |                   Not on LDR   5   0.0047   1073.82    446.95   2579.89 |
+  | LDR, not in residential care   8   0.0026   3096.65   1548.63   6192.09 |
+  +-------------------------------------------------------------------------+
+
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +-----------------------------------------------+
+  | ds    D        Y      Rate    Lower     Upper |
+  |-----------------------------------------------|
+  |  0   10   0.0060   1656.91   891.51   3079.45 |
+  |  1    3   0.0012   2490.91   803.37   7723.23 |
+  +-----------------------------------------------+
+
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +------------------------------------------------+
+  | cp    D        Y      Rate     Lower     Upper |
+  |------------------------------------------------|
+  |  0   11   0.0058   1899.02   1051.68   3429.07 |
+  |  1    2   0.0014   1381.95    345.62   5525.65 |
+  +------------------------------------------------+
+
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +------------------------------------------------------------------+
+  |            ldr_group   D        Y      Rate     Lower      Upper |
+  |------------------------------------------------------------------|
+  | No DS, no CP, no LDR   3   0.0031    954.74    307.92    2960.22 |
+  |       DS but not LDR   1   0.0006   1573.68    221.67   11171.63 |
+  |           DS and LDR   1   0.0002   6604.88    930.39   46888.53 |
+  |       CP but not LDR   1   0.0009   1138.21    160.33    8080.20 |
+  |           CP and LDR   1   0.0006   1758.55    247.71   12484.04 |
+  |------------------------------------------------------------------|
+  |  LD with no DS or CP   6   0.0019   3219.95   1446.60    7167.23 |
+  +------------------------------------------------------------------+
+
+
+     failure event:  composite1 != 0 & composite1 < .
+obs. time interval:  (0, stime_composite1]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+        157  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+        157  observations remaining, representing
+         17  failures in single-record/single-failure data
+     72.397  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .5037645
+
+         failure _d:  composite1
+   analysis time _t:  stime_composite1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +-------------------------------------------------+
+  | ldr    D        Y      Rate     Lower     Upper |
+  |-------------------------------------------------|
+  |   0    6   0.0047   1288.59    578.91   2868.24 |
+  |   1   11   0.0026   4257.90   2358.02   7688.50 |
+  +-------------------------------------------------+
+
+
+         failure _d:  composite1
+   analysis time _t:  stime_composite1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +-----------------------------------------------------------+
+  |       ldr_cat   D        Y      Rate     Lower      Upper |
+  |-----------------------------------------------------------|
+  |    Not on LDR   6   0.0047   1288.59    578.91    2868.24 |
+  |     LDR, mild   9   0.0021   4323.05   2249.35    8308.54 |
+  | LDR, profound   2   0.0005   3987.45    997.25   15943.55 |
+  +-----------------------------------------------------------+
+
+
+         failure _d:  composite1
+   analysis time _t:  stime_composite1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +--------------------------------------------------------------------------+
+  |                  ldr_carecat    D        Y      Rate     Lower     Upper |
+  |--------------------------------------------------------------------------|
+  |                   Not on LDR    6   0.0047   1288.59    578.91   2868.24 |
+  | LDR, not in residential care   11   0.0026   4257.90   2358.02   7688.50 |
+  +--------------------------------------------------------------------------+
+
+
+         failure _d:  composite1
+   analysis time _t:  stime_composite1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +------------------------------------------------+
+  | ds    D        Y      Rate     Lower     Upper |
+  |------------------------------------------------|
+  |  0   14   0.0060   2319.68   1373.84   3916.71 |
+  |  1    3   0.0012   2490.91    803.37   7723.23 |
+  +------------------------------------------------+
+
+
+         failure _d:  composite1
+   analysis time _t:  stime_composite1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +------------------------------------------------+
+  | cp    D        Y      Rate     Lower     Upper |
+  |------------------------------------------------|
+  |  0   15   0.0058   2589.57   1561.16   4295.43 |
+  |  1    2   0.0014   1381.95    345.62   5525.65 |
+  +------------------------------------------------+
+
+
+         failure _d:  composite1
+   analysis time _t:  stime_composite1/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(157 records included in the analysis)
+
+  +------------------------------------------------------------------+
+  |            ldr_group   D        Y      Rate     Lower      Upper |
+  |------------------------------------------------------------------|
+  | No DS, no CP, no LDR   4   0.0031   1272.98    477.77    3391.74 |
+  |       DS but not LDR   1   0.0006   1573.68    221.67   11171.63 |
+  |           DS and LDR   1   0.0002   6604.88    930.39   46888.53 |
+  |       CP but not LDR   1   0.0009   1138.21    160.33    8080.20 |
+  |           CP and LDR   1   0.0006   1758.55    247.71   12484.04 |
+  |------------------------------------------------------------------|
+  |  LD with no DS or CP   9   0.0019   4829.93   2513.08    9282.71 |
+  +------------------------------------------------------------------+
+
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+(210 observations deleted)
+(545 observations deleted)
+
+     failure event:  coviddeath2 != 0 & coviddeath2 < .
+obs. time interval:  (0, stime_coviddeath2]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+        128  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+        128  observations remaining, representing
+          3  failures in single-record/single-failure data
+     50.672  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .4188912
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(128 records included in the analysis)
+
+  +-------------------------------------------------+
+  | ldr   D        Y      Rate     Lower      Upper |
+  |-------------------------------------------------|
+  |   0   2   0.0029   695.317   173.897   2780.182 |
+  |   1   1   0.0022   456.448    64.297   3240.360 |
+  +-------------------------------------------------+
+
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(128 records included in the analysis)
+
+  +----------------------------------------------------------+
+  |       ldr_cat   D        Y      Rate    Lower      Upper |
+  |----------------------------------------------------------|
+  |    Not on LDR   2   0.0029    695.32   173.90    2780.18 |
+  |     LDR, mild   0   0.0020      0.00        .          . |
+  | LDR, profound   1   0.0002   5044.89   710.64   35814.03 |
+  +----------------------------------------------------------+
+
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(128 records included in the analysis)
+
+  +--------------------------------------------------------------------------+
+  |                  ldr_carecat   D        Y      Rate     Lower      Upper |
+  |--------------------------------------------------------------------------|
+  |                   Not on LDR   2   0.0029   695.317   173.897   2780.182 |
+  | LDR, not in residential care   1   0.0022   456.448    64.297   3240.360 |
+  +--------------------------------------------------------------------------+
+
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(128 records included in the analysis)
+
+  +---------------------------------------------+
+  | ds   D        Y     Rate    Lower     Upper |
+  |---------------------------------------------|
+  |  0   2   0.0040   501.06   125.31   2003.47 |
+  |  1   1   0.0011   929.63   130.95   6599.48 |
+  +---------------------------------------------+
+
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(128 records included in the analysis)
+
+  +---------------------------------------------+
+  | cp   D        Y     Rate    Lower     Upper |
+  |---------------------------------------------|
+  |  0   2   0.0037   540.27   135.12   2160.24 |
+  |  1   1   0.0014   732.40   103.17   5199.39 |
+  +---------------------------------------------+
+
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(128 records included in the analysis)
+
+  +-------------------------------------------------------------------+
+  |            ldr_group   D        Y       Rate     Lower      Upper |
+  |-------------------------------------------------------------------|
+  | No DS, no CP, no LDR   1   0.0018    555.344    78.228   3942.429 |
+  |       DS but not LDR   1   0.0004   2431.758   342.546    1.7e+04 |
+  |           DS and LDR   0   0.0004      0.000         .          . |
+  |       CP but not LDR   0   0.0007      0.000         .          . |
+  |           CP and LDR   1   0.0007   1426.758   200.978    1.0e+04 |
+  |-------------------------------------------------------------------|
+  |  LD with no DS or CP   0   0.0011      0.000         .          . |
+  +-------------------------------------------------------------------+
+
+
+     failure event:  covidadmission2 != 0 & covidadmission2 < .
+obs. time interval:  (0, stime_covidadmission2]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+        128  total observations
+         11  observations end on or before enter()
+------------------------------------------------------------------------------
+        117  observations remaining, representing
+          6  failures in single-record/single-failure data
+     43.907  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .4106776
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +-----------------------------------------------+
+  | ldr   D        Y      Rate    Lower     Upper |
+  |-----------------------------------------------|
+  |   0   4   0.0025   1587.53   595.83   4229.82 |
+  |   1   2   0.0019   1068.92   267.33   4274.01 |
+  +-----------------------------------------------+
+
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +---------------------------------------------------------+
+  |       ldr_cat   D        Y      Rate    Lower     Upper |
+  |---------------------------------------------------------|
+  |    Not on LDR   4   0.0025   1587.53   595.83   4229.82 |
+  |     LDR, mild   2   0.0017   1193.24   298.43   4771.09 |
+  | LDR, profound   0   0.0002      0.00        .         . |
+  +---------------------------------------------------------+
+
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +------------------------------------------------------------------------+
+  |                  ldr_carecat   D        Y      Rate    Lower     Upper |
+  |------------------------------------------------------------------------|
+  |                   Not on LDR   4   0.0025   1587.53   595.83   4229.82 |
+  | LDR, not in residential care   2   0.0019   1068.92   267.33   4274.01 |
+  +------------------------------------------------------------------------+
+
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +----------------------------------------------+
+  | ds   D        Y      Rate    Lower     Upper |
+  |----------------------------------------------|
+  |  0   6   0.0035   1714.79   770.39   3816.91 |
+  |  1   0   0.0009      0.00        .         . |
+  +----------------------------------------------+
+
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +----------------------------------------------+
+  | cp   D        Y      Rate    Lower     Upper |
+  |----------------------------------------------|
+  |  0   5   0.0032   1550.30   645.28   3724.64 |
+  |  1   1   0.0012    858.00   120.86   6090.99 |
+  +----------------------------------------------+
+
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +-----------------------------------------------------------------+
+  |            ldr_group   D        Y      Rate    Lower      Upper |
+  |-----------------------------------------------------------------|
+  | No DS, no CP, no LDR   3   0.0015   1980.39   638.72    6140.34 |
+  |       DS but not LDR   0   0.0004      0.00        .          . |
+  |           DS and LDR   0   0.0004      0.00        .          . |
+  |       CP but not LDR   1   0.0006   1557.57   219.40   11057.30 |
+  |           CP and LDR   0   0.0005      0.00        .          . |
+  |-----------------------------------------------------------------|
+  |  LD with no DS or CP   2   0.0010   2045.07   511.47    8177.10 |
+  +-----------------------------------------------------------------+
+
+
+     failure event:  composite2 != 0 & composite2 < .
+obs. time interval:  (0, stime_composite2]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+        128  total observations
+         11  observations end on or before enter()
+------------------------------------------------------------------------------
+        117  observations remaining, representing
+         11  failures in single-record/single-failure data
+     43.907  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .4106776
+
+         failure _d:  composite2
+   analysis time _t:  stime_composite2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +------------------------------------------------+
+  | ldr   D        Y      Rate     Lower     Upper |
+  |------------------------------------------------|
+  |   0   8   0.0025   3175.05   1587.84   6348.86 |
+  |   1   3   0.0019   1603.38    517.12   4971.39 |
+  +------------------------------------------------+
+
+
+         failure _d:  composite2
+   analysis time _t:  stime_composite2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +-----------------------------------------------------------+
+  |       ldr_cat   D        Y      Rate     Lower      Upper |
+  |-----------------------------------------------------------|
+  |    Not on LDR   8   0.0025   3175.05   1587.84    6348.86 |
+  |     LDR, mild   2   0.0017   1193.24    298.43    4771.09 |
+  | LDR, profound   1   0.0002   5129.92    722.62   36417.64 |
+  +-----------------------------------------------------------+
+
+
+         failure _d:  composite2
+   analysis time _t:  stime_composite2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +-------------------------------------------------------------------------+
+  |                  ldr_carecat   D        Y      Rate     Lower     Upper |
+  |-------------------------------------------------------------------------|
+  |                   Not on LDR   8   0.0025   3175.05   1587.84   6348.86 |
+  | LDR, not in residential care   3   0.0019   1603.38    517.12   4971.39 |
+  +-------------------------------------------------------------------------+
+
+
+         failure _d:  composite2
+   analysis time _t:  stime_composite2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +------------------------------------------------+
+  | ds    D        Y      Rate     Lower     Upper |
+  |------------------------------------------------|
+  |  0   10   0.0035   2857.98   1537.75   5311.69 |
+  |  1    1   0.0009   1121.43    157.97   7961.12 |
+  +------------------------------------------------+
+
+
+         failure _d:  composite2
+   analysis time _t:  stime_composite2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +-----------------------------------------------+
+  | cp   D        Y      Rate     Lower     Upper |
+  |-----------------------------------------------|
+  |  0   9   0.0032   2790.53   1451.96   5363.17 |
+  |  1   2   0.0012   1716.00    429.17   6861.31 |
+  +-----------------------------------------------+
+
+
+         failure _d:  composite2
+   analysis time _t:  stime_composite2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(117 records included in the analysis)
+
+  +------------------------------------------------------------------+
+  |            ldr_group   D        Y      Rate     Lower      Upper |
+  |------------------------------------------------------------------|
+  | No DS, no CP, no LDR   6   0.0015   3960.78   1779.42    8816.22 |
+  |       DS but not LDR   1   0.0004   2756.60    388.30   19569.33 |
+  |           DS and LDR   0   0.0004      0.00         .          . |
+  |       CP but not LDR   1   0.0006   1557.57    219.40   11057.30 |
+  |           CP and LDR   1   0.0005   1910.30    269.09   13561.38 |
+  |------------------------------------------------------------------|
+  |  LD with no DS or CP   2   0.0010   2045.07    511.47    8177.10 |
+  +------------------------------------------------------------------+
+
+
+. postclose `ldrresults'
+
+. 
+. use `ldrfile', clear
+
+. 
+. *************************
+. *  Tidy output for HRs  *
+. *************************
+. 
+. * Outcome
+. rename outcome out
+
+. gen outcome     = 1 if out=="coviddeath"
+(259 missing values generated)
+
+. replace outcome = 2 if out=="covidadmission"
+(136 real changes made)
+
+. replace outcome = 3 if out=="composite"
+(123 real changes made)
+
+. 
+. label define outcome    1 "COVID-19 death"              ///
+>                                                 2 "COVID-19 admission"  ///
+>                                                 3 "Composite"
+
+. label values outcome outcome
+
+. drop out
+
+. 
+. * Exposure
+. rename exposure exp
+
+. gen     exposure = 1 if exp=="ldr"
+(343 missing values generated)
+
+. replace exposure = 2 if exp=="ldr_cat"
+(69 real changes made)
+
+. replace exposure = 3 if exp=="ldr_carecat"
+(44 real changes made)
+
+. replace exposure = 4 if exp=="ds"
+(46 real changes made)
+
+. replace exposure = 5 if exp=="cp"
+(46 real changes made)
+
+. replace exposure = 6 if exp=="ldr_group"
+(138 real changes made)
+
+. 
+. label define exposure   1 "Learning disability register"        ///
+>                                                 2 "LDR Severe vs mild"       
+>                    ///
+>                                                 3 "LDR by residential care"  
+>                    ///
+>                                                 4 "Down's syndrome"          
+>                            ///
+>                                                 5 "Cerebral Palsy"           
+>                            ///
+>                                                 6 "Combined grouping"        
+>                    
+
+. label values exposure exposure                                          
+
+. drop exp
+
+. 
+. * Categories of exposure
+. gen category     = "No"                                         if expcat==0
+(251 missing values generated)
+
+. replace category = "Yes"                                        if inlist(exp
+> osure, 1, 4, 5) & expcat==1
+variable category was str2 now str3
+(68 real changes made)
+
+. 
+. replace category = "LDR, mild"                          if inlist(exposure, 2
+> ) & expcat==1
+variable category was str3 now str9
+(23 real changes made)
+
+. replace category = "LDR, profound"                      if inlist(exposure, 2
+> ) & expcat==2
+variable category was str9 now str13
+(23 real changes made)
+
+. 
+. replace category = "LDR, community"             if inlist(exposure, 3) & expc
+> at==1
+variable category was str13 now str14
+(22 real changes made)
+
+. replace category = "LDR, residential care"      if inlist(exposure, 3) & expc
+> at==2
+(0 real changes made)
+
+. 
+. replace category = "DS but not LDR"             if inlist(exposure, 6) & expc
+> at==1
+(23 real changes made)
+
+. replace category = "DS and LDR"                         if inlist(exposure, 6
+> ) & expcat==2
+(23 real changes made)
+
+. replace category = "CP but not LDR"             if inlist(exposure, 6) & expc
+> at==3
+(23 real changes made)
+
+. replace category = "CP and LDR"                         if inlist(exposure, 6
+> ) & expcat==4
+(23 real changes made)
+
+. replace category = "LDR with no DS or CP"       if inlist(exposure, 6) & expc
+> at==5
+variable category was str14 now str20
+(23 real changes made)
+
+. 
+. * Model adjustment
+. gen     adjustment = 1 if model=="Confounders"
+(289 missing values generated)
+
+. replace adjustment = 2 if model=="Confounders+IMD"
+(102 real changes made)
+
+. replace adjustment = 3 if model=="Confounders+Resid"
+(98 real changes made)
+
+. replace adjustment = 4 if model=="Confounders_Comorb"
+(89 real changes made)
+
+. label define adj        1 "Confounders"                         ///     
+>                                         2 "Confounders with IMD"        ///
+>                                         3 "Confounders with care"       ///
+>                                         4 "Confounders with comorbidities"   
+>    
+
+. label values adjustment adj
+
+. drop model
+
+. 
+. * Hazard ratio with 95% confidence interval
+. gen cl = exp(lnhr - invnorm(0.975)*sehr)
+(2 missing values generated)
+
+. gen cu = exp(lnhr + invnorm(0.975)*sehr)
+(2 missing values generated)
+
+. gen hr = exp(lnhr)
+
+. 
+. gen hr_ci =   string(round(hr, 0.01)) + " (" ///
+>                         + string(round(cl, 0.01)) + ", " ///
+>                         + string(round(cu, 0.01)) + ")"
+
+. replace hr_ci = "" if expcat==0
+(136 real changes made)
+
+. drop cl cu hr lnhr sehr
+
+. 
+. * Put in wide format
+. reshape wide hr_ci, i(wave outcome exposure expcat) j(adjust)
+(note: j = 1 2 3 4)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                      387   ->     102
+Number of variables                   7   ->       9
+j variable (4 values)        adjustment   ->   (dropped)
+xij variables:
+                                  hr_ci   ->   hr_ci1 hr_ci2 ... hr_ci4
+-----------------------------------------------------------------------------
+
+. rename hr_ci1 hr_conf
+
+. rename hr_ci2 hr_conf_imd
+
+. rename hr_ci3 hr_conf_resid
+
+. rename hr_ci4 hr_conf_comorb
+
+. 
+. 
+. order wave outcome exposure category hr*
+
+. sort wave outcome exposure expcat
+
+. 
+. * Save data
+. outsheet using "output/output_hrs_main_child", replace
+(note: file output/output_hrs_main_child.out not found)
+
+. 
+. 
+. 
+. ***************************
+. *  Tidy output for rates  *
+. ***************************
+. 
+. forvalues i = 1 (1) 2 {
+  2.         foreach out in coviddeath covidadmission composite  {
+  3.                 local expnow = "ldr"
+  4.                 use "analysis/data_temp`out'_`expnow'_`i'", clear
+  5.                 gen exp = "`expnow'"
+  6.                 foreach exp in ldr_cat ldr_carecat ds cp ldr_group {
+  7.                         rename `expnow' `exp'
+  8.                         append using "analysis/data_temp`out'_`exp'_`i'"
+  9.                         erase "analysis/data_temp`out'_`expnow'_`i'.dta"
+ 10.                         replace exp = "`exp'" if exp==""
+ 11.                         local expnow = "`exp'"
+ 12.                 }
+ 13.                 erase "analysis/data_temp`out'_`expnow'_`i'.dta"
+ 14.                 gen out = "`out'"
+ 15.                 save "analysis/data_temp`out'_`i'", replace
+ 16.         }
+ 17.         use "analysis/data_tempcoviddeath_`i'"
+ 18.         append using "analysis/data_tempcovidadmission_`i'"
+ 19.         append using "analysis/data_tempcomposite_`i'"
+ 20. 
+.         * Delete unneeded datasets
+.         erase "analysis/data_tempcoviddeath_`i'.dta"
+ 21.         erase "analysis/data_tempcovidadmission_`i'.dta"
+ 22.         erase "analysis/data_tempcomposite_`i'.dta"
+ 23. 
+.         gen wave = `i'
+ 24.         save "analysis/data_temp_`i'.dta"
+ 25. }
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+variable exp was str3 now str7
+(3 real changes made)
+variable exp was str7 now str11
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(6 real changes made)
+(note: file analysis/data_tempcoviddeath_1.dta not found)
+file analysis/data_tempcoviddeath_1.dta saved
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+variable exp was str3 now str7
+(3 real changes made)
+variable exp was str7 now str11
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(6 real changes made)
+(note: file analysis/data_tempcovidadmission_1.dta not found)
+file analysis/data_tempcovidadmission_1.dta saved
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+variable exp was str3 now str7
+(3 real changes made)
+variable exp was str7 now str11
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(6 real changes made)
+(note: file analysis/data_tempcomposite_1.dta not found)
+file analysis/data_tempcomposite_1.dta saved
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+(note: variable out was str10, now str14 to accommodate using data's values)
+file analysis/data_temp_1.dta saved
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+variable exp was str3 now str7
+(3 real changes made)
+variable exp was str7 now str11
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(6 real changes made)
+(note: file analysis/data_tempcoviddeath_2.dta not found)
+file analysis/data_tempcoviddeath_2.dta saved
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+variable exp was str3 now str7
+(3 real changes made)
+variable exp was str7 now str11
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(6 real changes made)
+(note: file analysis/data_tempcovidadmission_2.dta not found)
+file analysis/data_tempcovidadmission_2.dta saved
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+variable exp was str3 now str7
+(3 real changes made)
+variable exp was str7 now str11
+(2 real changes made)
+(2 real changes made)
+(2 real changes made)
+(6 real changes made)
+(note: file analysis/data_tempcomposite_2.dta not found)
+file analysis/data_tempcomposite_2.dta saved
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+(note: variable out was str10, now str14 to accommodate using data's values)
+file analysis/data_temp_2.dta saved
+
+. use "analysis/data_temp_1.dta"
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+
+. append using "analysis/data_temp_2.dta"
+
+. 
+. erase "analysis/data_temp_1.dta"
+
+. erase "analysis/data_temp_2.dta"
+
+. 
+. 
+. 
+. * Outcome
+. gen outcome     = 1 if out=="coviddeath"
+(68 missing values generated)
+
+. replace outcome = 2 if out=="covidadmission"
+(34 real changes made)
+
+. replace outcome = 3 if out=="composite"
+(34 real changes made)
+
+. 
+. label define outcome    1 "COVID-19 death"              ///
+>                                                 2 "COVID-19 admission"  ///
+>                                                 3 "Composite"
+
+. label values outcome outcome
+
+. drop out
+
+. 
+. * Exposure
+. gen     exposure = 1 if exp=="ldr"
+(90 missing values generated)
+
+. replace exposure = 2 if exp=="ldr_cat"
+(18 real changes made)
+
+. replace exposure = 3 if exp=="ldr_carecat"
+(12 real changes made)
+
+. replace exposure = 4 if exp=="ds"
+(12 real changes made)
+
+. replace exposure = 5 if exp=="cp"
+(12 real changes made)
+
+. replace exposure = 6 if exp=="ldr_group"
+(36 real changes made)
+
+. 
+. label define exposure   1 "Learning disability register"        ///
+>                                                 2 "LDR Severe vs mild"       
+>                    ///
+>                                                 3 "LDR by residential care"  
+>                    ///
+>                                                 4 "Down's syndrome"          
+>                            ///
+>                                                 5 "Cerebral Palsy"           
+>                            ///
+>                                                 6 "Combined grouping"        
+>                    
+
+. label values exposure exposure                                          
+
+. drop exp
+
+. 
+. * Categories of exposure
+. rename ldr_group expcat
+
+. gen category     = "No"                                         if expcat==0
+(66 missing values generated)
+
+. replace category = "Yes"                                        if inlist(exp
+> osure, 1, 4, 5) & expcat==1
+variable category was str2 now str3
+(18 real changes made)
+
+. 
+. replace category = "LDR, mild"                          if inlist(exposure, 2
+> ) & expcat==1
+variable category was str3 now str9
+(6 real changes made)
+
+. replace category = "LDR, profound"                      if inlist(exposure, 2
+> ) & expcat==2
+variable category was str9 now str13
+(6 real changes made)
+
+. 
+. replace category = "LDR, community"             if inlist(exposure, 3) & expc
+> at==1
+variable category was str13 now str14
+(6 real changes made)
+
+. replace category = "LDR, residential care"      if inlist(exposure, 3) & expc
+> at==2
+(0 real changes made)
+
+. 
+. replace category = "DS but not LDR"             if inlist(exposure, 6) & expc
+> at==1
+(6 real changes made)
+
+. replace category = "DS and LDR"                         if inlist(exposure, 6
+> ) & expcat==2
+(6 real changes made)
+
+. replace category = "CP but not LDR"             if inlist(exposure, 6) & expc
+> at==3
+(6 real changes made)
+
+. replace category = "CP and LDR"                         if inlist(exposure, 6
+> ) & expcat==4
+(6 real changes made)
+
+. replace category = "LDR with no DS or CP"       if inlist(exposure, 6) & expc
+> at==5
+variable category was str14 now str20
+(6 real changes made)
+
+. 
+. * Rename remaining variables
+. rename _D events
+
+. rename _Y pyr_10000
+
+. rename _Rate rate_per_10000
+
+. rename _Lower rate_cl
+
+. rename _Upper rate_cu
+
+. 
+. order wave outcome exposure category events pyr rate*
+
+. sort wave outcome exposure expcat
+
+. 
+. 
+. * Save data
+. outsheet using "output/output_rates_child", replace
+(note: file output/output_rates_child.out not found)
+
+. 
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /workspace/logs/AL004_cox_regression_child.log
+  log type:  text
+ closed on:   9 Feb 2021, 11:06:07
+-------------------------------------------------------------------------------

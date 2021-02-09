@@ -27,6 +27,9 @@ cap log close
 log using "logs/AL001_describe_cohort", replace text
 
 
+* Add ado files
+adopath++ `c(pwd)'\analysis
+
 
 * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
 * Wave 2: i=2  (1 Sept 20 - latest)
@@ -40,8 +43,8 @@ forvalues i = 1 (1) 2 {
 		
 	/* Complete case for ethnicity   */ 
 
-	tab ethnicity_5
-	tab ethnicity_5, m
+	safetab ethnicity_5
+	safetab ethnicity_5, m
 	drop if ethnicity_5>=.
 
 
@@ -52,22 +55,22 @@ forvalues i = 1 (1) 2 {
 	*  Describe exposure variables  *
 	*********************************
 
-	tab ldr
-	tab ld_profound ldr, m
-	tab ldr_cat
-	tab ldr_carecat ldr, m
-	tab ldr_carecat
+	safetab ldr
+	safetab ld_profound ldr, m
+	safetab ldr_cat
+	safetab ldr_carecat ldr, m
+	safetab ldr_carecat
 
-	tab ds ldr, m
-	tab ds
+	safetab ds ldr, m
+	safetab ds
 
-	tab cp ldr, m
-	tab cp
+	safetab cp ldr, m
+	safetab cp
 
-	tab ldr_group ldr, m
-	tab ldr_group cp,  m
-	tab ldr_group ds,  m
-	tab ldr_group 
+	safetab ldr_group ldr, m
+	safetab ldr_group cp,  m
+	safetab ldr_group ds,  m
+	safetab ldr_group 
 
 	
 
@@ -77,19 +80,19 @@ forvalues i = 1 (1) 2 {
 	***********************************
 
 	* Area
-	tab region_7, 		m
-	tab stp,		 	m
+	safetab region_7, 		m
+	safetab stp,		 	m
 
 	* Age, sex and ethnicity
 	summ age, 			d 
-	tab agegroup, 		m
-	tab child, 			m
+	safetab agegroup, 	m
+	safetab child, 		m
 	bysort child: summ age, d
-	tab male, 			m
+	safetab male, 		m
 
 	* Ethnicity
-	tab ethnicity_5, 	m
-	tab ethnicity_16, 	m
+	safetab ethnicity_5, 	m
+	safetab ethnicity_16, 	m
 
 	
 
@@ -99,14 +102,14 @@ forvalues i = 1 (1) 2 {
 	********************************************
 
 	* Deprivation
-	tab imd, 			m
+	safetab imd, 			m
 
 	
 	* Residential care 
-	tab resid_care_old,	m
-	tab resid_care_ldr,	m
+	safetab resid_care_old,	m
+	safetab resid_care_ldr,	m
 	sum household_size, d
-	tab resid_care_old resid_care_ldr
+	safetab resid_care_old resid_care_ldr
 	
 
 	
@@ -117,29 +120,32 @@ forvalues i = 1 (1) 2 {
 	
 	* BMI
 	summ bmi, 			d
-	tab obese40, 		m
+	safetab obese40, 	m
 
 	
 	* Physical comorbidities, also indicators for vaccination
-	tab1 	asthma_severe cf respiratory		///
-			cardiac  af dvt_pe diabcat		 	///
-			liver stroke tia dementia			///
-			kidneyfn, m
-
+	foreach var of varlist asthma_severe cf respiratory		///
+			cardiac  af dvt_pe diabcat		 				///
+			liver stroke tia dementia						///
+			kidneyfn {
+			safetab `var', m
+	}
 			
 	* Indicators for immunosuppression (an indication for vaccination)
-	tab1 	spleen transplant dialysis			///
-			immunosuppression cancerHaem		///
-			autoimmune ibd cancerExhaem1yr, m
-
+	foreach var of varlist spleen transplant dialysis		///
+			immunosuppression cancerHaem					///
+			autoimmune ibd cancerExhaem1yr {
+			safetab `var', m
+	}
 	
 	
 	*****************************************************
 	*  Describe other vaccine priority group variables  *
 	*****************************************************
 	
-	tab1 smi neuro dialysis, m
-	
+	foreach var of varlist smi neuro {
+			safetab `var', m
+	}	
 
 			
 	********************************
@@ -149,16 +155,15 @@ forvalues i = 1 (1) 2 {
 	summ coviddeath_date otherdeath_date covidadmission_date composite_date, d format
 
 	if `i'==1 {	
-		tab coviddeath1 
-		tab covidadmission1 
-		tab coviddeath1 covidadmission1
-		tab composite1
+		safetab coviddeath1 
+		safetab covidadmission1 
+		safetab coviddeath1 covidadmission1
+		safetab composite1
 	}
-	tab coviddeath2 
-	tab covidadmission2 
-	tab coviddeath2 covidadmission2
-	tab composite2
-
+	safetab coviddeath2 
+	safetab covidadmission2 
+	safetab coviddeath2 covidadmission2
+	safetab composite2
 
 	summ stime*
 

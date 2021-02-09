@@ -2,9 +2,20 @@
       name:  <unnamed>
        log:  /workspace/logs/AL001_describe_cohort.log
   log type:  text
- opened on:   8 Feb 2021, 19:51:42
+ opened on:   9 Feb 2021, 10:35:24
 
 . 
+. 
+. * Add ado files
+. adopath++ `c(pwd)'\analysis
+  [1]              "/workspace\analysis"
+  [2]  (BASE)      "/usr/local/stata/ado/base/"
+  [3]  (SITE)      "/usr/local/ado/"
+  [4]              "."
+  [5]  (PERSONAL)  "~/ado/personal/"
+  [6]  (PLUS)      "~/ado/plus/"
+  [7]  (OLDPLACE)  "~/ado/"
+
 . 
 . 
 . * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
@@ -19,8 +30,8 @@
 .                 
 .         /* Complete case for ethnicity   */ 
 . 
-.         tab ethnicity_5
-  4.         tab ethnicity_5, m
+.         safetab ethnicity_5
+  4.         safetab ethnicity_5, m
   5.         drop if ethnicity_5>=.
   6. 
 . 
@@ -31,22 +42,22 @@
 .         *  Describe exposure variables  *
 .         *********************************
 . 
-.         tab ldr
-  7.         tab ld_profound ldr, m
-  8.         tab ldr_cat
-  9.         tab ldr_carecat ldr, m
- 10.         tab ldr_carecat
+.         safetab ldr
+  7.         safetab ld_profound ldr, m
+  8.         safetab ldr_cat
+  9.         safetab ldr_carecat ldr, m
+ 10.         safetab ldr_carecat
  11. 
-.         tab ds ldr, m
- 12.         tab ds
+.         safetab ds ldr, m
+ 12.         safetab ds
  13. 
-.         tab cp ldr, m
- 14.         tab cp
+.         safetab cp ldr, m
+ 14.         safetab cp
  15. 
-.         tab ldr_group ldr, m
- 16.         tab ldr_group cp,  m
- 17.         tab ldr_group ds,  m
- 18.         tab ldr_group 
+.         safetab ldr_group ldr, m
+ 16.         safetab ldr_group cp,  m
+ 17.         safetab ldr_group ds,  m
+ 18.         safetab ldr_group 
  19. 
 .         
 . 
@@ -56,19 +67,19 @@
 .         ***********************************
 . 
 .         * Area
-.         tab region_7,           m
- 20.         tab stp,                        m
+.         safetab region_7,               m
+ 20.         safetab stp,                    m
  21. 
 .         * Age, sex and ethnicity
 .         summ age,                       d 
- 22.         tab agegroup,           m
- 23.         tab child,                      m
+ 22.         safetab agegroup,       m
+ 23.         safetab child,          m
  24.         bysort child: summ age, d
- 25.         tab male,                       m
+ 25.         safetab male,           m
  26. 
 .         * Ethnicity
-.         tab ethnicity_5,        m
- 27.         tab ethnicity_16,       m
+.         safetab ethnicity_5,    m
+ 27.         safetab ethnicity_16,   m
  28. 
 .         
 . 
@@ -78,14 +89,14 @@
 .         ********************************************
 . 
 .         * Deprivation
-.         tab imd,                        m
+.         safetab imd,                    m
  29. 
 .         
 .         * Residential care 
-.         tab resid_care_old,     m
- 30.         tab resid_care_ldr,     m
+.         safetab resid_care_old, m
+ 30.         safetab resid_care_ldr, m
  31.         sum household_size, d
- 32.         tab resid_care_old resid_care_ldr
+ 32.         safetab resid_care_old resid_care_ldr
  33.         
 . 
 .         
@@ -96,30 +107,36 @@
 .         
 .         * BMI
 .         summ bmi,                       d
- 34.         tab obese40,            m
+ 34.         safetab obese40,        m
  35. 
 .         
 .         * Physical comorbidities, also indicators for vaccination
-.         tab1    asthma_severe cf respiratory            ///
->                         cardiac  af dvt_pe diabcat                      ///
->                         liver stroke tia dementia                       ///
->                         kidneyfn, m
- 36. 
-.                         
+.         foreach var of varlist asthma_severe cf respiratory             ///
+>                         cardiac  af dvt_pe diabcat                           
+>                    ///
+>                         liver stroke tia dementia                            
+>                    ///
+>                         kidneyfn {
+ 36.                         safetab `var', m
+ 37.         }
+ 38.                         
 .         * Indicators for immunosuppression (an indication for vaccination)
-.         tab1    spleen transplant dialysis                      ///
->                         immunosuppression cancerHaem            ///
->                         autoimmune ibd cancerExhaem1yr, m
- 37. 
-.         
+.         foreach var of varlist spleen transplant dialysis               ///
+>                         immunosuppression cancerHaem                         
+>            ///
+>                         autoimmune ibd cancerExhaem1yr {
+ 39.                         safetab `var', m
+ 40.         }
+ 41.         
 .         
 .         *****************************************************
 .         *  Describe other vaccine priority group variables  *
 .         *****************************************************
 .         
-.         tab1 smi neuro dialysis, m
- 38.         
-. 
+.         foreach var of varlist smi neuro {
+ 42.                         safetab `var', m
+ 43.         }       
+ 44. 
 .                         
 .         ********************************
 .         *  Describe outcome variables  *
@@ -127,23 +144,23 @@
 .                 
 .         summ coviddeath_date otherdeath_date covidadmission_date composite_da
 > te, d format
- 39. 
+ 45. 
 .         if `i'==1 {     
- 40.                 tab coviddeath1 
- 41.                 tab covidadmission1 
- 42.                 tab coviddeath1 covidadmission1
- 43.                 tab composite1
- 44.         }
- 45.         tab coviddeath2 
- 46.         tab covidadmission2 
- 47.         tab coviddeath2 covidadmission2
- 48.         tab composite2
- 49. 
-. 
+ 46.                 safetab coviddeath1 
+ 47.                 safetab covidadmission1 
+ 48.                 safetab coviddeath1 covidadmission1
+ 49.                 safetab composite1
+ 50.         }
+ 51.         safetab coviddeath2 
+ 52.         safetab covidadmission2 
+ 53.         safetab coviddeath2 covidadmission2
+ 54.         safetab composite2
+ 55. 
 .         summ stime*
- 50. 
+ 56. 
 . }
 (Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+0
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
@@ -155,6 +172,7 @@ Asian or Asian British |        159       21.23       62.75
                  Other |        142       18.96      100.00
 -----------------------+-----------------------------------
                  Total |        749      100.00
+12
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
@@ -168,6 +186,7 @@ Asian or Asian British |        159       15.92       47.05
 -----------------------+-----------------------------------
                  Total |        999      100.00
 (250 observations deleted)
+0
 
    Learning |
  disability |      Freq.     Percent        Cum.
@@ -176,6 +195,7 @@ Asian or Asian British |        159       15.92       47.05
           1 |        293       39.12      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+16
 
 Severe-pro |
      found |
@@ -186,6 +206,7 @@ disability |         0          1 |     Total
          1 |        96         58 |       154 
 -----------+----------------------+----------
      Total |       456        293 |       749 
+0
 
      Learning |
    disability |
@@ -200,6 +221,7 @@ severe-profou |
 LDR, profound |         58        7.74      100.00
 --------------+-----------------------------------
         Total |        749      100.00
+16
 
   Learning disability |
            split into |
@@ -211,6 +233,7 @@ LDR, profound |         58        7.74      100.00
 LDR, not in residenti |         0        293 |       293 
 ----------------------+----------------------+----------
                 Total |       456        293 |       749 
+0
 
    Learning disability split |
          into residential vs |
@@ -220,6 +243,7 @@ LDR, not in residenti |         0        293 |       293
 LDR, not in residential care |        293       39.12      100.00
 -----------------------------+-----------------------------------
                        Total |        749      100.00
+7
 
     Down's |  Learning disability
   Syndrome |         0          1 |     Total
@@ -228,6 +252,7 @@ LDR, not in residential care |        293       39.12      100.00
          1 |        91         64 |       155 
 -----------+----------------------+----------
      Total |       456        293 |       749 
+0
 
      Down's |
    Syndrome |      Freq.     Percent        Cum.
@@ -236,6 +261,7 @@ LDR, not in residential care |        293       39.12      100.00
           1 |        155       20.69      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+7
 
   Cerebral |  Learning disability
      Palsy |         0          1 |     Total
@@ -244,6 +270,7 @@ LDR, not in residential care |        293       39.12      100.00
          1 |        92         57 |       149 
 -----------+----------------------+----------
      Total |       456        293 |       749 
+0
 
    Cerebral |
       Palsy |      Freq.     Percent        Cum.
@@ -252,6 +279,7 @@ LDR, not in residential care |        293       39.12      100.00
           1 |        149       19.89      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+14
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -266,6 +294,7 @@ No DS, no CP, no LDR |       295          0 |       295
  LD with no DS or CP |         0        183 |       183 
 ---------------------+----------------------+----------
                Total |       456        293 |       749 
+13
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -280,6 +309,7 @@ No DS, no CP, no LDR |       295          0 |       295
  LD with no DS or CP |       183          0 |       183 
 ---------------------+----------------------+----------
                Total |       600        149 |       749 
+13
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -294,6 +324,7 @@ No DS, no CP, no LDR |       295          0 |       295
  LD with no DS or CP |       183          0 |       183 
 ---------------------+----------------------+----------
                Total |       594        155 |       749 
+0
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -308,6 +339,7 @@ No DS, no CP, no LDR |        295       39.39       39.39
  LD with no DS or CP |        183       24.43      100.00
 ---------------------+-----------------------------------
                Total |        749      100.00
+9
 
   Geographical region (7 |
         England regions) |      Freq.     Percent        Cum.
@@ -320,6 +352,7 @@ North East and Yorkshire |        159       21.23       80.11
               South East |         67        8.95      100.00
 -------------------------+-----------------------------------
                    Total |        749      100.00
+4
 
 Sustainabil |
     ity and |
@@ -375,6 +408,7 @@ Partnership |      Freq.     Percent        Cum.
 90%           73             94       Variance         588.78
 95%           81             96       Skewness        .154436
 99%           93            103       Kurtosis       2.050146
+9
 
 Grouped age |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -387,6 +421,7 @@ Grouped age |      Freq.     Percent        Cum.
         80+ |         43        5.74      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+6
 
       Child |
   indicator |
@@ -433,6 +468,7 @@ Grouped age |      Freq.     Percent        Cum.
 95%           15             15       Skewness       .0194949
 99%           15             15       Kurtosis       1.777297
 
+5
 
        Male |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -440,6 +476,7 @@ Grouped age |      Freq.     Percent        Cum.
           1 |        366       48.87      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+12
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
@@ -451,6 +488,7 @@ Asian or Asian British |        159       21.23       62.75
                  Other |        142       18.96      100.00
 -----------------------+-----------------------------------
                  Total |        749      100.00
+13
 
         Ethnicity in 16 categories |      Freq.     Percent        Cum.
 -----------------------------------+-----------------------------------
@@ -460,6 +498,7 @@ Asian or Asian British |        159       21.23       62.75
                            Unknown |        184       24.57      100.00
 -----------------------------------+-----------------------------------
                              Total |        749      100.00
+4
 
         Index of |
         Multiple |
@@ -471,6 +510,7 @@ Asian or Asian British |        159       21.23       62.75
  5 most deprived |         85       11.35      100.00
 -----------------+-----------------------------------
            Total |        749      100.00
+15
 
 Residential |
       care, |
@@ -479,6 +519,7 @@ Residential |
           0 |        749      100.00      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+15
 
 Residential |
       care, |
@@ -503,6 +544,7 @@ Residential |
 90%            4              5       Variance        1.09113
 95%            4              5       Skewness       .0574156
 99%            5              6       Kurtosis       2.805717
+0
 
            | Residentia
            |  l care,
@@ -528,6 +570,7 @@ Residentia |  learning
 90%     44.12358       49.51208       Variance       62.58142
 95%     46.84472       49.54319       Skewness      -.0875456
 99%     49.39231        49.9908       Kurtosis       2.301457
+8
 
 Evidence of |
      BMI>40 |      Freq.     Percent        Cum.
@@ -536,8 +579,7 @@ Evidence of |
           1 |        131       17.49      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of asthma_severe  
+14
 
      Severe |
      asthma |      Freq.     Percent        Cum.
@@ -547,8 +589,7 @@ Evidence of |
           . |        596       79.57      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of cf  
+3
 
      Cystic |
 Fibrosis (& |
@@ -558,8 +599,7 @@ Fibrosis (& |
           1 |        150       20.03      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of respiratory  
+12
 
 Respiratory |
     disease |
@@ -570,8 +610,7 @@ Respiratory |
           1 |        155       20.69      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of cardiac  
+8
 
       Heart |
     disease |      Freq.     Percent        Cum.
@@ -580,8 +619,7 @@ Respiratory |
           1 |        158       21.09      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of af  
+3
 
      Atrial |
 fibrillatio |
@@ -591,8 +629,7 @@ fibrillatio |
           1 |        142       18.96      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of dvt_pe  
+7
 
   Deep vein |
 thrombosis/ |
@@ -603,19 +640,11 @@ thrombosis/ |
           1 |        157       20.96      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+8
 
--> tabulation of diabcat  
+**TABLE OF diabcat REDACTED DUE TO SMALL N**
 
-                  Diabetes |      Freq.     Percent        Cum.
----------------------------+-----------------------------------
-               No diabetes |        600       80.11       80.11
-       Controlled diabetes |        126       16.82       96.93
-     Uncontrolled diabetes |         22        2.94       99.87
-Diabetes, no hba1c measure |          1        0.13      100.00
----------------------------+-----------------------------------
-                     Total |        749      100.00
-
--> tabulation of liver  
+6
 
       Liver |
     disease |      Freq.     Percent        Cum.
@@ -624,8 +653,7 @@ Diabetes, no hba1c measure |          1        0.13      100.00
           1 |        152       20.29      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of stroke  
+7
 
      Stroke |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -633,8 +661,7 @@ Diabetes, no hba1c measure |          1        0.13      100.00
           1 |        146       19.49      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of tia  
+4
 
   Transient |
    ischemic |
@@ -644,8 +671,7 @@ Diabetes, no hba1c measure |          1        0.13      100.00
           1 |        142       18.96      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of dementia  
+9
 
    Dementia |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -653,18 +679,11 @@ Diabetes, no hba1c measure |          1        0.13      100.00
           1 |        144       19.23      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+9
 
--> tabulation of kidneyfn  
+**TABLE OF kidneyfn REDACTED DUE TO SMALL N**
 
-       Kidney function |      Freq.     Percent        Cum.
------------------------+-----------------------------------
-                  None |        483       64.49       64.49
-Stage 3a/3b egfr 30-60 |          5        0.67       65.15
-     Stage 4/5 egfr<30 |        261       34.85      100.00
------------------------+-----------------------------------
-                 Total |        749      100.00
-
--> tabulation of spleen  
+7
 
      Spleen |
    problems |
@@ -676,8 +695,7 @@ Stage 3a/3b egfr 30-60 |          5        0.67       65.15
           1 |        256       34.18      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of transplant  
+11
 
       Organ |
  transplant |
@@ -687,8 +705,7 @@ Stage 3a/3b egfr 30-60 |          5        0.67       65.15
           1 |        257       34.31      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of dialysis  
+9
 
    Dialysis |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -696,8 +713,7 @@ Stage 3a/3b egfr 30-60 |          5        0.67       65.15
           1 |        139       18.56      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of immunosuppression  
+18
 
  Conditions |
     causing |
@@ -711,8 +727,7 @@ immunosuppr |
           1 |        252       33.64      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of cancerHaem  
+11
 
 Haematologica |
      l cancer |      Freq.     Percent        Cum.
@@ -723,8 +738,7 @@ Haematologica |
      5+ years |        131       17.49      100.00
 --------------+-----------------------------------
         Total |        749      100.00
-
--> tabulation of autoimmune  
+11
 
    RA, SLE, |
   Psoriasis |
@@ -735,8 +749,7 @@ Haematologica |
           1 |        146       19.49      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of ibd  
+4
 
         IBD |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -744,19 +757,11 @@ Haematologica |
           1 |        148       19.76      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+16
 
--> tabulation of cancerExhaem1yr  
+**TABLE OF cancerExhaem1yr REDACTED DUE TO SMALL N**
 
-        Non |
-haematologi |
- cal cancer |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        745       99.47       99.47
-          1 |          4        0.53      100.00
-------------+-----------------------------------
-      Total |        749      100.00
-
--> tabulation of smi  
+4
 
     Serious |
      mental |
@@ -766,8 +771,7 @@ haematologi |
           1 |        139       18.56      100.00
 ------------+-----------------------------------
       Total |        749      100.00
-
--> tabulation of neuro  
+6
 
       Neuro |
   condition |
@@ -777,15 +781,6 @@ stroke/deme |
 ------------+-----------------------------------
           0 |        603       80.51       80.51
           1 |        146       19.49      100.00
-------------+-----------------------------------
-      Total |        749      100.00
-
--> tabulation of dialysis  
-
-   Dialysis |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        610       81.44       81.44
-          1 |        139       18.56      100.00
 ------------+-----------------------------------
       Total |        749      100.00
 
@@ -849,6 +844,7 @@ stroke/deme |
 90%    16jan2021      03feb2021       Variance       9584.504
 95%    22jan2021      07feb2021       Skewness       .0078538
 99%    07feb2021      08feb2021       Kurtosis       1.876689
+0
 
    COVID-19 |
       death |
@@ -860,6 +856,7 @@ censored 31 |
           1 |         16        2.14      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+0
 
    COVID-19 |
    hospital |
@@ -871,17 +868,11 @@ censored 31 |
           1 |         74        9.88      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+0
 
-  COVID-19 |
-     death |   COVID-19 hospital
-    (ONS), |  admission, censored
-  censored |       31 Aug 20
- 31 Aug 20 |         0          1 |     Total
------------+----------------------+----------
-         0 |       661         72 |       733 
-         1 |        14          2 |        16 
------------+----------------------+----------
-     Total |       675         74 |       749 
+**TABLE OF coviddeath1 covidadmission1 REDACTED DUE TO SMALL N**
+
+0
 
    COVID-19 |
    hospital |
@@ -894,6 +885,7 @@ censored 31 |
           1 |         90       12.02      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+0
 
    COVID-19 |
       death |
@@ -905,6 +897,7 @@ latest date |      Freq.     Percent        Cum.
           1 |         23        3.07      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+0
 
    COVID-19 |
    hospital |
@@ -916,18 +909,11 @@ latest date |      Freq.     Percent        Cum.
           1 |        136       18.16      100.00
 ------------+-----------------------------------
       Total |        749      100.00
+0
 
-  COVID-19 |
-     death |
-    (ONS), |   COVID-19 hospital
-  censored |  admission, censored
-    latest |      latest date
-      date |         0          1 |     Total
------------+----------------------+----------
-         0 |       593        133 |       726 
-         1 |        20          3 |        23 
------------+----------------------+----------
-     Total |       613        136 |       749 
+**TABLE OF coviddeath2 covidadmission2 REDACTED DUE TO SMALL N**
+
+0
 
    COVID-19 |
    hospital |
@@ -951,6 +937,7 @@ stime_cov~n2 |        749    273.1495    95.96439          2        330
 -------------+---------------------------------------------------------
 stime_comp~2 |        749    273.1495    95.96439          2        330
 (Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+0
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
@@ -962,6 +949,7 @@ Asian or Asian British |        141       20.95       60.62
                  Other |        130       19.32      100.00
 -----------------------+-----------------------------------
                  Total |        673      100.00
+12
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
@@ -975,6 +963,7 @@ Asian or Asian British |        141       15.97       46.21
 -----------------------+-----------------------------------
                  Total |        883      100.00
 (210 observations deleted)
+0
 
    Learning |
  disability |      Freq.     Percent        Cum.
@@ -983,6 +972,7 @@ Asian or Asian British |        141       15.97       46.21
           1 |        271       40.27      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+16
 
 Severe-pro |
      found |
@@ -993,6 +983,7 @@ disability |         0          1 |     Total
          1 |        78         58 |       136 
 -----------+----------------------+----------
      Total |       402        271 |       673 
+0
 
      Learning |
    disability |
@@ -1007,6 +998,7 @@ severe-profou |
 LDR, profound |         58        8.62      100.00
 --------------+-----------------------------------
         Total |        673      100.00
+16
 
   Learning disability |
            split into |
@@ -1018,6 +1010,7 @@ LDR, profound |         58        8.62      100.00
 LDR, not in residenti |         0        271 |       271 
 ----------------------+----------------------+----------
                 Total |       402        271 |       673 
+0
 
    Learning disability split |
          into residential vs |
@@ -1027,6 +1020,7 @@ LDR, not in residenti |         0        271 |       271
 LDR, not in residential care |        271       40.27      100.00
 -----------------------------+-----------------------------------
                        Total |        673      100.00
+7
 
     Down's |  Learning disability
   Syndrome |         0          1 |     Total
@@ -1035,6 +1029,7 @@ LDR, not in residential care |        271       40.27      100.00
          1 |        77         54 |       131 
 -----------+----------------------+----------
      Total |       402        271 |       673 
+0
 
      Down's |
    Syndrome |      Freq.     Percent        Cum.
@@ -1043,6 +1038,7 @@ LDR, not in residential care |        271       40.27      100.00
           1 |        131       19.47      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+7
 
   Cerebral |  Learning disability
      Palsy |         0          1 |     Total
@@ -1051,6 +1047,7 @@ LDR, not in residential care |        271       40.27      100.00
          1 |        79         53 |       132 
 -----------+----------------------+----------
      Total |       402        271 |       673 
+0
 
    Cerebral |
       Palsy |      Freq.     Percent        Cum.
@@ -1059,6 +1056,7 @@ LDR, not in residential care |        271       40.27      100.00
           1 |        132       19.61      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+14
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -1073,6 +1071,7 @@ No DS, no CP, no LDR |       259          0 |       259
  LD with no DS or CP |         0        173 |       173 
 ---------------------+----------------------+----------
                Total |       402        271 |       673 
+13
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -1087,6 +1086,7 @@ No DS, no CP, no LDR |       259          0 |       259
  LD with no DS or CP |       173          0 |       173 
 ---------------------+----------------------+----------
                Total |       541        132 |       673 
+13
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -1101,6 +1101,7 @@ No DS, no CP, no LDR |       259          0 |       259
  LD with no DS or CP |       173          0 |       173 
 ---------------------+----------------------+----------
                Total |       542        131 |       673 
+0
 
  Grouping of Down's, |
   Cerebral Palsy and |
@@ -1115,6 +1116,7 @@ No DS, no CP, no LDR |        259       38.48       38.48
  LD with no DS or CP |        173       25.71      100.00
 ---------------------+-----------------------------------
                Total |        673      100.00
+9
 
   Geographical region (7 |
         England regions) |      Freq.     Percent        Cum.
@@ -1127,6 +1129,7 @@ North East and Yorkshire |        123       18.28       79.35
               South East |         62        9.21      100.00
 -------------------------+-----------------------------------
                    Total |        673      100.00
+4
 
 Sustainabil |
     ity and |
@@ -1182,6 +1185,7 @@ Partnership |      Freq.     Percent        Cum.
 90%           71             92       Variance       516.5927
 95%           78             93       Skewness       .0708837
 99%           88             94       Kurtosis       2.119154
+9
 
 Grouped age |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -1194,6 +1198,7 @@ Grouped age |      Freq.     Percent        Cum.
         80+ |         28        4.16      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+6
 
       Child |
   indicator |
@@ -1240,6 +1245,7 @@ Grouped age |      Freq.     Percent        Cum.
 95%           15             15       Skewness      -.1393751
 99%           15             15       Kurtosis       1.790932
 
+5
 
        Male |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -1247,6 +1253,7 @@ Grouped age |      Freq.     Percent        Cum.
           1 |        324       48.14      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+12
 
        Ethnicity in 16 |
             categories |      Freq.     Percent        Cum.
@@ -1258,6 +1265,7 @@ Asian or Asian British |        141       20.95       60.62
                  Other |        130       19.32      100.00
 -----------------------+-----------------------------------
                  Total |        673      100.00
+13
 
         Ethnicity in 16 categories |      Freq.     Percent        Cum.
 -----------------------------------+-----------------------------------
@@ -1267,6 +1275,7 @@ Asian or Asian British |        141       20.95       60.62
                            Unknown |        166       24.67      100.00
 -----------------------------------+-----------------------------------
                              Total |        673      100.00
+4
 
         Index of |
         Multiple |
@@ -1278,6 +1287,7 @@ Asian or Asian British |        141       20.95       60.62
  5 most deprived |         61        9.06      100.00
 -----------------+-----------------------------------
            Total |        673      100.00
+15
 
 Residential |
       care, |
@@ -1286,6 +1296,7 @@ Residential |
           0 |        673      100.00      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+15
 
 Residential |
       care, |
@@ -1310,6 +1321,7 @@ Residential |
 90%            4              5       Variance       1.147744
 95%            4              5       Skewness      -.0104961
 99%            5              6       Kurtosis       2.914406
+0
 
            | Residentia
            |  l care,
@@ -1335,6 +1347,7 @@ Residentia |  learning
 90%     44.98058       49.47376       Variance       71.48121
 95%     47.24914       49.87366       Skewness      -.2139372
 99%     49.40646       49.96404       Kurtosis       2.109031
+8
 
 Evidence of |
      BMI>40 |      Freq.     Percent        Cum.
@@ -1343,8 +1356,7 @@ Evidence of |
           1 |        150       22.29      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of asthma_severe  
+14
 
      Severe |
      asthma |      Freq.     Percent        Cum.
@@ -1354,8 +1366,7 @@ Evidence of |
           . |        536       79.64      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of cf  
+3
 
      Cystic |
 Fibrosis (& |
@@ -1365,8 +1376,7 @@ Fibrosis (& |
           1 |        132       19.61      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of respiratory  
+12
 
 Respiratory |
     disease |
@@ -1377,8 +1387,7 @@ Respiratory |
           1 |        126       18.72      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of cardiac  
+8
 
       Heart |
     disease |      Freq.     Percent        Cum.
@@ -1387,8 +1396,7 @@ Respiratory |
           1 |        135       20.06      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of af  
+3
 
      Atrial |
 fibrillatio |
@@ -1398,8 +1406,7 @@ fibrillatio |
           1 |        138       20.51      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of dvt_pe  
+7
 
   Deep vein |
 thrombosis/ |
@@ -1410,8 +1417,7 @@ thrombosis/ |
           1 |        132       19.61      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of diabcat  
+8
 
                   Diabetes |      Freq.     Percent        Cum.
 ---------------------------+-----------------------------------
@@ -1420,8 +1426,7 @@ thrombosis/ |
      Uncontrolled diabetes |         25        3.71      100.00
 ---------------------------+-----------------------------------
                      Total |        673      100.00
-
--> tabulation of liver  
+6
 
       Liver |
     disease |      Freq.     Percent        Cum.
@@ -1430,8 +1435,7 @@ thrombosis/ |
           1 |        134       19.91      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of stroke  
+7
 
      Stroke |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -1439,8 +1443,7 @@ thrombosis/ |
           1 |        129       19.17      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of tia  
+4
 
   Transient |
    ischemic |
@@ -1450,8 +1453,7 @@ thrombosis/ |
           1 |        138       20.51      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of dementia  
+9
 
    Dementia |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -1459,8 +1461,7 @@ thrombosis/ |
           1 |        125       18.57      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of kidneyfn  
+9
 
        Kidney function |      Freq.     Percent        Cum.
 -----------------------+-----------------------------------
@@ -1469,8 +1470,7 @@ Stage 3a/3b egfr 30-60 |          6        0.89       64.78
      Stage 4/5 egfr<30 |        237       35.22      100.00
 -----------------------+-----------------------------------
                  Total |        673      100.00
-
--> tabulation of spleen  
+7
 
      Spleen |
    problems |
@@ -1482,8 +1482,7 @@ Stage 3a/3b egfr 30-60 |          6        0.89       64.78
           1 |        253       37.59      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of transplant  
+11
 
       Organ |
  transplant |
@@ -1493,8 +1492,7 @@ Stage 3a/3b egfr 30-60 |          6        0.89       64.78
           1 |        225       33.43      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of dialysis  
+9
 
    Dialysis |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -1502,8 +1500,7 @@ Stage 3a/3b egfr 30-60 |          6        0.89       64.78
           1 |        107       15.90      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of immunosuppression  
+18
 
  Conditions |
     causing |
@@ -1517,20 +1514,11 @@ immunosuppr |
           1 |        248       36.85      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+11
 
--> tabulation of cancerHaem  
+**TABLE OF cancerHaem REDACTED DUE TO SMALL N**
 
-Haematologica |
-     l cancer |      Freq.     Percent        Cum.
---------------+-----------------------------------
-        Never |        541       80.39       80.39
-    Last year |          2        0.30       80.68
-2-5 years ago |         16        2.38       83.06
-     5+ years |        114       16.94      100.00
---------------+-----------------------------------
-        Total |        673      100.00
-
--> tabulation of autoimmune  
+11
 
    RA, SLE, |
   Psoriasis |
@@ -1541,8 +1529,7 @@ Haematologica |
           1 |        133       19.76      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of ibd  
+4
 
         IBD |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -1550,19 +1537,11 @@ Haematologica |
           1 |        125       18.57      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+16
 
--> tabulation of cancerExhaem1yr  
+**TABLE OF cancerExhaem1yr REDACTED DUE TO SMALL N**
 
-        Non |
-haematologi |
- cal cancer |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        672       99.85       99.85
-          1 |          1        0.15      100.00
-------------+-----------------------------------
-      Total |        673      100.00
-
--> tabulation of smi  
+4
 
     Serious |
      mental |
@@ -1572,8 +1551,7 @@ haematologi |
           1 |        122       18.13      100.00
 ------------+-----------------------------------
       Total |        673      100.00
-
--> tabulation of neuro  
+6
 
       Neuro |
   condition |
@@ -1583,15 +1561,6 @@ stroke/deme |
 ------------+-----------------------------------
           0 |        536       79.64       79.64
           1 |        137       20.36      100.00
-------------+-----------------------------------
-      Total |        673      100.00
-
--> tabulation of dialysis  
-
-   Dialysis |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |        566       84.10       84.10
-          1 |        107       15.90      100.00
 ------------+-----------------------------------
       Total |        673      100.00
 
@@ -1655,6 +1624,7 @@ stroke/deme |
 90%    08jan2021      04feb2021       Variance       9569.337
 95%    18jan2021      05feb2021       Skewness      -.0530719
 99%    05feb2021      07feb2021       Kurtosis       1.823761
+0
 
    COVID-19 |
       death |
@@ -1666,6 +1636,7 @@ latest date |      Freq.     Percent        Cum.
           1 |         14        2.08      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+0
 
    COVID-19 |
    hospital |
@@ -1677,18 +1648,11 @@ latest date |      Freq.     Percent        Cum.
           1 |        136       20.21      100.00
 ------------+-----------------------------------
       Total |        673      100.00
+0
 
-  COVID-19 |
-     death |
-    (ONS), |   COVID-19 hospital
-  censored |  admission, censored
-    latest |      latest date
-      date |         0          1 |     Total
------------+----------------------+----------
-         0 |       526        133 |       659 
-         1 |        11          3 |        14 
------------+----------------------+----------
-     Total |       537        136 |       673 
+**TABLE OF coviddeath2 covidadmission2 REDACTED DUE TO SMALL N**
+
+0
 
    COVID-19 |
    hospital |
@@ -1714,5 +1678,5 @@ stime_comp~2 |        673    110.4948    80.75647       -178        150
       name:  <unnamed>
        log:  /workspace/logs/AL001_describe_cohort.log
   log type:  text
- closed on:   8 Feb 2021, 19:51:42
+ closed on:   9 Feb 2021, 10:35:25
 -------------------------------------------------------------------------------

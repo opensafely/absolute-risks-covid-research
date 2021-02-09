@@ -1,0 +1,545 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /workspace/logs/AL002_tabulate_cohort_descriptives.log
+  log type:  text
+ opened on:   9 Feb 2021, 10:43:58
+
+. 
+. * Add ado files
+. adopath++ `c(pwd)'\analysis
+  [1]              "/workspace\analysis"
+  [2]  (BASE)      "/usr/local/stata/ado/base/"
+  [3]  (SITE)      "/usr/local/ado/"
+  [4]              "."
+  [5]  (PERSONAL)  "~/ado/personal/"
+  [6]  (PLUS)      "~/ado/plus/"
+  [7]  (OLDPLACE)  "~/ado/"
+
+. 
+. 
+. *************************************************
+. *   Program: generaterow                                                *
+. *                                                                            
+>                    *
+. *       Generic code to output one row of table         *
+. *************************************************
+. 
+. cap prog drop generaterow
+
+. program define generaterow
+  1. syntax, variable(varname) binexp(varname) condition(string) file(string)
+  2.         
+.         * Counts among exposed
+.         safecount if `binexp'==1
+  3.         local expdenom = r(N)
+  4.         safecount if `variable' `condition' & `binexp'==1
+  5.         file write `file' ("`variable'") _tab ("`condition'") _tab (r(N)) 
+> (" (") %2.0f (100*(r(N))/`expdenom') (")") _tab
+  6. 
+.         * Counts among unexposed
+.         safecount if `binexp'==0
+  7.         local unexpdenom = r(N)
+  8.         safecount if `variable' `condition' & `binexp'==0
+  9.         file write `file' (r(N)) (" (") %2.0f (100*(r(N))/`unexpdenom') ("
+> )") _n
+ 10. 
+. end
+
+. 
+. 
+. 
+. 
+. *************************************************
+. *   Program: tabulatevariable                                   *
+. *                                                                            
+>                    *
+. *       Generic code to output one section                      *
+. *   (variable) within table                                             *
+. *************************************************
+. 
+. 
+. cap prog drop tabulatevariable
+
+. prog define tabulatevariable
+  1.         syntax, variable(varname) binexp(varname) ///
+>                 start(real) end(real) [missing] file(string)
+  2. 
+.         foreach varlevel of numlist `start'/`end'{ 
+  3.                 generaterow, variable(`variable') binexp(`binexp') ///
+>                         condition("==`varlevel'") file(`file')
+  4.         }
+  5.         if "`missing'"!="" generaterow, ///
+>                 variable(`variable') binexp(`binexp')  ///
+>                         condition(">=.") file(`file')
+  6. 
+. end
+
+. 
+. 
+. 
+. 
+. 
+. *************************
+. *  Create table output  *
+. *************************
+. 
+. 
+. 
+. cap file close tablecontent
+
+. file open tablecontent using "output/basetable1.txt", write text replace
+(note: file output/basetable1.txt not found)
+
+. 
+. 
+. 
+. /*  Open cohort and extract covariates  */
+.         
+. use "analysis/data_ldanalysis_cohort1.dta", clear 
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+
+. 
+. * Complete case for ethnicity  
+. drop if ethnicity_5>=.
+(250 observations deleted)
+
+. 
+. 
+. 
+. /* Table: Demographic variables  */
+. 
+. gen byte cons=1
+
+. tabulatevariable, variable(cons) start(1) end(1) file(tablecontent) binexp(ld
+> r)
+  293
+  293
+  456
+  456
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(agegroup) start(1) end(7) file(tablecontent) binex
+> p(ldr)
+  293
+  60
+  456
+  97
+  293
+  105
+  456
+  160
+  293
+  68
+  456
+  117
+  293
+  16
+  456
+  25
+  293
+  17
+  456
+  21
+  293
+  9
+  456
+  11
+  293
+  18
+  456
+  25
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(male) start(0) end(1) file(tablecontent) binexp(ld
+> r)
+  293
+  147
+  456
+  236
+  293
+  146
+  456
+  220
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(ethnicity_5) start(1) end(5) file(tablecontent) bi
+> nexp(ldr)
+  293
+  63
+  456
+  104
+  293
+  59
+  456
+  85
+  293
+  66
+  456
+  93
+  293
+  51
+  456
+  86
+  293
+  54
+  456
+  88
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(region_7) start(1) end(7) file(tablecontent) binex
+> p(ldr)
+  293
+  32
+  456
+  37
+  293
+  51
+  456
+  85
+  293
+  89
+  456
+  147
+  293
+  67
+  456
+  92
+  293
+  29
+  456
+  53
+  293
+  25
+  456
+  42
+  293
+  0
+  456
+  0
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(imd) start(1) end(5) file(tablecontent) binexp(ldr
+> )
+  293
+  207
+  456
+  321
+  293
+  0
+  456
+  0
+  293
+  0
+  456
+  0
+  293
+  55
+  456
+  81
+  293
+  31
+  456
+  54
+
+. file write tablecontent _n 
+
+. 
+. 
+. 
+. /* Table: Learning disability  */
+. 
+. tabulatevariable, variable(ld_profound) start(0) end(1) file(tablecontent) bi
+> nexp(ldr)
+  293
+  235
+  456
+  360
+  293
+  58
+  456
+  96
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(resid_care_ldr) start(0) end(1) file(tablecontent)
+>  binexp(ldr)
+  293
+  293
+  456
+  456
+  293
+  0
+  456
+  0
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(ds) start(0) end(1) file(tablecontent) binexp(ldr)
+  293
+  229
+  456
+  365
+  293
+  64
+  456
+  91
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(cp) start(0) end(1) file(tablecontent) binexp(ldr)
+  293
+  236
+  456
+  364
+  293
+  57
+  456
+  92
+
+. file write tablecontent _n 
+
+. 
+. 
+. 
+. /* Table: Comorbidities  */
+. 
+. tabulatevariable, variable(asthma_severe) start(1) end(1) file(tablecontent) 
+> binexp(ldr)
+  293
+
+** COUNT <=5 **
+  456
+  9
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(cf) start(1) end(1) file(tablecontent) binexp(ldr)
+  293
+  64
+  456
+  86
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(respiratory) start(1) end(1) file(tablecontent) bi
+> nexp(ldr)
+  293
+  57
+  456
+  98
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(cardiac) start(1) end(1) file(tablecontent) binexp
+> (ldr)
+  293
+  58
+  456
+  100
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(af) start(1) end(1) file(tablecontent) binexp(ldr)
+  293
+  50
+  456
+  92
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(dvt_pe) start(1) end(1) file(tablecontent) binexp(
+> ldr)
+  293
+  48
+  456
+  109
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(diabcat) start(2) end(4) file(tablecontent) binexp
+> (ldr)
+  293
+  50
+  456
+  76
+  293
+  8
+  456
+  14
+  293
+  0
+  456
+
+** COUNT <=5 **
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(liver) start(1) end(1) file(tablecontent) binexp(l
+> dr)
+  293
+  58
+  456
+  94
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(stroke) start(1) end(1) file(tablecontent) binexp(
+> ldr)
+  293
+  51
+  456
+  95
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(tia) start(1) end(1) file(tablecontent) binexp(ldr
+> )
+  293
+  53
+  456
+  89
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(dementia) start(1) end(1) file(tablecontent) binex
+> p(ldr)
+  293
+  45
+  456
+  99
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(kidneyfn) start(2) end(3) file(tablecontent) binex
+> p(ldr)
+  293
+
+** COUNT <=5 **
+  456
+
+** COUNT <=5 **
+  293
+  109
+  456
+  152
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(spleen) start(1) end(1) file(tablecontent) binexp(
+> ldr)
+  293
+  99
+  456
+  157
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(transplant) start(1) end(1) file(tablecontent) bin
+> exp(ldr)
+  293
+  103
+  456
+  154
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(immunosuppression) start(1) end(1) file(tableconte
+> nt) binexp(ldr)
+  293
+  79
+  456
+  173
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(cancerHaem) start(2) end(3) file(tablecontent) bin
+> exp(ldr)
+  293
+
+** COUNT <=5 **
+  456
+
+** COUNT <=5 **
+  293
+
+** COUNT <=5 **
+  456
+
+** COUNT <=5 **
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(cancerExhaem1yr) start(1) end(1) file(tablecontent
+> ) binexp(ldr)
+  293
+
+** COUNT <=5 **
+  456
+
+** COUNT <=5 **
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(autoimmune) start(1) end(1) file(tablecontent) bin
+> exp(ldr)
+  293
+  54
+  456
+  92
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(ibd) start(1) end(1) file(tablecontent) binexp(ldr
+> )
+  293
+  55
+  456
+  93
+
+. file write tablecontent _n 
+
+. 
+. tabulatevariable, variable(smi) start(1) end(1) file(tablecontent) binexp(ldr
+> )
+  293
+  50
+  456
+  89
+
+. file write tablecontent _n 
+
+. tabulatevariable, variable(neuro) start(1) end(1) file(tablecontent) binexp(l
+> dr)
+  293
+  57
+  456
+  89
+
+. file write tablecontent _n 
+
+. 
+.         
+. file close tablecontent
+
+. 
+. 
+. * Close log
+. log close
+      name:  <unnamed>
+       log:  /workspace/logs/AL002_tabulate_cohort_descriptives.log
+  log type:  text
+ closed on:   9 Feb 2021, 10:43:58
+-------------------------------------------------------------------------------
