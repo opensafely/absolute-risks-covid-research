@@ -21,9 +21,8 @@ actions:
     run: stata-mp:latest analysis/001_clean_input_data.do
     needs: [generate_cohort1, generate_cohort2]
     outputs:
-      moderately_sensitive:
-        log: logs/001_clean_input_data.log
      highly_sensitive:
+        log: logs/001_clean_input_data.log
         clean1: analysis/data_base_cohort1.dta
         clean2: analysis/data_base_cohort2.dta
 
@@ -31,7 +30,7 @@ actions:
     run: stata-mp:latest analysis/002_create_ld_analysis_dataset.do
     needs: [clean]
     outputs:
-      moderately_sensitive:
+     highly_sensitive:
         log: logs/002_create_ld_analysis_dataset.log
         an_data1: analysis/data_ldanalysis_cohort1.dta
         an_data2: analysis/data_ldanalysis_cohort2.dta
