@@ -118,9 +118,9 @@ stroke = codelist_from_csv(
     column="CTV3ID",
 )
 dementia = codelist_from_csv(
-    "codelists/opensafely-dementia.csv",
+    "codelists/opensafely-dementia-complete.csv",
     system="ctv3",
-    column="CTV3ID",
+    column="code",
 )
 other_neuro = codelist_from_csv(
     "codelists/opensafely-other-neurological-conditions.csv",

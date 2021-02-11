@@ -1,24 +1,25 @@
 ********************************************************************************
 *
-*	Do-file:		AL003_cox_regression.do
+*	Do-file:		AL005_cox_regression_child.do
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
 *	Data used:		analysis/
-*							analysis/data_ldanalysis_cohort1.dta
-*							analysis/data_ldanalysis_cohort2.dta
+*							data_ldanalysis_cohort1.dta
+*							data_ldanalysis_cohort2.dta
 *
 *	Data created:	None
 *
-*	Other output:	Log file:  logs/AL003_cox_regression.log
+*	Other output:	Log file:  logs/AL005_cox_regression_child.log
 *					Estimates:	output/
-*									output_hrs_main
-*									output/output_rates
+*									output_hrs_main_child
+*									output_rates_child
 *
 ********************************************************************************
 *
 *	Purpose:		This do-file fits a series of adjusted Cox models for the
-*					learning disability work and obtains the crude rates.
+*					learning disability work and obtains the crude rates
+*					among children (under 16).
 *  
 ********************************************************************************
 
@@ -30,7 +31,7 @@ set more off
 
 * Open a log file
 cap log close
-log using "logs/AL003_cox_regression", replace t
+log using "logs/AL005_cox_regression_child", replace t
 
 
 * Categories of various exposures
@@ -64,8 +65,8 @@ forvalues i = 1 (1) 2 {
 	use "analysis/data_ldanalysis_cohort`i'.dta", clear 
 	drop if ethnicity_5>=.
 
-	* Only keep data for adults
-	keep if child==0
+	* Only keep data for children (under 16)
+	keep if child==1
 
 	* Cycle over outcomes: mortality, hospitalisation, composite 
 	foreach out in coviddeath covidadmission composite {
@@ -91,7 +92,7 @@ forvalues i = 1 (1) 2 {
 			/*  Fit Cox models  */
 			
 			* Confounder only model
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 	///
+			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 	///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
@@ -103,7 +104,7 @@ forvalues i = 1 (1) 2 {
 			}
 			
 			* Confounders with deprivation
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 imd, ///
+			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 imd, ///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
@@ -115,7 +116,7 @@ forvalues i = 1 (1) 2 {
 			}
 			
 			* Confounders with residential care
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
+			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
@@ -127,7 +128,7 @@ forvalues i = 1 (1) 2 {
 			}
 			
 			* Confounders with physical comorbidities that are indicators for vaccination 
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
+			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
 						cardiac af dvt_pe i.diabcat		 		///
 						liver stroke tia dementia				///
 						i.kidneyfn								///
@@ -235,7 +236,7 @@ order wave outcome exposure category hr*
 sort wave outcome exposure expcat
 
 * Save data
-outsheet using "output/output_hrs_main", replace
+outsheet using "output/output_hrs_main_child", replace
 
 
 
@@ -336,7 +337,7 @@ sort wave outcome exposure expcat
 
 
 * Save data
-outsheet using "output/output_rates", replace
+outsheet using "output/output_rates_child", replace
 
 
 

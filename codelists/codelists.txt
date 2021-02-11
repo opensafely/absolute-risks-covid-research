@@ -9,7 +9,7 @@ opensafely/cerebral-palsy/1835edac
 opensafely/chronic-cardiac-disease/2020-04-08
 opensafely/chronic-liver-disease/2020-06-02
 opensafely/cystic-fibrosis/2020-07-20
-opensafely/dementia/2020-04-22
+opensafely/dementia-complete/48c76cf8
 opensafely/diabetes/2020-04-15
 opensafely/dialysis/2020-07-16
 opensafely/down-syndrome/15832db6

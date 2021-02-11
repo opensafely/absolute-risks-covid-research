@@ -9,8 +9,8 @@
 *						data_base_cohort2.dta 
 *
 *	Data created:   analysis/
-*							analysis/data_ldanalysis_cohort1.dta
-*							analysis/data_ldanalysis_cohort2.dta
+*							data_ldanalysis_cohort1.dta
+*							data_ldanalysis_cohort2.dta
 *
 *	Other output:	Log file:  logs/002_create_ld_analysis_dataset.log
 *
@@ -85,8 +85,9 @@ forvalues i = 1 (1) 2 {
 	assert agegroup<.
 
 	* Broader age strata
-	recode agegroup 1=. 2/3=1 4/5=2 6/7=3, gen(agebroad)
-	label define agebroad 	1 "16-<65" 		///
+	recode agegroup 1=0 2/3=1 4/5=2 6/7=3, gen(agebroad)
+	label define agebroad 	0 "<16"			///
+							1 "16-<65" 		///
 							2 "65-<75" 		///
 							3 "75+"
 	label values agebroad agebroad

@@ -1,8 +1,9 @@
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /workspace/logs/002_create_ld_analysis_dataset.log
+       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/002_create_ld_analysis
+> _dataset.log
   log type:  text
- opened on:   8 Feb 2021, 19:48:27
+ opened on:   9 Feb 2021, 13:56:36
 
 . 
 . * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
@@ -42,21 +43,15 @@
 >                                                         65/69.9999=4    ///
 >                                                         70/74.9999=5    ///
 >                                                         75/79.9999=6    ///
->                                                         80/max=7,            
->    ///
+>                                                         80/max=7,               ///
 >                                                         gen(agegroup) 
  13. 
 .         label define agegroup   1 "0-<16"               ///
->                                                         2 "16-<45"           
->    ///
->                                                         3 "45-<65"           
->    ///
->                                                         4 "65-<70"           
->    ///
->                                                         5 "70-<75"           
->    ///
->                                                         6 "75-<80"           
->    ///
+>                                                         2 "16-<45"              ///
+>                                                         3 "45-<65"              ///
+>                                                         4 "65-<70"              ///
+>                                                         5 "70-<75"              ///
+>                                                         6 "75-<80"              ///
 >                                                         7 "80+"
  14.         label values agegroup agegroup
  15. 
@@ -64,10 +59,10 @@
 .         assert agegroup<.
  16. 
 .         * Broader age strata
-.         recode agegroup 1=. 2/3=1 4/5=2 6/7=3, gen(agebroad)
- 17.         label define agebroad   1 "16-<65"              ///
->                                                         2 "65-<75"           
->    ///
+.         recode agegroup 1=0 2/3=1 4/5=2 6/7=3, gen(agebroad)
+ 17.         label define agebroad   0 "<16"                 ///
+>                                                         1 "16-<65"              ///
+>                                                         2 "65-<75"              ///
 >                                                         3 "75+"
  18.         label values agebroad agebroad
  19.         
@@ -84,8 +79,7 @@
 .         /*  Body Mass Index  */
 . 
 .         * Only include child BMI measurements within 2 years
-.         replace bmi = . if age<16 & (`index' - bmi_child_date_measured_date) 
-> > 365.25*2
+.         replace bmi = . if age<16 & (`index' - bmi_child_date_measured_date) > 365.25*2
  24.         drop bmi_child_date_measured_date
  25. 
 .         recode bmi min/39.99999=0 40/max=1, gen(obese40)
@@ -108,12 +102,9 @@
 .         recode imd 5=1 4=2 3=3 2=4 1=5 .u=.u
  34. 
 .         label define imd        1 "1 least deprived"    ///
->                                                 2 "2"                        
->            ///
->                                                 3 "3"                        
->            ///
->                                                 4 "4"                        
->            ///
+>                                                 2 "2"                                   ///
+>                                                 3 "3"                                   ///
+>                                                 4 "4"                                   ///
 >                                                 5 "5 most deprived"     ///
 >                                                 .u "Unknown"
  35.         label values imd imd 
@@ -133,8 +124,7 @@
 . 
 .         /*  Spleen  */
 . 
-.         * Spleen problems (dysplenia/splenectomy/etc and sickle cell disease)
->    
+.         * Spleen problems (dysplenia/splenectomy/etc and sickle cell disease)   
 .         egen spleen_date = rowmin(dysplenia_date sickle_cell_date)
  39.         format spleen_date %td
  40.         order spleen_date spleen, after(sickle_cell)
@@ -153,26 +143,19 @@
  47.         rename exhaem_cancer_date       cancerExhaem_date
  48. 
 .         * Only consider non-haematological malignancies if in previous year
-.         gen cancerExhaem1yr = inrange(cancerExhaem_date, `index'- 365.25, `in
-> dex')
+.         gen cancerExhaem1yr = inrange(cancerExhaem_date, `index'- 365.25, `index')
  49.         drop cancerExhaem_date
  50. 
 . 
 . 
 .         /*  Haematological malignancies  */
 . 
-.         gen     cancerHaem = 4 if                                            
->                                            ///
->                                 inrange(cancerHaem_date, d(1/1/1900), `index'
->  - 5*365.25)
- 51.         replace cancerHaem = 3 if                                         
->                                               ///
->                                 inrange(cancerHaem_date, `index' - 5*365.25, 
-> `index' - 365.25)
- 52.         replace cancerHaem = 2 if                                         
->                                               ///
->                                 inrange(cancerHaem_date, `index' - 365.25,   
-> `index')
+.         gen     cancerHaem = 4 if                                                                                       ///
+>                                 inrange(cancerHaem_date, d(1/1/1900), `index' - 5*365.25)
+ 51.         replace cancerHaem = 3 if                                                                                       ///
+>                                 inrange(cancerHaem_date, `index' - 5*365.25, `index' - 365.25)
+ 52.         replace cancerHaem = 2 if                                                                                       ///
+>                                 inrange(cancerHaem_date, `index' - 365.25,   `index')
  53.         recode  cancerHaem . = 1
  54. 
 .         * Label cancer variables
@@ -186,20 +169,14 @@
 . 
 .         /*  Immunosuppression  */
 . 
-.         * Temporary immunodeficiency or aplastic anaemia last year, HIV/perma
-> nent
+.         * Temporary immunodeficiency or aplastic anaemia last year, HIV/permanent
 .         *   condition ever
-.         gen immunosuppression =                                              
->                                              ///
->                         (inrange(temp_immuno_date,      `index' - 365.25, `in
-> dex')      | ///
->                          inrange(aplastic_anaemia_date, `index' - 365.25, `in
-> dex')      | ///
->                         (perm_immuno_date < `index')                         
->                                    | ///
+.         gen immunosuppression =                                                                                           ///
+>                         (inrange(temp_immuno_date,      `index' - 365.25, `index')      | ///
+>                          inrange(aplastic_anaemia_date, `index' - 365.25, `index')      | ///
+>                         (perm_immuno_date < `index')                                                            | ///
 >                         (hiv_date < `index'))
- 58.         drop temp_immuno_date aplastic_anaemia_date perm_immuno_date hiv_d
-> ate
+ 58.         drop temp_immuno_date aplastic_anaemia_date perm_immuno_date hiv_date
  59. 
 . 
 . 
@@ -209,12 +186,9 @@
 .         * If transplant since dialysis, set dialysis to no
 .         gen dialysis                    = (dialysis_date <.)
  60.         gen transplant_kidney   = (transplant_kidney_date <.)
- 61.         replace dialysis = 0   if dialysis == 1                         //
-> /
->                                                         & transplant_kidney  
->    == 1    ///
->                                                         & transplant_kidney_d
-> ate > dialysis_date 
+ 61.         replace dialysis = 0   if dialysis == 1                         ///
+>                                                         & transplant_kidney     == 1    ///
+>                                                         & transplant_kidney_date > dialysis_date 
  62.         order dialysis, after(transplant_kidney_date)
  63.         drop dialysis_date 
  64. 
@@ -224,8 +198,7 @@
 .         /*  Transplant  */
 . 
 .         egen transplant_date = rowmin(transplant_kidney_date ///
->                                                                   transplant_
-> notkidney_date)
+>                                                                   transplant_notkidney_date)
  65.         drop transplant_kidney_date transplant_notkidney_date
  66.         format transplant_date %td
  67. 
@@ -240,46 +213,26 @@
 .         **************************
 . 
 .         * Replace dates with binary indicators 
-.         foreach var of varlist  respiratory_date                             
->    ///
->                                                         cf_date              
->                                    ///
->                                                         cardiac_date         
->                            ///
->                                                         diabetes_date        
->                            ///
->                                                         af_date              
->                                    ///
->                                                         dvt_pe_date          
->                                    ///
->                                                         tia_date             
->                                    ///
->                                                         stroke_date          
->                                    ///
->                                                         dementia_date        
->                            ///
->                                                         neuro_date           
->                                    ///
->                                                         liver_date           
->                                    ///
->                                                         transplant_date      
->                            ///     
->                                                         spleen_date          
->                                    ///
->                                                         autoimmune_date      
->                            ///
->                                                         ibd_date             
->                                    ///
->                                                         smi_date             
->                                    ///
->                                                         ldr_date             
->                                    ///
->                                                         ld_profound_date     
->                            ///
->                                                         ds_date              
->                                    ///
->                                                         cp_date              
->                                    ///
+.         foreach var of varlist  respiratory_date                                ///
+>                                                         cf_date                                                 ///
+>                                                         cardiac_date                                    ///
+>                                                         diabetes_date                                   ///
+>                                                         af_date                                                 ///
+>                                                         dvt_pe_date                                             ///
+>                                                         tia_date                                                ///
+>                                                         stroke_date                                             ///
+>                                                         dementia_date                                   ///
+>                                                         neuro_date                                              ///
+>                                                         liver_date                                              ///
+>                                                         transplant_date                                 ///     
+>                                                         spleen_date                                             ///
+>                                                         autoimmune_date                                 ///
+>                                                         ibd_date                                                ///
+>                                                         smi_date                                                ///
+>                                                         ldr_date                                                ///
+>                                                         ld_profound_date                                ///
+>                                                         ds_date                                                 ///
+>                                                         cp_date                                                 ///
 >                                                 {
  68.                 local newvar =  substr("`var'", 1, length("`var'") - 5)
  69.                 gen `newvar' = (`var'< `index')
@@ -299,10 +252,8 @@
 .         ************
 . 
 . 
-.         label define kidneyfn   1 "None"                                     
->    ///
->                                                         2 "Stage 3a/3b egfr 3
-> 0-60"      ///
+.         label define kidneyfn   1 "None"                                        ///
+>                                                         2 "Stage 3a/3b egfr 30-60"      ///
 >                                                         3 "Stage 4/5 egfr<30"
  74.                                         
 .         * Categorise into CKD stages
@@ -317,8 +268,7 @@
 .         * Delete variables no longer needed
 .         drop egfr egfr_cat
  80. 
-.         * If either dialysis or kidney transplant then set kidney function to
->  the 
+.         * If either dialysis or kidney transplant then set kidney function to the 
 .         *   lowest level
 .         replace  kidneyfn = 3 if dialysis                       == 1
  81.         replace  kidneyfn = 3 if transplant_kidney      == 1
@@ -333,8 +283,7 @@
 .         label define hba1ccat   0 "<6.5%"               ///
 >                                                         1">=6.5-7.4"    ///
 >                                                         2">=7.5-7.9"    ///
->                                                         3">=8-8.9"           
->    ///
+>                                                         3">=8-8.9"              ///
 >                                                         4">=9"
  84. 
 . 
@@ -356,16 +305,12 @@
 .         gen     diabcat = 1 if diabetes==0
  92.         replace diabcat = 2 if diabetes==1 & inlist(hba1ccat, 0, 1)
  93.         replace diabcat = 3 if diabetes==1 & inlist(hba1ccat, 2, 3, 4)
- 94.         replace diabcat = 4 if diabetes==1 & !inlist(hba1ccat, 0, 1, 2, 3,
->  4)
+ 94.         replace diabcat = 4 if diabetes==1 & !inlist(hba1ccat, 0, 1, 2, 3, 4)
  95. 
 .         label define diabetes   1 "No diabetes"                         ///
->                                                         2 "Controlled diabete
-> s"         ///
->                                                         3 "Uncontrolled diabe
-> tes"       ///
->                                                         4 "Diabetes, no hba1c
->  measure"
+>                                                         2 "Controlled diabetes"         ///
+>                                                         3 "Uncontrolled diabetes"       ///
+>                                                         4 "Diabetes, no hba1c measure"
  96.         label values diabcat diabetes
  97. 
 . 
@@ -394,12 +339,9 @@
 .         gen ldr_carecat = ldr
 104.         recode ldr 1=2 if resid_care_ld==1
 105. 
-.         label define ldcare 0 "Not on LDR"                                   
->                    ///
->                                                         1 "LDR, not in reside
-> ntial care"        ///
->                                                         2 "LDR, in residentia
-> l care"
+.         label define ldcare 0 "Not on LDR"                                                      ///
+>                                                         1 "LDR, not in residential care"        ///
+>                                                         2 "LDR, in residential care"
 106.         label values ldr_carecat ldcare
 107. 
 . 
@@ -412,16 +354,11 @@
 112.         replace ldr_group = 5 if cp==0 & ds==0 & ldr==1
 113.         
 .         label define ldr_group  0 "No DS, no CP, no LDR"        ///
->                                                         1 "DS but not LDR"   
->                    /// 
->                                                         2 "DS and LDR"       
->                    ///
->                                                         3 "CP but not LDR"   
->                    ///
->                                                         4 "CP and LDR"       
->                    ///
->                                                         5 "LD with no DS or C
-> P" 
+>                                                         1 "DS but not LDR"                      /// 
+>                                                         2 "DS and LDR"                          ///
+>                                                         3 "CP but not LDR"                      ///
+>                                                         4 "CP and LDR"                          ///
+>                                                         5 "LD with no DS or CP" 
 114.         label values ldr_group ldr_group
 115.         
 . 
@@ -467,58 +404,37 @@
 129.          
 .                 * COVID-19 death
 .                 gen     coviddeath`k' = (coviddeath_date<.)
-130.                 replace coviddeath`k' = 0 if coviddeath_date > coviddeathc
-> ensor`k'
-131.                 replace coviddeath`k' = 0 if coviddeath_date > otherdeath_
-> date
+130.                 replace coviddeath`k' = 0 if coviddeath_date > coviddeathcensor`k'
+131.                 replace coviddeath`k' = 0 if coviddeath_date > otherdeath_date
 132. 
 .                 * COVID-19 hospitalisation
 .                 gen     covidadmission`k' = (covidadmission_date<.)
-133.                 replace covidadmission`k' = 0 if covidadmission_date > cov
-> idadmissioncensor`k'
-134.                 replace covidadmission`k' = 0 if covidadmission_date > cov
-> iddeathcensor`k'
-135.                 replace covidadmission`k' = 0 if covidadmission_date > cov
-> iddeath_date
-136.                 replace covidadmission`k' = 0 if covidadmission_date > oth
-> erdeath_date
+133.                 replace covidadmission`k' = 0 if covidadmission_date > covidadmissioncensor`k'
+134.                 replace covidadmission`k' = 0 if covidadmission_date > coviddeathcensor`k'
+135.                 replace covidadmission`k' = 0 if covidadmission_date > coviddeath_date
+136.                 replace covidadmission`k' = 0 if covidadmission_date > otherdeath_date
 137. 
 .                 * Composite (either COVID-19 death or hospitalisation)
 .                 gen     composite`k' = (composite_date<.)
-138.                 replace composite`k' = 0 if composite_date > covidadmissio
-> ncensor`k'
-139.                 replace composite`k' = 0 if composite_date > coviddeathcen
-> sor`k'
+138.                 replace composite`k' = 0 if composite_date > covidadmissioncensor`k'
+139.                 replace composite`k' = 0 if composite_date > coviddeathcensor`k'
 140.                 format composite_date %td
 141. 
 . 
-.                 /*  Calculate survival times  (days until event/censoring)  *
-> /
+.                 /*  Calculate survival times  (days until event/censoring)  */
 . 
-.                 egen stime_coviddeath`k'         = rowmin(coviddeath_date    
->    /// 
->                                                                         other
-> death_date                                 ///
->                                                                         covid
-> deathcensor`k') 
-142.                 egen stime_covidadmission`k' = rowmin(covidadmission_date 
->       ///
->                                                                         covid
-> death_date                                 ///
->                                                                         other
-> death_date                                 /// 
->                                                                         covid
-> admissioncensor`k'                 ///
->                                                                         covid
-> deathcensor`k')
-143.                 egen stime_composite`k'      = rowmin(composite_date      
->       ///
->                                                                         other
-> death_date                                 /// 
->                                                                         covid
-> admissioncensor`k'                 ///
->                                                                         covid
-> deathcensor`k')
+.                 egen stime_coviddeath`k'         = rowmin(coviddeath_date       /// 
+>                                                                         otherdeath_date                                 ///
+>                                                                         coviddeathcensor`k') 
+142.                 egen stime_covidadmission`k' = rowmin(covidadmission_date       ///
+>                                                                         coviddeath_date                                 ///
+>                                                                         otherdeath_date                                 /// 
+>                                                                         covidadmissioncensor`k'                 ///
+>                                                                         coviddeathcensor`k')
+143.                 egen stime_composite`k'      = rowmin(composite_date            ///
+>                                                                         otherdeath_date                                 /// 
+>                                                                         covidadmissioncensor`k'                 ///
+>                                                                         coviddeathcensor`k')
 144. 
 .                 drop coviddeathcensor`k' covidadmissioncensor`k' 
 145.         }
@@ -532,8 +448,7 @@
 .         * Wave 2: Keep only outcome censored at end
 .         if `i'==2 {
 150.             drop coviddeath1 covidadmission1 composite1 ///
->                         stime_coviddeath1 stime_covidadmission1 stime_composi
-> te1
+>                         stime_coviddeath1 stime_covidadmission1 stime_composite1
 151.         }
 152. 
 .         
@@ -547,115 +462,77 @@
 .         * Demographics
 .         label var patient_id                    "Patient ID"
 153.         label var age                                   "Age (years)"
-154.         label var age1                                  "Age spline term 1
-> "
-155.         label var age2                                  "Age spline term 2
-> "
-156.         label var age3                                  "Age spline term 3
-> "
+154.         label var age1                                  "Age spline term 1"
+155.         label var age2                                  "Age spline term 2"
+156.         label var age3                                  "Age spline term 3"
 157.         label var agegroup                              "Grouped age"
 158.         label var agebroad                              "Broad age strata"
-159.         label var child                                 "Child indicator (
-> <16 years)"
+159.         label var child                                 "Child indicator (<16 years)"
 160.         label var male                                  "Male"
-161.         label var imd                                   "Index of Multiple
->  Deprivation (IMD)"
-162.         label var ethnicity_5                   "Ethnicity in 16 categorie
-> s"
-163.         label var stp                                   "Sustainability an
-> d Transformation Partnership"
-164.         label var stpcode                               "Sustainability an
-> d Transformation Partnership"
-165.         label var region_7                              "Geographical regi
-> on (7 England regions)"
+161.         label var imd                                   "Index of Multiple Deprivation (IMD)"
+162.         label var ethnicity_5                   "Ethnicity in 16 categories"
+163.         label var stp                                   "Sustainability and Transformation Partnership"
+164.         label var stpcode                               "Sustainability and Transformation Partnership"
+165.         label var region_7                              "Geographical region (7 England regions)"
 166.         label var household_id                  "Household ID"
-167.         label var resid_care_old                "Residential care, elderly
-> "
-168.         label var resid_care_ldr                "Residential care, learnin
-> g disability"
+167.         label var resid_care_old                "Residential care, elderly"
+168.         label var resid_care_ldr                "Residential care, learning disability"
 169. 
 . 
 .         * Learning disabilities
 .         label var ldr                                   "Learning disability"
-170.         label var ld_profound                   "Severe-profound learning 
-> disability"
-171.         label var ldr_cat                               "Learning disabili
-> ty split into mild-moderate and severe-profound" 
-172.         label var ldr_carecat                   "Learning disability split
->  into residential vs non-residential setting" 
+170.         label var ld_profound                   "Severe-profound learning disability"
+171.         label var ldr_cat                               "Learning disability split into mild-moderate and severe-profound" 
+172.         label var ldr_carecat                   "Learning disability split into residential vs non-residential setting" 
 173.         label var ds                                    "Down's Syndrome"
 174.         label var cp                                    "Cerebral Palsy"
-175.         label var ldr_group                             "Grouping of Down'
-> s, Cerebral Palsy and learning disability register"
+175.         label var ldr_group                             "Grouping of Down's, Cerebral Palsy and learning disability register"
 176. 
 .         * Confounders and comorbidities 
-.         label var bmi                                   "Body Mass Index (BMI
-> , kg/m2)"
-177.         label var obese40                               "Evidence of BMI>4
-> 0"
+.         label var bmi                                   "Body Mass Index (BMI, kg/m2)"
+177.         label var obese40                               "Evidence of BMI>40"
 178.         label var asthma_severe                 "Severe asthma"
-179.         label var respiratory                   "Respiratory disease (excl
-> . asthma)"
+179.         label var respiratory                   "Respiratory disease (excl. asthma)"
 180.         label var cardiac                               "Heart disease"
-181.         label var cf                                    "Cystic Fibrosis (
-> & related)"
-182.         label var af                                    "Atrial fibrillati
-> on"
-183.         label var dvt                                   "Deep vein thrombo
-> sis/pulmonary embolism"
+181.         label var cf                                    "Cystic Fibrosis (& related)"
+182.         label var af                                    "Atrial fibrillation"
+183.         label var dvt                                   "Deep vein thrombosis/pulmonary embolism"
 184.         label var diabcat                               "Diabetes"
-185.         label var tia                                   "Transient ischemi
-> c attack"
+185.         label var tia                                   "Transient ischemic attack"
 186.         label var stroke                                "Stroke"
 187.         label var dementia                              "Dementia"
-188.         label var neuro                                 "Neuro condition o
-> ther than stroke/dementia"    
-189.         label var cancerExhaem1yr               "Non haematological cancer
-> "
+188.         label var neuro                                 "Neuro condition other than stroke/dementia"    
+189.         label var cancerExhaem1yr               "Non haematological cancer"
 190.         label var cancerHaem                    "Haematological cancer"
 191.         label var liver                                 "Liver disease"
 192.         label var kidneyfn                              "Kidney function"
-193.         label var transplant                    "Organ transplant recipien
-> t"
+193.         label var transplant                    "Organ transplant recipient"
 194.         label var dialysis                              "Dialysis"
-195.         label var spleen                                "Spleen problems (
-> dysplenia, sickle cell)"
-196.         label var autoimmune                    "RA, SLE, Psoriasis (autoi
-> mmune disease)"
-197.         label var immunosuppression             "Conditions causing perman
-> ent or temporary immunosuppression"
+195.         label var spleen                                "Spleen problems (dysplenia, sickle cell)"
+196.         label var autoimmune                    "RA, SLE, Psoriasis (autoimmune disease)"
+197.         label var immunosuppression             "Conditions causing permanent or temporary immunosuppression"
 198.         label var ibd                                   "IBD"
-199.         label var smi                                   "Serious mental il
-> lness"
+199.         label var smi                                   "Serious mental illness"
 200. 
 .         * Outcomes 
-.         label var  coviddeath_date                      "Date of ONS COVID-19
->  death"
-201.         label var  otherdeath_date                      "Date of ONS non-C
-> OVID-19 death"
-202.         label var  covidadmission_date          "Date of COVID-19 hospital
->  admission"
-203.         label var  composite_date                       "Date of first of 
-> COVID-19 hospital admission or death"
+.         label var  coviddeath_date                      "Date of ONS COVID-19 death"
+201.         label var  otherdeath_date                      "Date of ONS non-COVID-19 death"
+202.         label var  covidadmission_date          "Date of COVID-19 hospital admission"
+203.         label var  composite_date                       "Date of first of COVID-19 hospital admission or death"
 204.                         
 .         local tag1 = "censored 31 Aug 20"
 205.         local tag2 = "censored latest date"
 206.         
 .         forvalues k = 1 (1) 2 {
-207.                 capture label var  coviddeath`k'                        "C
-> OVID-19 death (ONS), `tag`k''"
-208.                 capture label var  covidadmission`k'            "COVID-19 
-> hospital admission, `tag`k''"
-209.                 capture label var  composite`k'                         "C
-> OVID-19 hospital admission or death, `tag`k''"
+207.                 capture label var  coviddeath`k'                        "COVID-19 death (ONS), `tag`k''"
+208.                 capture label var  covidadmission`k'            "COVID-19 hospital admission, `tag`k''"
+209.                 capture label var  composite`k'                         "COVID-19 hospital admission or death, `tag`k''"
 210.                         
-.                 capture label var  stime_coviddeath`k'          "Days from st
-> udy entry until COVID-19 death or censoring, `tag`k''"
-211.                 capture label var  stime_covidadmission`k'      "Days from
->  study entry until COVID-19 hospital admission or censoring, `tag`k''"
-212.                 capture label var  stime_composite`k'           "Days from
->  study entry until COVID-19 hospital admission or death or censoring, `tag`k'
-> '"
+.                 capture label var  stime_coviddeath`k'          "Days from study entry until COVID-19 death or censoring, `tag`k''"
+211.                 capture label var  stime_covidadmission`k'      "Days from study entry until COVID-19 hospital admission or censor
+> ing, `tag`k''"
+212.                 capture label var  stime_composite`k'           "Days from study entry until COVID-19 hospital admission or death 
+> or censoring, `tag`k''"
 213.         }       
 214. 
 . 
@@ -664,56 +541,32 @@
 .         *********************
 . 
 .         sort patient_id
-215.         order   patient_id stp* region_7 imd                              
->                               ///
->                         household* resid_care_old resid_care_ldr             
->                            ///
->                         ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group  
->                    ///
->                         age age age1 age2 age3 agegroup agebroad child male  
->                    ///
->                         bmi* obese* ethnicity*                               
->                                            /// 
->                         respiratory* asthma_severe* cf* cardiac* diabcat*    
->                    ///
->                         af* dvt_pe*                                          
->                                                    ///
->                         stroke* dementia* tia*                               
->                                            ///
->                         cancerExhaem* cancerHaem*                            
->                                            ///
->                         kidneyfn* liver* transplant*                         
->                                    ///
->                         spleen* autoimmune* immunosuppression*  ibd*         
->                    ///
->                         smi* dialysis neuro                                  
->                                                    ///
+215.         order   patient_id stp* region_7 imd                                                            ///
+>                         household* resid_care_old resid_care_ldr                                        ///
+>                         ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group                     ///
+>                         age age age1 age2 age3 agegroup agebroad child male                     ///
+>                         bmi* obese* ethnicity*                                                                          /// 
+>                         respiratory* asthma_severe* cf* cardiac* diabcat*                       ///
+>                         af* dvt_pe*                                                                                             ///
+>                         stroke* dementia* tia*                                                                          ///
+>                         cancerExhaem* cancerHaem*                                                                       ///
+>                         kidneyfn* liver* transplant*                                                            ///
+>                         spleen* autoimmune* immunosuppression*  ibd*                            ///
+>                         smi* dialysis neuro                                                                                     ///
 >                         coviddeath* otherdeath* covidadmission* composite*
 216. 
-.         keep    patient_id stp* region_7 imd                                 
->                            ///
->                         household* resid_care_old resid_care_ldr             
->                            ///
->                         ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group  
->                    ///
->                         age age age1 age2 age3 agegroup agebroad child male  
->                    ///
->                         bmi* obese* ethnicity*                               
->                                            /// 
->                         respiratory* asthma_severe cf cardiac diabcat        
->                    ///
->                         af dvt_pe stroke dementia tia                        
->                                    ///
->                         cancerExhaem* cancerHaem                             
->                                            ///
->                         kidneyfn liver transplant                            
->                                            ///
->                         spleen autoimmune immunosuppression ibd              
->                            ///
->                         smi dialysis neuro                                   
->                                                    ///
->                         coviddeath* otherdeath* covidadmission* composite*   
->                    ///
+.         keep    patient_id stp* region_7 imd                                                            ///
+>                         household* resid_care_old resid_care_ldr                                        ///
+>                         ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group                     ///
+>                         age age age1 age2 age3 agegroup agebroad child male                     ///
+>                         bmi* obese* ethnicity*                                                                          /// 
+>                         respiratory* asthma_severe cf cardiac diabcat                           ///
+>                         af dvt_pe stroke dementia tia                                                           ///
+>                         cancerExhaem* cancerHaem                                                                        ///
+>                         kidneyfn liver transplant                                                                       ///
+>                         spleen autoimmune immunosuppression ibd                                         ///
+>                         smi dialysis neuro                                                                                      ///
+>                         coviddeath* otherdeath* covidadmission* composite*                      ///
 >                         stime*
 217. 
 . 
@@ -725,12 +578,10 @@
 . 
 .     sort patient_id
 218.         if `i'==1 {
-219.             label data "Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for 
-> learning disability work"
+219.             label data "Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work"
 220.         }
 221.         else if `i'==2 {
-222.             label data "Analysis dataset, wave 2 (1 Sept 20 - latest), for
->  learning disability work"
+222.             label data "Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work"
 223.         }
 224.         * Save overall dataset
 .         save "analysis/data_ldanalysis_cohort`i'.dta", replace 
@@ -931,7 +782,8 @@ file analysis/data_ldanalysis_cohort2.dta saved
 . 
 . log close
       name:  <unnamed>
-       log:  /workspace/logs/002_create_ld_analysis_dataset.log
+       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/002_create_ld_analysis
+> _dataset.log
   log type:  text
- closed on:   8 Feb 2021, 19:48:27
--------------------------------------------------------------------------------
+ closed on:   9 Feb 2021, 13:56:36
+---------------------------------------------------------------------------------------------------------------------------------------

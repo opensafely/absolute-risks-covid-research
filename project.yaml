@@ -63,3 +63,14 @@ actions:
         log: logs/AL004_cox_regression_child.log
         hrs_child: output/output_hrs_main_child.out
         rates_child: output/output_rates_child.out
+
+
+
+  cumulative_incidence:
+    run: stata-mp:latest analysis/AL003_cumulative_incidence.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL003_cumulative_incidence.log
+        graph1: output/cumincidence_coviddeath.svg
+        graph2: output/cumincidence_composite.svg
