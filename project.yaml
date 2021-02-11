@@ -47,20 +47,20 @@ actions:
         model: output/basetable1.txt
  
   cox_regression:
-    run: stata-mp:latest analysis/AL003_cox_regression.do
+    run: stata-mp:latest analysis/AL004_cox_regression.do
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL003_cox_regression.log
+        log: logs/AL004_cox_regression.log
         hrs_adult: output/output_hrs_main.out
         rates_adult: output/output_rates.out
 
   cox_regression_child:
-    run: stata-mp:latest analysis/AL004_cox_regression_child.do
+    run: stata-mp:latest analysis/AL005_cox_regression_child.do
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL004_cox_regression_child.log
+        log: logs/AL005_cox_regression_child.log
         hrs_child: output/output_hrs_main_child.out
         rates_child: output/output_rates_child.out
 
