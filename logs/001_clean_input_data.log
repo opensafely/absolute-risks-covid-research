@@ -1,8 +1,9 @@
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /workspace/logs/001_clean_input_data.log
+       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/001_clean_input_data.l
+> og
   log type:  text
- opened on:   8 Feb 2021, 19:47:24
+ opened on:  11 Feb 2021, 11:49:57
 
 . 
 . 
@@ -96,74 +97,40 @@
 .         *  Convert strings to dates (for covariates)  *
 .         ***********************************************
 . 
-.         foreach var of varlist  cf                                           
->                    ///
->                                                         respiratory          
->                                    ///
->                                                         cardiac              
->                                    ///
->                                                         hypertension         
->                            ///
->                                                         af                   
->                                            ///
->                                                         dvt_pe               
->                                    ///
->                                                         pad_surg             
->                                    ///
->                                                         amputate             
->                                    ///
->                                                         diabetes             
->                                    ///
->                                                         tia                  
->                                            ///
->                                                         stroke               
->                                    ///
->                                                         dementia             
->                                    ///
->                                                         neuro                
->                                    ///
->                                                         lung_cancer          
->                            ///
->                                                         haem_cancer          
->                                    ///
->                                                         other_cancer         
->                            ///
->                                                         liver                
->                                    ///
->                                                         transplant_notkidney 
->                    ///     
->                                                         transplant_kidney    
->                            ///
->                                                         dialysis             
->                                    ///
->                                                         dysplenia            
->                                    ///
->                                                         sickle_cell          
->                            ///
->                                                         hiv                  
->                                    ///
->                                                         perm_immuno          
->                                    ///
->                                                         aplastic_anaemia     
->                            ///
->                                                         temp_immuno          
->                                    ///
->                                                         autoimmune           
->                                    ///
->                                                         ibd                  
->                                    ///
->                                                         fracture             
->                                    ///
->                                                         smi                  
->                                    ///
->                                                         ldr                  
->                                            ///
->                                                         ld_profound          
->                            ///
->                                                         ds                   
->                                            ///
->                                                         cp                   
->                                            ///
+.         foreach var of varlist  cf                                                              ///
+>                                                         respiratory                                             ///
+>                                                         cardiac                                                 ///
+>                                                         hypertension                                    ///
+>                                                         af                                                              ///
+>                                                         dvt_pe                                                  ///
+>                                                         pad_surg                                                ///
+>                                                         amputate                                                ///
+>                                                         diabetes                                                ///
+>                                                         tia                                                             ///
+>                                                         stroke                                                  ///
+>                                                         dementia                                                ///
+>                                                         neuro                                                   ///
+>                                                         lung_cancer                                     ///
+>                                                         haem_cancer                                             ///
+>                                                         other_cancer                                    ///
+>                                                         liver                                                   ///
+>                                                         transplant_notkidney                    ///     
+>                                                         transplant_kidney                               ///
+>                                                         dialysis                                                ///
+>                                                         dysplenia                                               ///
+>                                                         sickle_cell                                     ///
+>                                                         hiv                                                     ///
+>                                                         perm_immuno                                             ///
+>                                                         aplastic_anaemia                                ///
+>                                                         temp_immuno                                             ///
+>                                                         autoimmune                                              ///
+>                                                         ibd                                                     ///
+>                                                         fracture                                                ///
+>                                                         smi                                                     ///
+>                                                         ldr                                                             ///
+>                                                         ld_profound                                     ///
+>                                                         ds                                                              ///
+>                                                         cp                                                              ///
 >                                                         {
  48.                 capture confirm string variable `var'
  49.                 if _rc!=0 {
@@ -218,56 +185,34 @@
 .         * Ethnicity (5 category)
 .         rename ethnicity ethnicity_5
  76.         replace ethnicity_5 = .u if ethnicity_5==.
- 77.         label define ethnicity  1 "White"                                 
->                               ///
->                                                         2 "Mixed"            
->                                                    ///
->                                                         3 "Asian or Asian Bri
-> tish"                              ///
->                                                         4 "Black"            
->                                                    ///
->                                                         5 "Other"            
->                                                    ///
+ 77.         label define ethnicity  1 "White"                                                               ///
+>                                                         2 "Mixed"                                                               ///
+>                                                         3 "Asian or Asian British"                              ///
+>                                                         4 "Black"                                                               ///
+>                                                         5 "Other"                                                               ///
 >                                                         .u "Unknown"
  78.         label values ethnicity_5 ethnicity
  79. 
 .         * Ethnicity (16 category)
 .         replace ethnicity_16 = .u if ethnicity_5>=.
  80.         replace ethnicity_16 = .u if ethnicity_16>=.
- 81.         label define ethnicity_16                                         
->                                       ///
->                                                         1 "British or Mixed B
-> ritish"                    ///
->                                                         2 "Irish"            
->                                                    ///
->                                                         3 "Other White"      
->                                            ///
->                                                         4 "White + Black Cari
-> bbean"                     ///
->                                                         5 "White + Black Afri
-> can"                               ///
->                                                         6 "White + Asian"    
->                                            ///
->                                                         7 "Other mixed"      
->                                            ///
->                                                         8 "Indian or British 
-> Indian"                    ///
->                                                         9 "Pakistani or Briti
-> sh Pakistani"              ///
->                                                         10 "Bangladeshi or Br
-> itish Bangladeshi" ///
->                                                         11 "Other Asian"     
->                                            ///
->                                                         12 "Caribbean"       
->                                            ///
->                                                         13 "African"         
->                                            ///
->                                                         14 "Other Black"     
->                                            ///
->                                                         15 "Chinese"         
->                                            ///
->                                                         16 "Other"           
->                                                    ///
+ 81.         label define ethnicity_16                                                                               ///
+>                                                         1 "British or Mixed British"                    ///
+>                                                         2 "Irish"                                                               ///
+>                                                         3 "Other White"                                                 ///
+>                                                         4 "White + Black Caribbean"                     ///
+>                                                         5 "White + Black African"                               ///
+>                                                         6 "White + Asian"                                               ///
+>                                                         7 "Other mixed"                                                 ///
+>                                                         8 "Indian or British Indian"                    ///
+>                                                         9 "Pakistani or British Pakistani"              ///
+>                                                         10 "Bangladeshi or British Bangladeshi" ///
+>                                                         11 "Other Asian"                                                ///
+>                                                         12 "Caribbean"                                                  ///
+>                                                         13 "African"                                                    ///
+>                                                         14 "Other Black"                                                ///
+>                                                         15 "Chinese"                                                    ///
+>                                                         16 "Other"                                                              ///
 >                                                         .u "Unknown"  
  82.         label values ethnicity_16 ethnicity_16
  83.         drop ethnicity_date ethnicity_16_date
@@ -284,25 +229,18 @@
 .         capture confirm string variable bmi_child_date_measured
  86.         if _rc!=0 {
  87.                 assert bmi_child_date_measured==.
- 88.                 rename bmi_child_date_measured bmi_child_date_measured_dat
-> e
+ 88.                 rename bmi_child_date_measured bmi_child_date_measured_date
  89.         }
  90.         else {
- 91.                 replace bmi_child_date_measured = bmi_child_date_measured 
-> + "-15"
- 92.                 rename bmi_child_date_measured bmi_child_date_measured_dst
-> r
- 93.                 replace bmi_child_date_measured_dstr = " " if bmi_child_da
-> te_measured_dstr == "-15"
- 94.                 gen bmi_child_date_measured_date = date(bmi_child_date_mea
-> sured_dstr, "YMD") 
- 95.                 order bmi_child_date_measured_date, after(bmi_child_date_m
-> easured_dstr)
+ 91.                 replace bmi_child_date_measured = bmi_child_date_measured + "-15"
+ 92.                 rename bmi_child_date_measured bmi_child_date_measured_dstr
+ 93.                 replace bmi_child_date_measured_dstr = " " if bmi_child_date_measured_dstr == "-15"
+ 94.                 gen bmi_child_date_measured_date = date(bmi_child_date_measured_dstr, "YMD") 
+ 95.                 order bmi_child_date_measured_date, after(bmi_child_date_measured_dstr)
  96.                 drop bmi_child_date_measured_dstr
  97.         }
  98.         format bmi_child_date_measured_date %td
- 99.         replace bmi_child                                        = . if ag
-> e>=16
+ 99.         replace bmi_child                                        = . if age>=16
 100.         replace bmi_child_date_measured_date = . if age>=16
 101. 
 .         * Combine BMI measurements
@@ -335,18 +273,12 @@
 118.         replace region_7 = 6 if region=="South East"
 119.         replace region_7 = 7 if region=="South West"
 120. 
-.         label define region_7   1 "East"                                     
->                    ///
->                                                         2 "London"           
->                                            ///
->                                                         3 "Midlands"         
->                                    ///
->                                                         4 "North East and Yor
-> kshire"            ///
->                                                         5 "North West"       
->                                    ///
->                                                         6 "South East"       
->                                    ///     
+.         label define region_7   1 "East"                                                        ///
+>                                                         2 "London"                                                      ///
+>                                                         3 "Midlands"                                            ///
+>                                                         4 "North East and Yorkshire"            ///
+>                                                         5 "North West"                                          ///
+>                                                         6 "South East"                                          ///     
 >                                                         7 "South West"
 121.         label values region_7 region_7
 122.         label var region_7 "Region of England (7 regions)"
@@ -357,8 +289,7 @@
 .         capture confirm string var rural_urban 
 125.         if _rc==0 {
 126.                 assert inlist(rural_urban, "rural", "urban", "")
-127.                 replace rural_urban = "urban" if !inlist(rural_urban, "rur
-> al", "urban")
+127.                 replace rural_urban = "urban" if !inlist(rural_urban, "rural", "urban")
 128. 
 .                 gen rural = rural_urban=="rural"
 129.                 order rural, after(rural_urban)
@@ -386,8 +317,7 @@
 .         /*  Asthma  */
 . 
 .         label define asthmacat  1 "No"                          ///
->                                                         2 "Yes, no OCS"      
->    ///
+>                                                         2 "Yes, no OCS"         ///
 >                                                         3 "Yes with OCS"
 143. 
 .         * Asthma  (coded: 0 No, 1 Yes no OCS, 2 Yes with OCS)
@@ -402,8 +332,7 @@
 .         *   eGFR   *
 .         ************
 . 
-.         * Set implausible creatinine values to missing (Note: zero changed to
->  missing)
+.         * Set implausible creatinine values to missing (Note: zero changed to missing)
 .         replace creatinine = . if !inrange(creatinine, 20, 3000) 
 147. 
 .         * Divide by 88.4 (to convert umol/l to mg/dl)
@@ -509,124 +438,76 @@
 . 
 .         * Demographics
 .         label var patient_id                            "Patient ID"
-192.         label var age                                           "Age (year
-> s)"
+192.         label var age                                           "Age (years)"
 193.         label var male                                          "Male"
-194.         label var imd_order                             "Ranking of index 
-> of Multiple Deprivation (IMD)"
-195.         label var ethnicity_16                          "Ethnicity in 16 c
-> ategories"
-196.         label var ethnicity_5                           "Ethnicity in 5 ca
-> tegories"
-197.         label var stp                                           "Sustainab
-> ility and Transformation Partnership"
-198.         label var stpcode                                       "Sustainab
-> ility and Transformation Partnership"
-199.         label var region_7                                      "Geographi
-> cal region (7 England regions)"
-200.         label var rural                                         "Rural/urb
-> an binary classification"
+194.         label var imd_order                             "Ranking of index of Multiple Deprivation (IMD)"
+195.         label var ethnicity_16                          "Ethnicity in 16 categories"
+196.         label var ethnicity_5                           "Ethnicity in 5 categories"
+197.         label var stp                                           "Sustainability and Transformation Partnership"
+198.         label var stpcode                                       "Sustainability and Transformation Partnership"
+199.         label var region_7                                      "Geographical region (7 England regions)"
+200.         label var rural                                         "Rural/urban binary classification"
 201.         label var household_id                          "Household ID"
 202.         label var household_size                        "Household size"
-203.         label var resid_care_old                        "Residential care,
->  elderly"
-204.         label var resid_care_ldr                        "Residential care,
->  learning disability"
+203.         label var resid_care_old                        "Residential care, elderly"
+204.         label var resid_care_ldr                        "Residential care, learning disability"
 205. 
-.         label var smoke                                         "Smoking stat
-> us"
-206.         label var bmi                                           "Body Mass
->  Index (BMI, kg/m2)"
-207.         label var bmi_child_date_measured_date "Date BMI measured (if age<
-> 16)"
+.         label var smoke                                         "Smoking status"
+206.         label var bmi                                           "Body Mass Index (BMI, kg/m2)"
+207.         label var bmi_child_date_measured_date "Date BMI measured (if age<16)"
 208. 
 . 
 .         * Clinical measurements
-.         label var bp_sys                                        "Systolic blo
-> od pressure"
-209.         label var bp_sys_date                           "Systolic blood pr
-> essure, date"
-210.         label var bp_dias                                       "Diastolic
->  blood pressure"
-211.         label var bp_dias_date                          "Diastolic blood p
-> ressure, date"
-212.         label var egfr                                          "Estimated
->  globular filtration rate"
-213.         label var hba1c_pct                                     "Hba1c per
-> centage"
+.         label var bp_sys                                        "Systolic blood pressure"
+209.         label var bp_sys_date                           "Systolic blood pressure, date"
+210.         label var bp_dias                                       "Diastolic blood pressure"
+211.         label var bp_dias_date                          "Diastolic blood pressure, date"
+212.         label var egfr                                          "Estimated globular filtration rate"
+213.         label var hba1c_pct                                     "Hba1c percentage"
 214.         label var asthmacat                                     "Asthma"
 215. 
 .         * Dates of comorbidities        
-.         label var cf_date                                       "Cystic fibro
-> sis, date"
-216.         label var respiratory_date                      "Respiratory disea
-> se (excl. asthma), date"
-217.         label var cardiac_date                          "Heart disease, da
-> te"
-218.         label var af_date                                       "Atrial fi
-> brillation, date"
-219.         label var dvt_pe_date                           "Deep vein thrombo
-> sis/pulmonary embolism, date"
-220.         label var pad_surg_date                         "Surgery for perip
-> heral arterial disease, date"
-221.         label var amputate_date                         "Limb amputation, 
-> date"
+.         label var cf_date                                       "Cystic fibrosis, date"
+216.         label var respiratory_date                      "Respiratory disease (excl. asthma), date"
+217.         label var cardiac_date                          "Heart disease, date"
+218.         label var af_date                                       "Atrial fibrillation, date"
+219.         label var dvt_pe_date                           "Deep vein thrombosis/pulmonary embolism, date"
+220.         label var pad_surg_date                         "Surgery for peripheral arterial disease, date"
+221.         label var amputate_date                         "Limb amputation, date"
 222.         label var diabetes_date                         "Diabetes, date"
-223.         label var hypertension_date                     "Date of diagnosed
->  hypertension"
-224.         label var tia_date                                      "Transient
->  ischemic attack, date"
+223.         label var hypertension_date                     "Date of diagnosed hypertension"
+224.         label var tia_date                                      "Transient ischemic attack, date"
 225.         label var stroke_date                           "Stroke, date"
 226.         label var dementia_date                         "Dementia, date"
-227.         label var neuro_date                            "Neuro condition o
-> ther than stroke/dementia, date"      
-228.         label var lung_cancer_date                      "Lung cancer, date
-> "
-229.         label var other_cancer_date                     "Other cancer, dat
-> e"
-230.         label var haem_cancer_date                      "Haematological ma
-> lignancy, date"
+227.         label var neuro_date                            "Neuro condition other than stroke/dementia, date"      
+228.         label var lung_cancer_date                      "Lung cancer, date"
+229.         label var other_cancer_date                     "Other cancer, date"
+230.         label var haem_cancer_date                      "Haematological malignancy, date"
 231.         label var liver_date                            "Liver, date"
 232.         label var dialysis_date                         "Dialysis, date"
-233.         label var transplant_kidney_date        "Kidney transplant recipie
-> nt, date"
-234.         label var transplant_notkidney_date     "Organ (not kidney) transp
-> lant recipient, date"
+233.         label var transplant_kidney_date        "Kidney transplant recipient, date"
+234.         label var transplant_notkidney_date     "Organ (not kidney) transplant recipient, date"
 235.         label var dysplenia_date                        "Dysplenia, date"
-236.         label var sickle_cell_date                      "Sickle cell, date
-> "
+236.         label var sickle_cell_date                      "Sickle cell, date"
 237.         label var aplastic_anaemia_date         "Aplastic anaemia, date"
-238.         label var autoimmune_date                       "RA, SLE, Psoriasi
-> s (autoimmune disease), date"
-239.         label var hiv_date                                      "HIV, date
-> "
-240.         label var perm_immuno_date                      "Conditions causin
-> g permanent immunosuppression, date"
-241.         label var temp_immuno_date                      "Conditions causin
-> g temporary immunosuppression, date"
-242.         label var ibd_date                                      "IBD, date
-> "
+238.         label var autoimmune_date                       "RA, SLE, Psoriasis (autoimmune disease), date"
+239.         label var hiv_date                                      "HIV, date"
+240.         label var perm_immuno_date                      "Conditions causing permanent immunosuppression, date"
+241.         label var temp_immuno_date                      "Conditions causing temporary immunosuppression, date"
+242.         label var ibd_date                                      "IBD, date"
 243.         label var fracture_date                         "Fracture, date"
-244.         label var smi_date                                      "Serious m
-> ental illness, date"
-245.         label var ldr_date                                      "Learning 
-> disability register, date"
-246.         label var ld_profound_date                      "Profound/severe l
-> earning disability, date"
-247.         label var ds_date                                       "Down's Sy
-> ndrome, date"
-248.         label var cp_date                                       "Cerebral 
-> Palsy, date"
+244.         label var smi_date                                      "Serious mental illness, date"
+245.         label var ldr_date                                      "Learning disability register, date"
+246.         label var ld_profound_date                      "Profound/severe learning disability, date"
+247.         label var ds_date                                       "Down's Syndrome, date"
+248.         label var cp_date                                       "Cerebral Palsy, date"
 249.          
 . 
 . 
 .         * Outcomes 
-.         label var  coviddeath_date                      "Date of ONS COVID-19
->  death"
-250.         label var  otherdeath_date                      "Date of ONS non-C
-> OVID-19 death"
-251.         label var  covidadmission_date          "Date of COVID-19 hospital
->  admission"
+.         label var  coviddeath_date                      "Date of ONS COVID-19 death"
+250.         label var  otherdeath_date                      "Date of ONS non-COVID-19 death"
+251.         label var  covidadmission_date          "Date of COVID-19 hospital admission"
 252.         label var  covidpostest_date            "SGSS first positive test"
 253. 
 .         
@@ -636,38 +517,24 @@
 .         *********************
 . 
 .         sort patient_id
-254.         order   patient_id stp* region_7 imd* rural                       
->                       ///
->                         household* resid_care_old resid_care_ldr             
->                            ///
->                         age male                                             
->                                                            ///
->                         bmi* smoke*                                          
->                                                    ///
->                         ethnicity*                                           
->                                                            /// 
->                         respiratory* asthma* cf* cardiac* diabetes* hba1c*   
->                    ///
->                         bp_sys bp_sys_date bp_dias bp_dias_date              
->                            ///
->                         hypertension*                                        
->                                                    ///
->                         af* dvt_pe* pad* amputate*                           
->                                            ///
->                         stroke* dementia* neuro* tia*                        
->                                    ///
->                         lung_cancer* haem_cancer* other_cancer*              
->                            ///     
->                         transplant_kidney* dialysis* liver* transplant_notkid
-> ney*       ///
->                         dysplenia* sickle* hiv* perm* temp* aplastic*        
->                    ///
->                         autoimmune* ibd* smi* fracture*                      
->                                    ///
->                         smi* ld* fracture*                                   
->                                                    ///
->                         coviddeath_date otherdeath_date covidadmission_date  
->                    ///
+254.         order   patient_id stp* region_7 imd* rural                                             ///
+>                         household* resid_care_old resid_care_ldr                                        ///
+>                         age male                                                                                                     
+>    ///
+>                         bmi* smoke*                                                                                             ///
+>                         ethnicity*                                                                                                   
+>    /// 
+>                         respiratory* asthma* cf* cardiac* diabetes* hba1c*                      ///
+>                         bp_sys bp_sys_date bp_dias bp_dias_date                                         ///
+>                         hypertension*                                                                                           ///
+>                         af* dvt_pe* pad* amputate*                                                                      ///
+>                         stroke* dementia* neuro* tia*                                                           ///
+>                         lung_cancer* haem_cancer* other_cancer*                                         ///     
+>                         transplant_kidney* dialysis* liver* transplant_notkidney*       ///
+>                         dysplenia* sickle* hiv* perm* temp* aplastic*                           ///
+>                         autoimmune* ibd* smi* fracture*                                                         ///
+>                         smi* ld* fracture*                                                                                      ///
+>                         coviddeath_date otherdeath_date covidadmission_date                     ///
 >                         covidpostest_date
 255. 
 . 
@@ -681,13 +548,11 @@
 . 
 .         sort patient_id
 256.         if "`index_date'" == "2020-03-01" {
-257.                 label data "Base cohort dataset (wave 1), index date 1st M
-> arch 2020"
+257.                 label data "Base cohort dataset (wave 1), index date 1st March 2020"
 258.                 save "analysis/data_base_cohort1.dta", replace
 259.         }
 260.         else if "`index_date'" == "2020-09-01" {
-261.                 label data "Base cohort dataset (wave 2), index date 1st S
-> eptember 2020"
+261.                 label data "Base cohort dataset (wave 2), index date 1st September 2020"
 262.                 save "analysis/data_base_cohort2.dta", replace
 263.         }
 264. 
@@ -695,12 +560,12 @@
 2020-03-01
 (63 vars, 1,000 obs)
 (0 real changes made)
-(382 differences between num_old and resid_care_old)
-(655 differences between num_ldr and resid_care_ldr)
+(395 differences between num_old and resid_care_old)
+(643 differences between num_ldr and resid_care_ldr)
 STARTING COUNT FROM IMPORT:
   1,000
 DROPPING AGE>105:
-(1 observation deleted)
+(0 observations deleted)
 DROPPING AGE<0:
 (0 observations deleted)
 DROPPING GENDER NOT M/F:
@@ -711,221 +576,222 @@ DROPPING IF NO IMD
 (0 observations deleted)
 (0 observations deleted)
 DROPPING IF DIED BEFORE INDEX DATE
-(799 missing values generated)
+(800 missing values generated)
 (0 observations deleted)
 variable cf was str7 now str10
-(999 real changes made)
-(801 real changes made)
-(801 missing values generated)
+(1,000 real changes made)
+(804 real changes made)
+(804 missing values generated)
 variable respiratory was str7 now str10
-(999 real changes made)
-(803 real changes made)
-(803 missing values generated)
+(1,000 real changes made)
+(802 real changes made)
+(802 missing values generated)
 variable cardiac was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (803 real changes made)
 (803 missing values generated)
 variable hypertension was str7 now str10
-(999 real changes made)
-(804 real changes made)
-(804 missing values generated)
+(1,000 real changes made)
+(806 real changes made)
+(806 missing values generated)
 variable af was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (802 real changes made)
 (802 missing values generated)
 variable dvt_pe was str7 now str10
-(999 real changes made)
-(803 real changes made)
-(803 missing values generated)
+(1,000 real changes made)
+(805 real changes made)
+(805 missing values generated)
 variable pad_surg was str7 now str10
-(999 real changes made)
-(803 real changes made)
-(803 missing values generated)
+(1,000 real changes made)
+(800 real changes made)
+(800 missing values generated)
 variable amputate was str7 now str10
-(999 real changes made)
-(803 real changes made)
-(803 missing values generated)
+(1,000 real changes made)
+(802 real changes made)
+(802 missing values generated)
 variable diabetes was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (802 real changes made)
 (802 missing values generated)
 variable tia was str7 now str10
-(999 real changes made)
-(801 real changes made)
-(801 missing values generated)
+(1,000 real changes made)
+(804 real changes made)
+(804 missing values generated)
 variable stroke was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (803 real changes made)
 (803 missing values generated)
 variable dementia was str7 now str10
-(999 real changes made)
-(801 real changes made)
-(801 missing values generated)
+(1,000 real changes made)
+(803 real changes made)
+(803 missing values generated)
 variable neuro was str7 now str10
-(999 real changes made)
-(804 real changes made)
-(804 missing values generated)
-variable lung_cancer was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (802 real changes made)
 (802 missing values generated)
+variable lung_cancer was str7 now str10
+(1,000 real changes made)
+(803 real changes made)
+(803 missing values generated)
 variable haem_cancer was str7 now str10
-(999 real changes made)
-(805 real changes made)
-(805 missing values generated)
+(1,000 real changes made)
+(803 real changes made)
+(803 missing values generated)
 variable other_cancer was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (805 real changes made)
 (805 missing values generated)
 variable liver was str7 now str10
-(999 real changes made)
-(804 real changes made)
-(804 missing values generated)
-variable transplant_notkidney was str7 now str10
-(999 real changes made)
-(804 real changes made)
-(804 missing values generated)
-variable transplant_kidney was str7 now str10
-(999 real changes made)
-(808 real changes made)
-(808 missing values generated)
-variable dialysis was str7 now str10
-(999 real changes made)
-(801 real changes made)
-(801 missing values generated)
-variable dysplenia was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (805 real changes made)
 (805 missing values generated)
+variable transplant_notkidney was str7 now str10
+(1,000 real changes made)
+(806 real changes made)
+(806 missing values generated)
+variable transplant_kidney was str7 now str10
+(1,000 real changes made)
+(803 real changes made)
+(803 missing values generated)
+variable dialysis was str7 now str10
+(1,000 real changes made)
+(808 real changes made)
+(808 missing values generated)
+variable dysplenia was str7 now str10
+(1,000 real changes made)
+(801 real changes made)
+(801 missing values generated)
 variable sickle_cell was str7 now str10
-(999 real changes made)
-(802 real changes made)
-(802 missing values generated)
+(1,000 real changes made)
+(805 real changes made)
+(805 missing values generated)
 variable hiv was str7 now str10
-(999 real changes made)
-(807 real changes made)
-(807 missing values generated)
+(1,000 real changes made)
+(806 real changes made)
+(806 missing values generated)
 variable perm_immuno was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (802 real changes made)
 (802 missing values generated)
 variable aplastic_anaemia was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (998 real changes made)
 (998 missing values generated)
+variable temp_immuno was str7 now str10
+(1,000 real changes made)
+(991 real changes made)
+(991 missing values generated)
 variable autoimmune was str7 now str10
-(999 real changes made)
-(804 real changes made)
-(804 missing values generated)
+(1,000 real changes made)
+(807 real changes made)
+(807 missing values generated)
 variable ibd was str7 now str10
-(999 real changes made)
-(806 real changes made)
-(806 missing values generated)
+(1,000 real changes made)
+(803 real changes made)
+(803 missing values generated)
 variable fracture was str7 now str10
-(999 real changes made)
-(986 real changes made)
-(986 missing values generated)
+(1,000 real changes made)
+(995 real changes made)
+(995 missing values generated)
 variable smi was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (802 real changes made)
 (802 missing values generated)
 variable ldr was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (608 real changes made)
 (608 missing values generated)
 variable ld_profound was str7 now str10
-(999 real changes made)
-(803 real changes made)
-(803 missing values generated)
-variable ds was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (801 real changes made)
 (801 missing values generated)
-variable cp was str7 now str10
-(999 real changes made)
+variable ds was str7 now str10
+(1,000 real changes made)
 (804 real changes made)
 (804 missing values generated)
-(960 missing values generated)
-(16 real changes made)
-(121 real changes made)
-(24 real changes made, 24 to missing)
-(799 real changes made, 799 to missing)
+variable cp was str7 now str10
+(1,000 real changes made)
+(807 real changes made)
+(807 missing values generated)
+(948 missing values generated)
+(15 real changes made)
+(115 real changes made)
+(18 real changes made, 18 to missing)
+(800 real changes made, 800 to missing)
 (250 real changes made, 250 to missing)
 (250 real changes made, 250 to missing)
-(184 real changes made, 184 to missing)
-(205 real changes made, 205 to missing)
+(195 real changes made, 195 to missing)
+(203 real changes made, 203 to missing)
 variable bmi_child_date_measured was str7 now str10
-(999 real changes made)
+(1,000 real changes made)
 (50 real changes made)
 (50 missing values generated)
-(794 real changes made, 794 to missing)
-(752 real changes made, 752 to missing)
+(797 real changes made, 797 to missing)
+(759 real changes made, 759 to missing)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-   bmi_adult |        794    32.77703    12.54188          0   67.79285
-   bmi_child |        205    34.62541    11.02958          0   56.47743
-(205 missing values generated)
-(205 real changes made)
-(143 real changes made, 143 to missing)
-(968 missing values generated)
-(998 real changes made)
-(904 missing values generated)
-(191 real changes made)
+   bmi_adult |        797    33.12665     11.9984  -.1307325     59.823
+   bmi_child |        203    32.82115    12.94715          0   73.42787
+(203 missing values generated)
 (203 real changes made)
-(105 real changes made)
-(115 real changes made)
-(106 real changes made)
-(104 real changes made)
-(80 real changes made)
+(131 real changes made, 131 to missing)
+(969 missing values generated)
+(999 real changes made)
+(899 missing values generated)
+(204 real changes made)
+(211 real changes made)
+(100 real changes made)
+(100 real changes made)
+(103 real changes made)
+(100 real changes made)
+(81 real changes made)
 (0 real changes made)
-(rural_urban: 23 changes made)
-Warning: at least one group contains all missing values or contains multiple
-modes.  Generating missing values for the mode of these groups.  Use the
-missing, maxmode, minmode, or nummode() options to control this behavior.
-(22 missing values generated)
-(23 real changes made)
-(999 differences between rural_urban and rural)
+(rural_urban: 29 changes made)
+(29 real changes made)
+(1000 differences between rural_urban and rural)
 (asthmacat: 200 changes made)
-(56 real changes made, 56 to missing)
-(56 missing values generated)
-(999 missing values generated)
-(494 real changes made)
-(449 real changes made)
-(494 real changes made)
-(449 real changes made)
-(269 real changes made)
-(999 missing values generated)
-(494 real changes made)
-(449 real changes made)
-(943 real changes made)
-(730 real changes made)
-(56 missing values generated)
-(935 real changes made)
-(494 real changes made)
+(54 real changes made, 54 to missing)
+(54 missing values generated)
+(1,000 missing values generated)
+(491 real changes made)
+(455 real changes made)
+(491 real changes made)
+(455 real changes made)
+(273 real changes made)
+(1,000 missing values generated)
+(491 real changes made)
+(455 real changes made)
+(946 real changes made)
+(727 real changes made)
+(54 missing values generated)
+(933 real changes made)
+(491 real changes made)
 (0 real changes made)
-(57 real changes made, 57 to missing)
-(74 real changes made, 74 to missing)
+(58 real changes made, 58 to missing)
+(72 real changes made, 72 to missing)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-hba1c_perc~e |        942    5.120511    1.985078   .1839577   10.65956
-hba1c_mmol~l |        925    40.59331    18.28111   .0554168   95.01129
-(57 missing values generated)
-(925 real changes made)
+hba1c_perc~e |        942    5.024326    1.956973   .1241322   11.11007
+hba1c_mmol~l |        928    41.16155    18.88956   .0039162   103.7383
+(58 missing values generated)
+(928 real changes made)
 (0 real changes made)
-(991 real changes made)
-(799 missing values generated)
-(958 missing values generated)
-(840 missing values generated)
-(799 missing values generated)
+(996 real changes made)
 (800 missing values generated)
+(959 missing values generated)
+(841 missing values generated)
+(800 missing values generated)
+(800 missing values generated)
+(note: file analysis/data_base_cohort1.dta not found)
 file analysis/data_base_cohort1.dta saved
 2020-09-01
 (63 vars, 1,000 obs)
 (0 real changes made)
-(322 differences between num_old and resid_care_old)
-(652 differences between num_ldr and resid_care_ldr)
+(352 differences between num_old and resid_care_old)
+(629 differences between num_ldr and resid_care_ldr)
 STARTING COUNT FROM IMPORT:
   1,000
 DROPPING AGE>105:
@@ -941,223 +807,220 @@ DROPPING IF NO IMD
 (0 observations deleted)
 DROPPING IF DIED BEFORE INDEX DATE
 (800 missing values generated)
-(117 observations deleted)
+(107 observations deleted)
 variable cf was str7 now str10
-(883 real changes made)
-(707 real changes made)
-(707 missing values generated)
-variable respiratory was str7 now str10
-(883 real changes made)
-(711 real changes made)
-(711 missing values generated)
-variable cardiac was str7 now str10
-(883 real changes made)
-(708 real changes made)
-(708 missing values generated)
-variable hypertension was str7 now str10
-(883 real changes made)
-(715 real changes made)
-(715 missing values generated)
-variable af was str7 now str10
-(883 real changes made)
-(709 real changes made)
-(709 missing values generated)
-variable dvt_pe was str7 now str10
-(883 real changes made)
-(710 real changes made)
-(710 missing values generated)
-variable pad_surg was str7 now str10
-(883 real changes made)
-(718 real changes made)
-(718 missing values generated)
-variable amputate was str7 now str10
-(883 real changes made)
-(707 real changes made)
-(707 missing values generated)
-variable diabetes was str7 now str10
-(883 real changes made)
-(719 real changes made)
-(719 missing values generated)
-variable tia was str7 now str10
-(883 real changes made)
-(706 real changes made)
-(706 missing values generated)
-variable stroke was str7 now str10
-(883 real changes made)
-(709 real changes made)
-(709 missing values generated)
-variable dementia was str7 now str10
-(883 real changes made)
-(712 real changes made)
-(712 missing values generated)
-variable neuro was str7 now str10
-(883 real changes made)
-(710 real changes made)
-(710 missing values generated)
-variable lung_cancer was str7 now str10
-(883 real changes made)
+(893 real changes made)
 (713 real changes made)
 (713 missing values generated)
-variable haem_cancer was str7 now str10
-(883 real changes made)
-(716 real changes made)
-(716 missing values generated)
-variable other_cancer was str7 now str10
-(883 real changes made)
-(708 real changes made)
-(708 missing values generated)
-variable liver was str7 now str10
-(883 real changes made)
-(709 real changes made)
-(709 missing values generated)
-variable transplant_notkidney was str7 now str10
-(883 real changes made)
+variable respiratory was str7 now str10
+(893 real changes made)
+(717 real changes made)
+(717 missing values generated)
+variable cardiac was str7 now str10
+(893 real changes made)
+(715 real changes made)
+(715 missing values generated)
+variable hypertension was str7 now str10
+(893 real changes made)
+(713 real changes made)
+(713 missing values generated)
+variable af was str7 now str10
+(893 real changes made)
+(723 real changes made)
+(723 missing values generated)
+variable dvt_pe was str7 now str10
+(893 real changes made)
+(726 real changes made)
+(726 missing values generated)
+variable pad_surg was str7 now str10
+(893 real changes made)
+(720 real changes made)
+(720 missing values generated)
+variable amputate was str7 now str10
+(893 real changes made)
+(712 real changes made)
+(712 missing values generated)
+variable diabetes was str7 now str10
+(893 real changes made)
 (722 real changes made)
 (722 missing values generated)
-variable transplant_kidney was str7 now str10
-(883 real changes made)
-(709 real changes made)
-(709 missing values generated)
-variable dialysis was str7 now str10
-(883 real changes made)
+variable tia was str7 now str10
+(893 real changes made)
+(721 real changes made)
+(721 missing values generated)
+variable stroke was str7 now str10
+(893 real changes made)
+(715 real changes made)
+(715 missing values generated)
+variable dementia was str7 now str10
+(893 real changes made)
 (716 real changes made)
 (716 missing values generated)
-variable dysplenia was str7 now str10
-(883 real changes made)
+variable neuro was str7 now str10
+(893 real changes made)
+(720 real changes made)
+(720 missing values generated)
+variable lung_cancer was str7 now str10
+(893 real changes made)
+(718 real changes made)
+(718 missing values generated)
+variable haem_cancer was str7 now str10
+(893 real changes made)
+(714 real changes made)
+(714 missing values generated)
+variable other_cancer was str7 now str10
+(893 real changes made)
+(719 real changes made)
+(719 missing values generated)
+variable liver was str7 now str10
+(893 real changes made)
+(716 real changes made)
+(716 missing values generated)
+variable transplant_notkidney was str7 now str10
+(893 real changes made)
+(719 real changes made)
+(719 missing values generated)
+variable transplant_kidney was str7 now str10
+(893 real changes made)
 (711 real changes made)
 (711 missing values generated)
+variable dialysis was str7 now str10
+(893 real changes made)
+(717 real changes made)
+(717 missing values generated)
+variable dysplenia was str7 now str10
+(893 real changes made)
+(722 real changes made)
+(722 missing values generated)
 variable sickle_cell was str7 now str10
-(883 real changes made)
-(703 real changes made)
-(703 missing values generated)
+(893 real changes made)
+(709 real changes made)
+(709 missing values generated)
 variable hiv was str7 now str10
-(883 real changes made)
+(893 real changes made)
 (718 real changes made)
 (718 missing values generated)
 variable perm_immuno was str7 now str10
-(883 real changes made)
-(707 real changes made)
-(707 missing values generated)
+(893 real changes made)
+(721 real changes made)
+(721 missing values generated)
 variable aplastic_anaemia was str7 now str10
-(883 real changes made)
-(878 real changes made)
-(878 missing values generated)
-variable temp_immuno was str7 now str10
-(883 real changes made)
-(878 real changes made)
-(878 missing values generated)
+(893 real changes made)
+(890 real changes made)
+(890 missing values generated)
+(893 real changes made)
+(893 real changes made)
+(893 missing values generated)
 variable autoimmune was str7 now str10
-(883 real changes made)
-(706 real changes made)
-(706 missing values generated)
+(893 real changes made)
+(716 real changes made)
+(716 missing values generated)
 variable ibd was str7 now str10
-(883 real changes made)
-(719 real changes made)
-(719 missing values generated)
+(893 real changes made)
+(715 real changes made)
+(715 missing values generated)
 variable fracture was str7 now str10
-(883 real changes made)
-(876 real changes made)
-(876 missing values generated)
+(893 real changes made)
+(885 real changes made)
+(885 missing values generated)
 variable smi was str7 now str10
-(883 real changes made)
-(711 real changes made)
-(711 missing values generated)
+(893 real changes made)
+(716 real changes made)
+(716 missing values generated)
 variable ldr was str7 now str10
-(883 real changes made)
-(525 real changes made)
-(525 missing values generated)
+(893 real changes made)
+(543 real changes made)
+(543 missing values generated)
 variable ld_profound was str7 now str10
-(883 real changes made)
-(708 real changes made)
-(708 missing values generated)
+(893 real changes made)
+(720 real changes made)
+(720 missing values generated)
 variable ds was str7 now str10
-(883 real changes made)
-(702 real changes made)
-(702 missing values generated)
+(893 real changes made)
+(716 real changes made)
+(716 missing values generated)
 variable cp was str7 now str10
-(883 real changes made)
-(702 real changes made)
-(702 missing values generated)
-(845 missing values generated)
-(14 real changes made)
-(106 real changes made)
-(17 real changes made, 17 to missing)
-(708 real changes made, 708 to missing)
-(210 real changes made, 210 to missing)
-(210 real changes made, 210 to missing)
-(166 real changes made, 166 to missing)
-(172 real changes made, 172 to missing)
-variable bmi_child_date_measured was str7 now str10
-(883 real changes made)
-(42 real changes made)
-(42 missing values generated)
-(711 real changes made, 711 to missing)
-(677 real changes made, 677 to missing)
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-   bmi_adult |        711    33.24419    12.09058          0   61.11536
-   bmi_child |        172    32.48191     12.4346          0   66.28869
-(172 missing values generated)
-(172 real changes made)
-(111 real changes made, 111 to missing)
+(893 real changes made)
+(714 real changes made)
+(714 missing values generated)
 (852 missing values generated)
-(882 real changes made)
-(793 missing values generated)
-(165 real changes made)
-(192 real changes made)
-(86 real changes made)
-(80 real changes made)
-(89 real changes made)
-(100 real changes made)
-(81 real changes made)
-(0 real changes made)
-(rural_urban: 25 changes made)
-Warning: at least one group contains all missing values or contains multiple
-modes.  Generating missing values for the mode of these groups.  Use the
-missing, maxmode, minmode, or nummode() options to control this behavior.
-(76 missing values generated)
-(21 real changes made)
-(879 differences between rural_urban and rural)
-(asthmacat: 174 changes made)
-(45 real changes made, 45 to missing)
-(45 missing values generated)
-(883 missing values generated)
-(422 real changes made)
-(416 real changes made)
-(422 real changes made)
-(416 real changes made)
-(239 real changes made)
-(883 missing values generated)
-(422 real changes made)
-(416 real changes made)
-(838 real changes made)
-(644 real changes made)
-(45 missing values generated)
-(829 real changes made)
-(422 real changes made)
-(0 real changes made)
-(55 real changes made, 55 to missing)
-(66 real changes made, 66 to missing)
+(18 real changes made)
+(98 real changes made)
+(16 real changes made, 16 to missing)
+(720 real changes made, 720 to missing)
+(226 real changes made, 226 to missing)
+(226 real changes made, 226 to missing)
+(161 real changes made, 161 to missing)
+(140 real changes made, 140 to missing)
+variable bmi_child_date_measured was str7 now str10
+(893 real changes made)
+(46 real changes made)
+(46 missing values generated)
+(753 real changes made, 753 to missing)
+(717 real changes made, 717 to missing)
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-hba1c_perc~e |        828    5.014897    1.983849   .3515907   11.57545
-hba1c_mmol~l |        817    40.74076    18.93019    .220412   116.6338
-(55 missing values generated)
-(817 real changes made)
-(0 real changes made)
-(880 real changes made)
+   bmi_adult |        753    33.25179    12.35759          0    61.6464
+   bmi_child |        140    33.50246    13.40188          0   64.15395
+(140 missing values generated)
+(140 real changes made)
+(120 real changes made, 120 to missing)
+(862 missing values generated)
+(892 real changes made)
 (800 missing values generated)
-(865 missing values generated)
-(818 missing values generated)
-(704 missing values generated)
+(167 real changes made)
+(172 real changes made)
+(92 real changes made)
+(93 real changes made)
+(107 real changes made)
+(83 real changes made)
+(86 real changes made)
+(0 real changes made)
+(rural_urban: 30 changes made)
+(30 real changes made)
+(893 differences between rural_urban and rural)
+(asthmacat: 173 changes made)
+(48 real changes made, 48 to missing)
+(48 missing values generated)
+(893 missing values generated)
+(421 real changes made)
+(424 real changes made)
+(421 real changes made)
+(424 real changes made)
+(217 real changes made)
+(893 missing values generated)
+(421 real changes made)
+(424 real changes made)
+(845 real changes made)
+(676 real changes made)
+(48 missing values generated)
+(838 real changes made)
+(421 real changes made)
+(0 real changes made)
+(49 real changes made, 49 to missing)
+(65 real changes made, 65 to missing)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+hba1c_perc~e |        844    5.132201    2.003754   .0194196   12.16265
+hba1c_mmol~l |        828    40.25959    19.33875   .2936997   95.63728
+(49 missing values generated)
+(828 real changes made)
+(0 real changes made)
+(890 real changes made)
+(800 missing values generated)
+(876 missing values generated)
+(817 missing values generated)
 (713 missing values generated)
+(715 missing values generated)
+(note: file analysis/data_base_cohort2.dta not found)
 file analysis/data_base_cohort2.dta saved
 
 . log close
       name:  <unnamed>
-       log:  /workspace/logs/001_clean_input_data.log
+       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/001_clean_input_data.l
+> og
   log type:  text
- closed on:   8 Feb 2021, 19:47:24
--------------------------------------------------------------------------------
+ closed on:  11 Feb 2021, 11:49:57
+---------------------------------------------------------------------------------------------------------------------------------------

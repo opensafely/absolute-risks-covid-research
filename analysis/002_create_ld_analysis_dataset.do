@@ -39,7 +39,6 @@ forvalues i = 1 (1) 2 {
 	* Open data
 	use "analysis/data_base_cohort`i'.dta", clear 
 
-
 	* Index date
 	if `i'==1 {
 		local index_date = "2020-03-01"
