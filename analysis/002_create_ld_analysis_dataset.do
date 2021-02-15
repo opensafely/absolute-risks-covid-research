@@ -361,10 +361,10 @@ forvalues i = 1 (1) 2 {
 	* Split into in residential care and not
 	noi tab ldr resid_care_ld, m
 
-	gen ldr_carecat = ldr
-	recode ldr 1=2 if resid_care_ld==1
+	gen 	ldr_carecat = ldr
+	recode 	ldr_carecat 1=2 if resid_care_ld==1
 
-	label define ldcare 0 "Not on LDR"							///
+	label define ldcare	 	0 "Not on LDR"						///
 							1 "LDR, not in residential care"	///
 							2 "LDR, in residential care"
 	label values ldr_carecat ldcare
@@ -398,7 +398,7 @@ forvalues i = 1 (1) 2 {
 	global coviddeathcensor1     = d(31Aug2020)
 	global covidadmissioncensor1 = d(31Aug2020)
 
-	*** WAVE 2 CENSORING *** last outcome date minus 7 days
+	*** WAVE 2 CENSORING *** last outcome date minus 7 days	
 	* COVID death
 	noi summ coviddeath_date, format
 	global coviddeathcensor2 = r(max) - 7
@@ -422,6 +422,7 @@ forvalues i = 1 (1) 2 {
 	/*  Binary outcome and survival time  */
 
 	* Events prior to index date (shouldn't happen in real data)
+	noi count if otherdeath_date     < `index'
 	noi count if coviddeath_date     < `index'
 	noi count if covidadmission_date < `index'
 		
@@ -445,7 +446,12 @@ forvalues i = 1 (1) 2 {
 		replace composite`k' = 0 if composite_date > coviddeathcensor`k'
 		format composite_date %td
 
+		* Non-COVID-19 death
+		gen 	noncoviddeath`k' = (otherdeath_date<.)
+		replace noncoviddeath`k' = 0 if otherdeath_date > coviddeathcensor`k'
+		replace noncoviddeath`k' = 0 if otherdeath_date > coviddeath_date
 
+		
 		/*  Calculate survival times  (days until event/censoring)  */
 
 		egen stime_coviddeath`k' 	 = rowmin(coviddeath_date    	/// 
@@ -460,7 +466,10 @@ forvalues i = 1 (1) 2 {
 									otherdeath_date					/// 
 									covidadmissioncensor`k' 		///
 									coviddeathcensor`k')
-
+		egen stime_noncoviddeath`k' = rowmin(otherdeath_date    	/// 
+									coviddeath_date 				///
+									coviddeathcensor`k') 
+									
 		drop coviddeathcensor`k' covidadmissioncensor`k' 
 	}
 	
@@ -472,8 +481,9 @@ forvalues i = 1 (1) 2 {
 	* Wave 1: Keep both outcomes (censored at Aug 31, and all time)
 	* Wave 2: Keep only outcome censored at end
 	if `i'==2 {
-	    drop coviddeath1 covidadmission1 composite1 ///
-			stime_coviddeath1 stime_covidadmission1 stime_composite1
+	    drop coviddeath1 covidadmission1 composite1 noncoviddeath1 		///
+			stime_coviddeath1 stime_covidadmission1 stime_composite1 	///
+			stime_noncoviddeath1
 	}
 
 	
@@ -552,10 +562,12 @@ forvalues i = 1 (1) 2 {
 		capture label var  coviddeath`k'			"COVID-19 death (ONS), `tag`k''"
 		capture label var  covidadmission`k'		"COVID-19 hospital admission, `tag`k''"
 		capture label var  composite`k'				"COVID-19 hospital admission or death, `tag`k''"
+		capture label var  noncoviddeath`k'			"Non COVID-19 death (ONS), `tag`k''"
 			
 		capture label var  stime_coviddeath`k'		"Days from study entry until COVID-19 death or censoring, `tag`k''"
 		capture label var  stime_covidadmission`k'	"Days from study entry until COVID-19 hospital admission or censoring, `tag`k''"
 		capture label var  stime_composite`k'		"Days from study entry until COVID-19 hospital admission or death or censoring, `tag`k''"
+		capture label var  stime_coviddeath`k'		"Days from study entry until Non-COVID-19 death or censoring, `tag`k''"
 	}	
 
 
@@ -576,7 +588,7 @@ forvalues i = 1 (1) 2 {
 			kidneyfn* liver* transplant* 								///
 			spleen* autoimmune* immunosuppression*	ibd*				///
 			smi* dialysis neuro											///
-			coviddeath* otherdeath* covidadmission* composite*
+			coviddeath* otherdeath* covidadmission* composite* noncovid*
 
 	keep 	patient_id stp* region_7 imd 	 					 		///
 			household* resid_care_old resid_care_ldr			 		///
@@ -590,6 +602,7 @@ forvalues i = 1 (1) 2 {
 			spleen autoimmune immunosuppression ibd						///
 			smi dialysis neuro											///
 			coviddeath* otherdeath* covidadmission* composite*			///
+			noncovid*													///
 			stime*
 
 
