@@ -100,22 +100,14 @@ actions:
         hrs_adult: output/output_hrs_main_2_covidadmission_ldr_group.out
         rates_adult: output/output_rates_2_covidadmission_ldr_group.out
 
-
-
-
-
-
-
- create_analysis_ar:
-    run: stata-mp:latest analysis/003_create_absolute_risks_analysis_dataset.do
+  create_analysis_ar:
+    run: stata-mp:latest analysis/003_create_ar_analysis_dataset.do
     needs: [clean]
     outputs:
      highly_sensitive:
-        log: logs/003_create_absolute_risks_analysis_dataset.log
+        log: logs/003_create_ar_analysis_dataset.log
         an_data1: analysis/data_aranalysis_cohort1.dta
         an_data2: analysis/data_aranalysis_cohort2.dta
-
-
 
   cox_regression_ar1:
     run: stata-mp:latest analysis/AAR001_1_cox_regression.do
@@ -124,12 +116,9 @@ actions:
       moderately_sensitive:
         log: logs/AAR001_1_cox_regression.log
 
-
-
   cox_regression_ar2:
     run: stata-mp:latest analysis/AAR001_2_cox_regression.do
     needs: [create_analysis_ar]
     outputs:
       moderately_sensitive:
         log: logs/AAR001_2_cox_regression.log
-
