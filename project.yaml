@@ -100,6 +100,27 @@ actions:
         hrs_adult: output/output_hrs_main_2_covidadmission_ldr_group.out
         rates_adult: output/output_rates_2_covidadmission_ldr_group.out
 
+
+
+  cox_regression3:
+    run: stata-mp:latest analysis/AL004_3_cox_regression.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:  
+        log: logs/AL004_1_coviddeath_ldr_group_cox_regression.log
+        hrs_adult: output/output_hrs_main_1_coviddeath_ldr_group.out
+        rates_adult: output/output_rates_1_coviddeath_ldr_group.out
+
+  cox_regression4:
+    run: stata-mp:latest analysis/AL004_4_cox_regression.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL004_1_covidadmission_ldr_group_cox_regression.log
+        hrs_adult: output/output_hrs_main_1_covidadmission_ldr_group.out
+        rates_adult: output/output_rates_1_covidadmission_ldr_group.out
+
+
   create_analysis_ar:
     run: stata-mp:latest analysis/003_create_ar_analysis_dataset.do
     needs: [clean]
