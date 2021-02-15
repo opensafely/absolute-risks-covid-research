@@ -78,7 +78,7 @@ foreach out in coviddeath composite  {
 			(rarea _at2_lci _at2_uci date, color(blue%25)) 	///
 			(line _at1 date, sort lcolor(red)) 				///
 			(line _at2 date, sort lcolor(blue)) 			///
-			if agebroad==2,									///
+			,												///
 			legend(order(1 "Not on LDR" 2 "On LDR") 		///
 				ring(0) cols(1) pos(11)) 					///
 			ylabel(`label_`out'',angle(h) format(%4.2f)) 	///
