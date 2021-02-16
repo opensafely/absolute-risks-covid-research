@@ -22,7 +22,6 @@ actions:
     needs: [generate_cohort1, generate_cohort2]
     outputs:
      highly_sensitive:
-        log: logs/001_clean_input_data.log
         clean1: analysis/data_base_cohort1.dta
         clean2: analysis/data_base_cohort2.dta
 
@@ -31,9 +30,18 @@ actions:
     needs: [clean]
     outputs:
      highly_sensitive:
-        log: logs/002_create_ld_analysis_dataset.log
         an_data1: analysis/data_ldanalysis_cohort1.dta
         an_data2: analysis/data_ldanalysis_cohort2.dta
+
+
+  create_analysis_ar:
+    run: stata-mp:latest analysis/003_create_ar_analysis_dataset.do
+    needs: [clean]
+    outputs:
+     highly_sensitive:
+        an_data1: analysis/data_aranalysis_cohort1.dta
+        an_data2: analysis/data_aranalysis_cohort2.dta
+
 
   describe_cohort:
     run: stata-mp:latest analysis/AL001_describe_cohort.do
@@ -49,7 +57,7 @@ actions:
       moderately_sensitive:
         log: logs/AL002_tabulate_cohort_descriptives.log
         model: output/basetable1.txt
- 
+
   cox_regression:
     run: stata-mp:latest analysis/AL004_cox_regression.do
     needs: [create_analysis]
@@ -86,8 +94,8 @@ actions:
     run: stata-mp:latest analysis/AL004_1_cox_regression.do
     needs: [create_analysis]
     outputs:
-      moderately_sensitive:  
-        log: logs/AL004_2_coviddeath_ldr_group_cox_regression.log
+      moderately_sensitive:
+        log: logs/AL004_1_cox_regression.log
         hrs_adult: output/output_hrs_main_2_coviddeath_ldr_group.out
         rates_adult: output/output_rates_2_coviddeath_ldr_group.out
 
@@ -96,18 +104,16 @@ actions:
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL004_2_covidadmission_ldr_group_cox_regression.log
+        log: logs/AL004_2_cox_regression.log
         hrs_adult: output/output_hrs_main_2_covidadmission_ldr_group.out
         rates_adult: output/output_rates_2_covidadmission_ldr_group.out
-
-
 
   cox_regression3:
     run: stata-mp:latest analysis/AL004_3_cox_regression.do
     needs: [create_analysis]
     outputs:
-      moderately_sensitive:  
-        log: logs/AL004_1_coviddeath_ldr_group_cox_regression.log
+      moderately_sensitive:
+        log: logs/AL004_3_cox_regression.log
         hrs_adult: output/output_hrs_main_1_coviddeath_ldr_group.out
         rates_adult: output/output_rates_1_coviddeath_ldr_group.out
 
@@ -116,98 +122,6 @@ actions:
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL004_1_covidadmission_ldr_group_cox_regression.log
+        log: logs/AL004_4_cox_regression.log
         hrs_adult: output/output_hrs_main_1_covidadmission_ldr_group.out
-        rates_adult: output/output_rates_1_covidadmission_ldr_group.out
-
-
-  create_analysis_ar:
-    run: stata-mp:latest analysis/003_create_ar_analysis_dataset.do
-    needs: [clean]
-    outputs:
-     highly_sensitive:
-        log: logs/003_create_ar_analysis_dataset.log
-        an_data1: analysis/data_aranalysis_cohort1.dta
-        an_data2: analysis/data_aranalysis_cohort2.dta
-
-  cox_regression_ar1:
-    run: stata-mp:latest analysis/AAR001_1_cox_regression.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR001_1_cox_regression.log
-	tablefemale: analysis/tabhr_covidadmission_wave1_male0.txt
-	tablemale: analysis/tabhr_covidadmission_wave1_male1.txt
-
-  cox_regression_ar2:
-    run: stata-mp:latest analysis/AAR001_2_cox_regression.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR001_2_cox_regression.log
-	tablefemale: analysis/tabhr_covidadmission_wave2_male0.txt
-	tablemale: analysis/tabhr_covidadmission_wave2_male1.txt
-
-  cox_regression_ar3:
-    run: stata-mp:latest analysis/AAR001_3_cox_regression.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR001_3_cox_regression.log
-	tablefemale: analysis/tabhr_coviddeath_wave1_male0.txt
-	tablemale: analysis/tabhr_coviddeath_wave1_male1.txt
-
-  cox_regression_ar4:
-    run: stata-mp:latest analysis/AAR001_4_cox_regression.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR001_4_cox_regression.log
-	tablefemale: analysis/tabhr_coviddeath_wave2_male0.txt
-	tablemale: analysis/tabhr_coviddeath_wave2_male1.txt
-
-
-
-  ar1:
-    run: stata-mp:latest analysis/AAR002_1_risk_by_age.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR002_1_risk_by_age.log
-	tablefemale: analysis/ar_wave1_male0_covidadmission.out
-	tablemale: analysis/ar_wave1_male1_covidadmission.out
-	graphfemale: analysis/ar_wave1_male0_covidadmission.svg
-	graphmale: analysis/ar_wave1_male1_covidadmission.svg
-
-  ar2:
-    run: stata-mp:latest analysis/AAR002_2_risk_by_age.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR002_2_risk_by_age.log
-	tablefemale: analysis/ar_wave2_male0_covidadmission.out
-	tablemale: analysis/ar_wave2_male1_covidadmission.out
-	graphfemale: analysis/ar_wave2_male0_covidadmission.svg
-	graphmale: analysis/ar_wave2_male1_covidadmission.svg
-
-  ar3:
-    run: stata-mp:latest analysis/AAR002_3_risk_by_age.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR002_3_risk_by_age.log
-	tablefemale: analysis/ar_wave1_male0_coviddeath.out
-	tablemale: analysis/ar_wave1_male1_coviddeath.out
-	graphfemale: analysis/ar_wave1_male0_coviddeath.svg
-	graphmale: analysis/ar_wave1_male1_coviddeath.svg
-
-  ar4:
-    run: stata-mp:latest analysis/AAR002_4_risk_by_age.do
-    needs: [create_analysis_ar]
-    outputs:
-      moderately_sensitive:
-        log: logs/AAR002_4_risk_by_age.log
-	tablefemale: analysis/ar_wave2_male0_coviddeath.out
-	tablemale: analysis/ar_wave2_male1_coviddeath.out
-	graphfemale: analysis/ar_wave2_male0_coviddeath.svg
-	graphmale: analysis/ar_wave2_male1_coviddeath.svg
+        rates_adult: output/output_rates_1_covidadmission_ldr_group.out4
