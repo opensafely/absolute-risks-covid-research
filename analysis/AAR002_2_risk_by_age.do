@@ -6,10 +6,10 @@
 *
 *	Data used:		analysis/data_aranalysis_cohort`i'.dta
 *
-*	Data created:	analysis/ar_wave`i'_male`j'_`outcome.out
+*	Data created:	output/ar_wave`i'_male`j'_`outcome.out
 *
 *	Other output:	Log file:  logs/AAR002_2_risk_by_age
-*					analysis/ar_wave`i'_male`j'_`outcome'.svg
+*					output/ar_wave`i'_male`j'_`outcome'.svg
 *
 ********************************************************************************
 *
@@ -245,7 +245,7 @@ forvalues j = 0 (1) 1 {
 
 	* Save data
 	save "analysis/ar_wave`i'_male`j'_`outcome'", replace
-	outsheet using "analysis/ar_wave`i'_male`j'_`outcome'.out", replace
+	outsheet using "output/ar_wave`i'_male`j'_`outcome'.out", replace
 
 
 
@@ -340,7 +340,7 @@ forvalues j = 0 (1) 1 {
 			label(30 "Down's Syndrome") 	  	///
 			label(31 "No comorbidity") 	  		///
 			colfirst) 
-		graph export analysis/ar_wave`i'_male`j'_`outcome'.svg, as(svg) replace width(1600)
+		graph export output/ar_wave`i'_male`j'_`outcome'.svg, as(svg) replace width(1600)
 	}
 }
 
