@@ -34,7 +34,7 @@ set more off
 
 * Open a log file
 cap log close
-log using "logs/AL004_`i'_`out'_`exp'_cox_regression", replace t
+log using "logs/AL004_1_cox_regression", replace t
 
 
 * Categories of various exposures

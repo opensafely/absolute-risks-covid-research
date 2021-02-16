@@ -49,17 +49,17 @@ local lo_ldr_group 	= 0
 local hi_ldr_group 	= 5
 
 * Open temporary file to post results
-tempfile ldrfile
-tempname ldrresults
+*tempfile ldrfile
+*tempname ldrresults
 
-postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
-						expcat lnhr sehr using `ldrfile'
+*postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
+*						expcat lnhr sehr using `ldrfile'
 
 * Cycle over the two waves
 *    Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
 *    Wave 2: i=2  (1 Sept 20 - latest)
-forvalues i = 1 (1) 2 {
-
+*forvalues i = 1 (1) 2 {
+local i = 1
 	* Open dataset (complete case ethnicity)
 	use "analysis/data_ldanalysis_cohort`i'.dta", clear 
 	drop if ethnicity_5>=.
@@ -67,12 +67,15 @@ forvalues i = 1 (1) 2 {
 	* Only keep data for adults
 	keep if child==0
 
-	* Cycle over outcomes: mortality, hospitalisation, composite 
-	foreach out in coviddeath covidadmission composite {
+
+	qui summ otherdeath_date
+	global otherdeathcensor = r(max) - 7
+	gen covidadmissioncensor2 = $covidadmissioncensor2
 
 
 		/*  Declare data to be survival  */
 
+		
 		stset stime_`out'`i', fail(`out'`i') scale(365.25)
 
 
