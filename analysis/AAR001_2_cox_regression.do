@@ -1,6 +1,6 @@
 ********************************************************************************
 *
-*	Do-file:		AAR001_1_cox_regression.do
+*	Do-file:		AAR001_2_cox_regression.do
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
