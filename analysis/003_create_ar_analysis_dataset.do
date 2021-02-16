@@ -64,6 +64,10 @@ forvalues i = 1 (1) 2 {
 	drop if hiv_date<.
 	drop hiv_date
 	
+	* Drop people with missing ethnicity
+	drop if ethnicity_5>=.
+	
+	
 	
 	**************************
 	*  Categorise variables  *
@@ -453,7 +457,9 @@ forvalues i = 1 (1) 2 {
 	noi count if covidadmission_date < `index'
 		
 	forvalues k = 1 (1) 2 {
-	 
+
+		/*  Censoring for competing events  */
+		
 		* COVID-19 death
 		gen 	coviddeath`k' = (coviddeath_date<.)
 		replace coviddeath`k' = 0 if coviddeath_date > coviddeathcensor`k'
@@ -478,6 +484,19 @@ forvalues i = 1 (1) 2 {
 		replace noncoviddeath`k' = 0 if otherdeath_date > coviddeath_date
 
 		
+		/*  Not censoring for competing events  */
+		
+		* COVID-19 death
+		gen 	coviddeath`k'_nocensor = (coviddeath_date<.)
+		replace coviddeath`k'_nocensor = 0 if coviddeath_date > coviddeathcensor`k'
+
+		* COVID-19 hospitalisation
+		gen 	covidadmission`k'_nocensor = (covidadmission_date<.)
+		replace covidadmission`k'_nocensor = 0 if covidadmission_date > covidadmissioncensor`k'
+		replace covidadmission`k'_nocensor = 0 if covidadmission_date > coviddeathcensor`k'
+
+		
+		
 		/*  Calculate survival times  (days until event/censoring)  */
 
 		egen stime_coviddeath`k' 	 = rowmin(coviddeath_date    	/// 
@@ -496,6 +515,14 @@ forvalues i = 1 (1) 2 {
 									coviddeath_date 				///
 									coviddeathcensor`k') 
 									
+		egen stime_coviddeath`k'_nocensor							///
+									= rowmin(coviddeath_date    	/// 
+									coviddeathcensor`k') 
+		egen stime_covidadmission`k'_nocensor						///
+								= rowmin(covidadmission_date 		///
+									covidadmissioncensor`k' 		///
+									coviddeathcensor`k')
+									
 		drop coviddeathcensor`k' covidadmissioncensor`k' 
 	}
 	
@@ -507,9 +534,12 @@ forvalues i = 1 (1) 2 {
 	* Wave 1: Keep both outcomes (censored at Aug 31, and all time)
 	* Wave 2: Keep only outcome censored at end
 	if `i'==2 {
-	    drop coviddeath1 covidadmission1 composite1 noncoviddeath1 		///
-			stime_coviddeath1 stime_covidadmission1 stime_composite1 	///
-			stime_noncoviddeath1
+	    drop 	coviddeath1 stime_coviddeath1							///
+				covidadmission1 stime_covidadmission1					///
+				composite1 stime_composite1 							///
+				noncoviddeath1 stime_noncoviddeath1						///
+				coviddeath1_nocensor stime_coviddeath1_nocensor			///
+				covidadmission1_nocensor stime_covidadmission1_nocensor	
 	}
 
 	
@@ -531,7 +561,7 @@ forvalues i = 1 (1) 2 {
 	label var imd 					"Index of Multiple Deprivation (IMD)"
 	label var smoke 				"Smoking status (with missingness)"
 	label var smoke_nomiss 			"Smoking status (no missingness)"
-	label var ethnicity_5			"Ethnicity in 16 categories"
+	label var ethnicity_5			"Ethnicity in 5 categories"
 	label var stp 					"Sustainability and Transformation Partnership"
 	label var stpcode 				"Sustainability and Transformation Partnership"
 	label var region_7 				"Geographical region (7 England regions)"
@@ -583,15 +613,27 @@ forvalues i = 1 (1) 2 {
 	local tag2 = "censored latest date"
 	
 	forvalues k = 1 (1) 2 {
-		capture label var  coviddeath`k'			"COVID-19 death (ONS), `tag`k''"
-		capture label var  covidadmission`k'		"COVID-19 hospital admission, `tag`k''"
-		capture label var  composite`k'				"COVID-19 hospital admission or death, `tag`k''"
-		capture label var  noncoviddeath`k'			"Non COVID-19 death (ONS), `tag`k''"
+		capture label var  coviddeath`k'				"COVID-19 death (ONS), `tag`k''"
+		capture label var  covidadmission`k'			"COVID-19 hospital admission, `tag`k''"
+		capture label var  composite`k'					"COVID-19 hospital admission or death, `tag`k''"
+		capture label var  noncoviddeath`k'				"Non COVID-19 death (ONS), `tag`k''"
 
-		capture label var  stime_coviddeath`k'		"Days from study entry until COVID-19 death or censoring, `tag`k''"
-		capture label var  stime_covidadmission`k'	"Days from study entry until COVID-19 hospital admission or censoring, `tag`k''"
-		capture label var  stime_composite`k'		"Days from study entry until COVID-19 hospital admission or death or censoring, `tag`k''"
-		capture label var  stime_noncoviddeath`k'	"Days from study entry until Non-COVID-19 death or censoring, `tag`k''"
+		capture label var  coviddeath`k'_nocensor		"COVID-19 death (ONS) (competing events not censored), `tag`k''"
+		capture label var  covidadmission`k'_nocensor	"COVID-19 hospital admission  (competing events not censored), `tag`k''"
+
+		capture label var  stime_coviddeath`k'				///
+			"Days from study entry until COVID-19 death or censoring, `tag`k''"
+		capture label var  stime_covidadmission`k'			///
+			"Days from study entry until COVID-19 hospital admission or censoring, `tag`k''"
+		capture label var  stime_composite`k'				///
+			"Days from study entry until COVID-19 hospital admission or death or censoring, `tag`k''"
+		capture label var  stime_noncoviddeath`k'			///
+			"Days from study entry until Non-COVID-19 death or censoring, `tag`k''"
+		
+		capture label var  stime_coviddeath`k'_nocensor		///
+			"Days from study entry until COVID-19 death or censoring (competing events not censored), `tag`k''"
+		capture label var  stime_covidadmission`k'_nocensor	///
+			"Days from study entry until COVID-19 hospital admission or censoring (competing events not censored), `tag`k''"
 	}	
 
 
