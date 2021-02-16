@@ -134,3 +134,31 @@ actions:
         log: logs/AAR001_1_cox_regression.log
         hrfemale: output/hr_covidadmission_wave1_male0.txt
         hrmale: output/hr_covidadmission_wave1_male1.txt
+
+
+  cox_regression2_ar:
+    run: stata-mp:latest analysis/AAR001_2_cox_regression.do
+    needs: [create_analysis_ar]
+    outputs:
+      moderately_sensitive:
+        log: logs/AAR001_2_cox_regression.log
+        hrfemale: output/hr_covidadmission_wave2_male0.txt
+        hrmale: output/hr_covidadmission_wave2_male1.txt
+
+cox_regression3_ar:
+  run: stata-mp:latest analysis/AAR001_3_cox_regression.do
+  needs: [create_analysis_ar]
+  outputs:
+    moderately_sensitive:
+      log: logs/AAR001_3_cox_regression.log
+      hrfemale: output/hr_coviddeath_wave1_male0.txt
+      hrmale: output/hr_coviddeath_wave1_male1.txt
+
+cox_regression4_ar:
+  run: stata-mp:latest analysis/AAR001_4_cox_regression.do
+  needs: [create_analysis_ar]
+  outputs:
+    moderately_sensitive:
+      log: logs/AAR001_4_cox_regression.log
+      hrfemale: output/hr_coviddeath_wave2_male0.txt
+      hrmale: output/hr_coviddeath_wave2_male1.txt

@@ -12,8 +12,8 @@
 *
 *	Other output:	Log file:  logs/AAR001_4_cox_regression.log
 *					Estimates:	output/
-*									hr_covidadmission_wave2_male0.txt
-*									hr_covidadmission_wave2_male1.txt
+*									hr_coviddeath_wave2_male0.txt
+*									hr_coviddeath_wave2_male1.txt
 *
 ********************************************************************************
 *
