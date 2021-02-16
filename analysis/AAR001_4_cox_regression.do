@@ -1,6 +1,6 @@
 ********************************************************************************
 *
-*	Do-file:		AAR001_1_cox_regression.do
+*	Do-file:		AAR001_4_cox_regression.do
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
@@ -10,10 +10,10 @@
 *
 *	Data created:	None
 *
-*	Other output:	Log file:  logs/AAR001_1_cox_regression.log
+*	Other output:	Log file:  logs/AAR001_4_cox_regression.log
 *					Estimates:	output/
-*									tabhr_covidadmission_wave1_male0.txt
-*									tabhr_covidadmission_wave1_male1.txt
+*									tabhr_covidadmission_wave2_male0.txt
+*									tabhr_covidadmission_wave2_male1.txt
 *
 ********************************************************************************
 *
@@ -24,8 +24,8 @@
 
 
 * Set wave (1 or 2), outcome (coviddeath, covidadmission or composite)
-local i = 1
-local out = "covidadmission"
+local i = 2
+local out = "coviddeath"
 
 
 clear all
@@ -33,7 +33,7 @@ set more off
 
 * Open a log file
 cap log close
-log using "logs/AAR001_1_cox_regression", replace t
+log using "logs/AAR001_4_cox_regression", replace t
 
 
 
@@ -56,7 +56,7 @@ stset stime_`out'`i', fail(`out'`i') scale(365.25)
 /*  Fit Cox models  */
 			
 forvalues j = 0 (1) 1 {
-	capture erase coefs_cox_1_`j'.ster
+	capture erase coefs_cox_3_`j'.ster
 
 	stcox 		age1 age2 age3					///
 				ib2.obesecat					///
@@ -92,7 +92,7 @@ forvalues j = 0 (1) 1 {
 				i.fracture						///
 				if male==`j'					///
 				, strata(stp)
-	estimates save coefs_cox_1_`j', replace
+	estimates save coefs_cox_4_`j', replace
 }
 
 
@@ -107,7 +107,7 @@ qui do "analysis/000_HR_table.do"
 
 forvalues j = 0 (1) 1 {
 	* Cox model
-	crtablehr, 	estimates(coefs_cox_1_`j')		///
+	crtablehr, 	estimates(coefs_cox_4_`j')		///
 				outputfile(analysis/tabhr_`out'_wave`i'_male`j'.txt)
 }
 

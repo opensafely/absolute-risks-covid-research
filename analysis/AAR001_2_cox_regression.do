@@ -1,6 +1,6 @@
 ********************************************************************************
 *
-*	Do-file:		AAR001_2_cox_regression.do
+*	Do-file:		AAR001_1_cox_regression.do
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
@@ -10,21 +10,23 @@
 *
 *	Data created:	None
 *
-*	Other output:	Log file:  logs/AAR001_1_cox_regression.log
+*	Other output:	Log file:  logs/AAR001_2_cox_regression.log
 *					Estimates:	output/
-*									output_hrs_mainAL004_`i'_`out'_`exp'
-*									output_rates_`i'_`out'_`exp'
+*									tabhr_covidadmission_wave2_male0.txt
+*									tabhr_covidadmission_wave2_male1.txt
 *
 ********************************************************************************
 *
-*	Purpose:		This do-file fits a series of adjusted Cox models for the
-*					learning disability work and obtains the crude rates.
+*	Purpose:		This do-file fits a multivariable Cox model for the
+*					absolute risks work and tabulates estimated hazard ratios.
 *  
 ********************************************************************************
+
 
 * Set wave (1 or 2), outcome (coviddeath, covidadmission or composite)
 local i = 2
 local out = "covidadmission"
+
 
 clear all
 set more off
@@ -40,6 +42,11 @@ use "analysis/data_aranalysis_cohort`i'.dta", clear
 drop if ethnicity_5>=.
 
 
+* Keep under 50s only
+drop if age>=50
+
+
+
 /*  Declare data to be survival  */
 
 stset stime_`out'`i', fail(`out'`i') scale(365.25)
@@ -48,40 +55,60 @@ stset stime_`out'`i', fail(`out'`i') scale(365.25)
 		
 /*  Fit Cox models  */
 			
-* Confounder only model
-stcox 		age1 age2 age3					///
-			i.male 							///
-			i.obesecat						///
-			i.smoke_nomiss					///
-			i.ethnicity_5					///
-			i.imd 							///
-			i.respiratory 					///
-			i.cf 							///
-			i.asthmacat						///
-			i.cardiac						///
-			i.hypertension					///
-			i.diabcat						///
-			i.af							///
-			i.dvt_pe						///
-			i.pad							///
-			i.cancerExhaem	 				///
-			i.cancerHaem 					///
-			i.liver					 		///
-			i.stroke		 				///
-			i.dementia				 		///
-			i.tia					 		///
-			i.neuro							///
-			i.kidneyfn						///
-			i.transplant 					///
-			i.dialysis 						///
-			i.spleen 						///
-			i.autoimmune  					///
-			i.ibd		  					///
-			i.immunosuppression				///
-			i.smi							///
-			i.ds							///
-			i.ldr							///
-			i.fracture						///
-			, strata(stp)
-		
+forvalues j = 0 (1) 1 {
+	capture erase coefs_cox_2_`j'.ster
+
+	stcox 		age1 age2 age3					///
+				ib2.obesecat					///
+				i.smoke_nomiss					///
+				i.ethnicity_5					///
+				i.imd 							///
+				i.respiratory 					///
+				i.cf 							///
+				i.asthmacat						///
+				i.cardiac						///
+				i.hypertension					///
+				i.diabcat						///
+				i.af							///
+				i.dvt_pe						///
+				i.pad							///
+				i.cancerExhaem	 				///
+				i.cancerHaem 					///
+				i.liver					 		///
+				i.stroke		 				///
+				i.dementia				 		///
+				i.tia					 		///
+				i.neuro							///
+				i.kidneyfn						///
+				i.transplant 					///
+				i.dialysis 						///
+				i.spleen 						///
+				i.autoimmune  					///
+				i.ibd		  					///
+				i.immunosuppression				///
+				i.smi							///
+				i.ds							///
+				i.ldr							///
+				i.fracture						///
+				if male==`j'					///
+				, strata(stp)
+	estimates save coefs_cox_2_`j', replace
+}
+
+
+
+
+*********************************************
+*  Read in estimates and format for tables  *
+*********************************************
+
+* Read in programs to format output
+qui do "analysis/000_HR_table.do"
+
+forvalues j = 0 (1) 1 {
+	* Cox model
+	crtablehr, 	estimates(coefs_cox_2_`j')		///
+				outputfile(analysis/tabhr_`out'_wave`i'_male`j'.txt)
+}
+
 log close
