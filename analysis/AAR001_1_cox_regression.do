@@ -12,8 +12,8 @@
 *
 *	Other output:	Log file:  logs/AAR001_1_cox_regression.log
 *					Estimates:	output/
-*									tabhr_covidadmission_wave1_male0.txt
-*									tabhr_covidadmission_wave1_male1.txt
+*									hr_covidadmission_wave1_male0.txt
+*									hr_covidadmission_wave1_male1.txt
 *
 ********************************************************************************
 *
@@ -108,7 +108,7 @@ qui do "analysis/000_HR_table.do"
 forvalues j = 0 (1) 1 {
 	* Cox model
 	crtablehr, 	estimates(coefs_cox_1_`j')		///
-				outputfile(analysis/tabhr_`out'_wave`i'_male`j'.txt)
+				outputfile(output/hr_`out'_wave`i'_male`j'.txt)
 }
 
 log close
