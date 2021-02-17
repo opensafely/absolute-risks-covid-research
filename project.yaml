@@ -119,7 +119,7 @@ actions:
       moderately_sensitive:
         log: logs/AL004_4_cox_regression.log
         hrs_adult: output/output_hrs_main_1_covidadmission_ldr_group.out
-        rates_adult: output/output_rates_1_covidadmission_ldr_group.out4
+        rates_adult: output/output_rates_1_covidadmission_ldr_group.out
 
   cox_regression3_ar:
     run: stata-mp:latest analysis/AAR001_3_cox_regression.do
