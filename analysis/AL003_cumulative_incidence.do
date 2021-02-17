@@ -29,7 +29,7 @@ set more off
 cap log close
 log using "logs/AL003_cumulative_incidence", replace t
 
-adopath ++ `c(pwd)'/analysis
+adopath ++ `c(pwd)'/analysis/ado
 
 * Open data (complete case ethnicity for adults (16+))
 use "analysis/data_ldanalysis_cohort1", clear
