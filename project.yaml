@@ -1,7 +1,7 @@
 version: '3.0'
 
 expectations:
-  population_size: 1000
+  population_size: 50000
 
 actions:
 
@@ -57,15 +57,6 @@ actions:
       moderately_sensitive:
         log: logs/AL002_tabulate_cohort_descriptives.log
         model: output/basetable1.txt
-
-  cox_regression:
-    run: stata-mp:latest analysis/AL004_cox_regression.do
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL004_cox_regression.log
-        hrs_adult: output/output_hrs_main.out
-        rates_adult: output/output_rates.out
 
   cox_regression_child:
     run: stata-mp:latest analysis/AL005_cox_regression_child.do
@@ -159,45 +150,73 @@ actions:
 
 
   ar_1:
-    run: stata-mp:latest analysis/AAR002_1_risk_by_age.do
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 1 0 covidadmission
     needs: [create_analysis_ar]
     outputs:
       moderately_sensitive:
-        log: logs/AAR002_1_risk_by_age.log
-        arfemale: output/ar_wave1_male0_covidadmission.out
-        armale: output/ar_wave1_male1_covidadmission.out
-        garfemale: output/ar_wave1_male0_covidadmission.svg
-        garmale: output/ar_wave1_male1_covidadmission.svg
+        log: logs/AAR002_risk_by_age_wave1_male0_covidadmission.log
+        absrisk: output/ar_wave1_male0_covidadmission.out
+        graph: output/ar_wave1_male0_covidadmission.svg
 
   ar_2:
-    run: stata-mp:latest analysis/AAR002_2_risk_by_age.do
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 1 1 covidadmission
     needs: [create_analysis_ar]
     outputs:
       moderately_sensitive:
-        log: logs/AAR002_2_risk_by_age.log
-        arfemale: output/ar_wave2_male0_covidadmission.out
-        armale: output/ar_wave2_male1_covidadmission.out
-        garfemale: output/ar_wave2_male0_covidadmission.svg
-        garmale: output/ar_wave2_male1_covidadmission.svg
+        log: logs/AAR002_risk_by_age_wave1_male1_covidadmission.log
+        absrisk: output/ar_wave1_male1_covidadmission.out
+        graph: output/ar_wave1_male1_covidadmission.svg
 
   ar_3:
-    run: stata-mp:latest analysis/AAR002_3_risk_by_age.do
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 2 0 covidadmission
     needs: [create_analysis_ar]
     outputs:
       moderately_sensitive:
-        log: logs/AAR002_3_risk_by_age.log
-        arfemale: output/ar_wave1_male0_coviddeath.out
-        armale: output/ar_wave1_male1_coviddeath.out
-        garfemale: output/ar_wave1_male0_coviddeath.svg
-        garmale: output/ar_wave1_male1_coviddeath.svg
+        log: logs/AAR002_risk_by_age_wave2_male0_covidadmission.log
+        absrisk: output/ar_wave2_male0_covidadmission.out
+        graph: output/ar_wave2_male0_covidadmission.svg
 
   ar_4:
-    run: stata-mp:latest analysis/AAR002_4_risk_by_age.do
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 2 1 covidadmission
     needs: [create_analysis_ar]
     outputs:
       moderately_sensitive:
-        log: logs/AAR002_4_risk_by_age.log
-        arfemale: output/ar_wave2_male0_coviddeath.out
-        armale: output/ar_wave2_male1_coviddeath.out
-        garfemale: output/ar_wave2_male0_coviddeathn.svg
-        garmale: output/ar_wave2_male1_coviddeath.svg
+        log: logs/AAR002_risk_by_age_wave2_male1_covidadmission.log
+        absrisk: output/ar_wave2_male1_covidadmission.out
+        graph: output/ar_wave2_male1_covidadmission.svg
+
+  ar_5:
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 1 0 coviddeath
+    needs: [create_analysis_ar]
+    outputs:
+      moderately_sensitive:
+        log: logs/AAR002_risk_by_age_wave1_male0_coviddeath.log
+        absrisk: output/ar_wave1_male0_coviddeath.out
+        graph: output/ar_wave1_male0_coviddeath.svg
+
+  ar_6:
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 1 1 coviddeath
+    needs: [create_analysis_ar]
+    outputs:
+      moderately_sensitive:
+        log: logs/AAR002_risk_by_age_wave1_male1_coviddeath.log
+        absrisk: output/ar_wave1_male1_coviddeath.out
+        graph: output/ar_wave1_male1_coviddeath.svg
+
+  ar_7:
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 2 0 coviddeath
+    needs: [create_analysis_ar]
+    outputs:
+      moderately_sensitive:
+        log: logs/AAR002_risk_by_age_wave2_male0_coviddeath.log
+        absrisk: output/ar_wave2_male0_coviddeath.out
+        graph: output/ar_wave2_male0_coviddeath.svg
+
+  ar_8:
+    run: stata-mp:latest analysis/AAR002_risk_by_age.do 2 1 coviddeath
+    needs: [create_analysis_ar]
+    outputs:
+      moderately_sensitive:
+        log: logs/AAR002_risk_by_age_wave2_male1_coviddeath.log
+        absrisk: output/ar_wave2_male1_coviddeath.out
+        graph: output/ar_wave2_male1_coviddeath.svg
