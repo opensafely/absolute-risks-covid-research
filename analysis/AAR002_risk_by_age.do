@@ -283,7 +283,7 @@ local male1 = "Male"
 
 
 * Risk 
-qui summ risk_cons if age==50 
+qui summ risk_cons if age==49
 gen risk_age_50 = r(mean) 
 
 
