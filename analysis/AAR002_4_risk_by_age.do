@@ -33,6 +33,7 @@
 local i = 2
 local out = "coviddeath"
 
+adopath ++ `c(pwd)'/analysis
 
 * Open a log file
 capture log close

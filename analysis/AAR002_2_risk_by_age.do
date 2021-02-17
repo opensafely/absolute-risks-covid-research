@@ -33,6 +33,7 @@
 local i = 2
 local out = "covidadmission"
 
+adopath ++ `c(pwd)'/analysis
 
 * Open a log file
 capture log close
