@@ -68,8 +68,8 @@ forvalues i = 1 (1) 2 {
 	* Only keep data for children (under 16)
 	keep if child==1
 
-	* Cycle over outcomes: mortality, hospitalisation, composite 
-	foreach out in coviddeath covidadmission composite {
+	* Outcome: hospitalisation (insufficient deaths) 
+	foreach out in covidadmission {
 
 
 		/*  Declare data to be survival  */
