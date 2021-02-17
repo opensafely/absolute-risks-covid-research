@@ -10,10 +10,13 @@
 *
 *	Data created:	None
 *
-*	Other output:	Log file:  logs/AL004_cox_regression.log
+*	Other output:	Log file:  logs/AL004_cox_regression_wave`i'_`out'_`exp'.log
 *					Estimates:	output/
-*									output_hrs_main
-*									output_rates
+*									ldcox_wave`i'_`out'_`exp'.out
+*
+* 						i = Wave (1 or 2)
+*						out = outcome (coviddeath covidadmission)
+*						exp = exposure (ldr ldr_cat ldr_carecat ds cp ldr_group
 *
 ********************************************************************************
 *
@@ -25,12 +28,35 @@
 
 
 
+**********************
+*  Input parameters  *
+**********************
+
+local wave 		`1'
+local outcome  	`2'
+local exposure 	`3'
+
+local i = `wave'
+local out = "`outcome'"
+local exp = "`exposure'"
+
+noi di "Wave:" `i'
+noi di "Outcome: `out'"
+noi di "Exposure: `exp'"
+
+
+
+
+**************************
+*  Adopath and log file  *
+**************************
+
 clear all
 set more off
 
 * Open a log file
 cap log close
-log using "logs/AL004_cox_regression", replace t
+log using "logs/AL004_cox_regression_wave`i'_`out'_`exp'", replace t
 
 
 * Categories of various exposures
@@ -55,10 +81,6 @@ tempname ldrresults
 postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 						expcat lnhr sehr using `ldrfile'
 
-* Cycle over the two waves
-*    Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
-*    Wave 2: i=2  (1 Sept 20 - latest)
-forvalues i = 1 (1) 2 {
 
 	* Open dataset (complete case ethnicity)
 	use "analysis/data_ldanalysis_cohort`i'.dta", clear 
@@ -67,85 +89,75 @@ forvalues i = 1 (1) 2 {
 	* Only keep data for adults
 	keep if child==0
 
-	* Cycle over outcomes: mortality, hospitalisation, composite 
-	foreach out in coviddeath covidadmission composite {
+	/*  Declare data to be survival  */
 
+	stset stime_`out'`i', fail(`out'`i') scale(365.25)
 
-		/*  Declare data to be survival  */
-
-		stset stime_`out'`i', fail(`out'`i') scale(365.25)
-
-
-		* Cycle over exposures: learning disability register, by severity, 
-		*    Down's syndrome, Cerebral Palsy, and the combined grouping
-		foreach exp in ldr ldr_cat ldr_carecat ds cp ldr_group {
 
 		
-			/*  Obtain rates  */
-			
-			strate `exp', 											///
-				output(analysis/data_temp`out'_`exp'_`i', replace) 	///
-				per(10000)
+	/*  Obtain rates  */
+		
+	strate `exp', 												///
+			output(output/data_temp`i'_`out'_`exp', replace) 	///
+			per(10000)
 		
 		
-			/*  Fit Cox models  */
-			
-			* Confounder only model
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 	///
-				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-			    capture qui di _b[`k'.`exp']
-				if _rc==0 {
-				    post `ldrresults' (`i') ("`out'") ("`exp'")		///
-						("Confounders") 							///
-						(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
-				}
-			}
-			
-			* Confounders with deprivation
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 imd, ///
-				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-			    capture qui di _b[`k'.`exp']
-				if _rc==0 {
-				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
-						("Confounders+IMD") 						///
-						(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
-				}		
-			}
-			
-			* Confounders with residential care
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
-				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-			    capture qui di _b[`k'.`exp']
-				if _rc==0 {
-				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
-						("Confounders+Resid") 						///
-						(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
-				}		
-			}
-			
-			* Confounders with physical comorbidities that are indicators for vaccination 
-			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
-						cardiac af dvt_pe i.diabcat		 		///
-						liver stroke tia dementia				///
-						i.kidneyfn								///
-						spleen transplant dialysis				///
-						immunosuppression cancerHaem			///
-						autoimmune ibd cancerExhaem1yr, 		///
-				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-			    capture qui di _b[`k'.`exp']
-				if _rc==0 {
-				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
-					("Confounders_Comorb") 						///
-					(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
-				}
-			}
+	/*  Fit Cox models  */
+	
+	* Confounder only model
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 	///
+		strata(stpcode) cluster(household_id) 
+	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+		capture qui di _b[`k'.`exp']
+		if _rc==0 {
+			post `ldrresults' (`i') ("`out'") ("`exp'")		///
+				("Confounders") 							///
+				(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
 		}
 	}
-}
+	
+	* Confounders with deprivation
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 imd, ///
+		strata(stpcode) cluster(household_id) 
+	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+		capture qui di _b[`k'.`exp']
+		if _rc==0 {
+			post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+				("Confounders+IMD") 						///
+				(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+		}		
+	}
+	
+	* Confounders with residential care
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
+		strata(stpcode) cluster(household_id) 
+	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+		capture qui di _b[`k'.`exp']
+		if _rc==0 {
+			post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+				("Confounders+Resid") 						///
+				(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+		}		
+	}
+	
+	* Confounders with physical comorbidities that are indicators for vaccination 
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
+				cardiac af dvt_pe i.diabcat		 		///
+				liver stroke tia dementia				///
+				i.kidneyfn								///
+				spleen transplant dialysis				///
+				immunosuppression cancerHaem			///
+				autoimmune ibd cancerExhaem1yr, 		///
+		strata(stpcode) cluster(household_id) 
+	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+		capture qui di _b[`k'.`exp']
+		if _rc==0 {
+			post `ldrresults' (`i') ("`out'") ("`exp'") ///
+			("Confounders_Comorb") 						///
+			(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+		}
+	}
+
 postclose `ldrresults'
 
 use `ldrfile', clear
@@ -235,7 +247,7 @@ order wave outcome exposure category hr*
 sort wave outcome exposure expcat
 
 * Save data
-outsheet using "output/output_hrs_main", replace
+save "output/ldhrs_wave`i'_`out'_`exp'", replace
 
 
 
@@ -243,40 +255,12 @@ outsheet using "output/output_hrs_main", replace
 *  Tidy output for rates  *
 ***************************
 
-forvalues i = 1 (1) 2 {
-	foreach out in coviddeath covidadmission composite  {
-		local expnow = "ldr"
-		use "analysis/data_temp`out'_`expnow'_`i'", clear
-		gen exp = "`expnow'"
-		foreach exp in ldr_cat ldr_carecat ds cp ldr_group {
-			rename `expnow' `exp'
-			append using "analysis/data_temp`out'_`exp'_`i'"
-			erase "analysis/data_temp`out'_`expnow'_`i'.dta"
-			replace exp = "`exp'" if exp==""
-			local expnow = "`exp'"
-		}
-		erase "analysis/data_temp`out'_`expnow'_`i'.dta"
-		gen out = "`out'"
-		save "analysis/data_temp`out'_`i'", replace
-	}
-	use "analysis/data_tempcoviddeath_`i'"
-	append using "analysis/data_tempcovidadmission_`i'"
-	append using "analysis/data_tempcomposite_`i'"
 
-	* Delete unneeded datasets
-	erase "analysis/data_tempcoviddeath_`i'.dta"
-	erase "analysis/data_tempcovidadmission_`i'.dta"
-	erase "analysis/data_tempcomposite_`i'.dta"
-
-	gen wave = `i'
-	save "analysis/data_temp_`i'.dta"
-}
-use "analysis/data_temp_1.dta"
-append using "analysis/data_temp_2.dta"
-
-erase "analysis/data_temp_1.dta"
-erase "analysis/data_temp_2.dta"
-
+use "output/data_temp`i'_`out'_`exp'", clear
+gen wave = `i'
+gen exp = "`exp'"
+gen out = "`out'"
+erase "output/data_temp`i'_`out'_`exp'.dta"
 
 
 * Outcome
@@ -308,7 +292,7 @@ label values exposure exposure
 drop exp
 
 * Categories of exposure
-rename ldr_group expcat
+rename `exp' expcat
 gen category     = "No" 					if expcat==0
 replace category = "Yes" 					if inlist(exposure, 1, 4, 5) & expcat==1
 
@@ -336,8 +320,21 @@ sort wave outcome exposure expcat
 
 
 * Save data
-outsheet using "output/output_rates", replace
+save "output/ldrates_wave`i'_`out'_`exp'", replace
 
 
+
+******************************
+*  Put output data together  *
+******************************
+
+use "output/ldrates_wave`i'_`out'_`exp'.dta", clear
+merge 1:1 outcome exposure expcat using ///
+	"output/ldhrs_wave`i'_`out'_`exp'.dta", assert(match) nogen
+order wave outcome exposure expcat
+outsheet using "output/ldcox_wave`i'_`out'_`exp'.out", replace
+erase "output/ldrates_wave`i'_`out'_`exp'.dta"
+erase "output/ldhrs_wave`i'_`out'_`exp'.dta"
 
 log close
+
