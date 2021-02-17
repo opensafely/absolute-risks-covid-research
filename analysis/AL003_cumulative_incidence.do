@@ -45,7 +45,7 @@ foreach out in coviddeath composite  {
 	
 	* Fit flexible survival model, adjusting for sex age and ethnicity
 	xi i.ethnicity_5 i.male 
-	stpm2 ldr age1 age2 age3 _I*, df(3) scale(hazard) eform 
+	stpm2 ldr age1 age2 age3 _I*, df(2) scale(hazard) eform 
 
 	summ _t 
 	local tmax=r(max)
