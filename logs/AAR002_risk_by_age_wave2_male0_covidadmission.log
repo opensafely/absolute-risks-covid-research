@@ -1,0 +1,593 @@
+---------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/AAR002_risk_by_age_wav
+> e2_male0_covidadmission.log
+  log type:  text
+ opened on:  17 Feb 2021, 13:58:22
+
+. 
+. 
+.         
+. ****************
+. *   Open data  *
+. ****************
+. 
+. use "analysis/data_aranalysis_cohort`i'.dta", replace   
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for absolute risk work)
+
+. drop if ethnicity_5>=.
+(0 observations deleted)
+
+. drop ethnicity_16
+
+. rename ethnicity_5 ethnicity
+
+. rename region_7 region
+
+. 
+. * Keep under 50s only
+. drop if age>=50
+(10,015 observations deleted)
+
+. 
+. 
+. /*  Declare data to be survival  */
+. 
+. stset stime_`out'`i'_nocensor, fail(`out'`i'_nocensor) ///
+>         scale(365.25) id(patient_id)
+
+                id:  patient_id
+     failure event:  covidadmission2_nocensor != 0 & covidadmission2_nocensor < .
+obs. time interval:  (stime_covidadmission2_nocensor[_n-1], stime_covidadmission2_nocensor]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+     11,142  total observations
+      1,177  observations end on or before enter()
+------------------------------------------------------------------------------
+      9,965  observations remaining, representing
+      9,965  subjects
+      1,026  failures in single-failure-per-subject data
+  4,213.648  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .4462697
+
+. 
+. 
+. 
+. 
+.         
+. ********************************
+. *   Fit Royston-Parmar model   *
+. ********************************
+. 
+. 
+. * Create dummy variables for categorical predictors 
+. foreach var of varlist obesecat smoke_nomiss imd        ///
+>         asthmacat diabcat cancerExhaem cancerHaem               ///
+>         kidneyfn region ethnicity                                               ///
+>         {
+  2.                 egen ord_`var' = group(`var')
+  3.                 qui summ ord_`var'
+  4.                 local max=r(max)
+  5.                 forvalues c = 1 (1) `max' {
+  6.                         gen `var'_`c' = (ord_`var'==`c')
+  7.                 }       
+  8.                 drop ord_`var'
+  9.                 drop `var'_1
+ 10. }
+(8,816 missing values generated)
+
+. 
+. 
+. timer clear 1
+
+. timer on 1
+
+. stpm2   age1 age2 age3                  ///
+>                 ethnicity_*                             ///
+>                 obesecat_*                              ///
+>                 smoke_nomiss_*                  ///
+>                 imd_*                                   ///
+>                 hypertension                    ///
+>                 respiratory                             ///
+>                 cf                                              ///
+>                 asthmacat_*                             ///
+>                 cardiac                                 ///
+>                 diabcat_*                               ///
+>                 af                                              ///
+>                 dvt_pe                                  ///
+>                 pad                                             ///
+>                 cancerExhaem_*                  ///
+>                 cancerHaem_*                    ///
+>                 liver                                   ///
+>                 stroke                                  ///
+>                 dementia                                ///
+>                 tia                                             ///
+>                 neuro                                   ///
+>                 kidneyfn_*                              ///
+>                 transplant                              ///
+>                 dialysis                                ///
+>                 spleen                                  ///
+>                 autoimmune                      ///
+>                 ibd                                             ///
+>                 immunosuppression               ///
+>                 smi                                             ///
+>                 ds                                              ///
+>                 ldr                                             ///
+>                 region_*                                ///
+>                 if male==`j',                   ///
+>                 scale(hazard) df(10) eform lininit
+Initial Values Obtained
+
+Iteration 0:   log likelihood = -2170.2971  
+Iteration 1:   log likelihood = -2165.7751  
+Iteration 2:   log likelihood =  -2165.427  
+Iteration 3:   log likelihood = -2165.4265  
+Iteration 4:   log likelihood = -2165.4265  
+
+Log likelihood = -2165.4265                     Number of obs     =      5,072
+
+-----------------------------------------------------------------------------------
+                  |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------+----------------------------------------------------------------
+xb                |
+             age1 |   1.021426   .0140719     1.54   0.124     .9942148    1.049382
+             age2 |   .8118342   .0910513    -1.86   0.063     .6516296    1.011426
+             age3 |   9.456836   17.24457     1.23   0.218     .2652022     337.221
+      ethnicity_2 |   1.064778   .1457088     0.46   0.646     .8142863    1.392327
+      ethnicity_3 |   .9875744    .139103    -0.09   0.929     .7493338     1.30156
+      ethnicity_4 |   .9207842   .1327655    -0.57   0.567     .6941052    1.221491
+      ethnicity_5 |   1.014493   .1424567     0.10   0.918     .7704103    1.335907
+       obesecat_2 |   1.318531   .4295663     0.85   0.396     .6962671     2.49692
+       obesecat_3 |   1.473374     .49121     1.16   0.245      .766531    2.832019
+       obesecat_4 |   1.437622   .4794472     1.09   0.276     .7477715    2.763889
+       obesecat_5 |   1.398105   .4621092     1.01   0.311     .7314697     2.67229
+   smoke_nomiss_2 |   .5716747    .235884    -1.36   0.175     .2546401    1.283427
+   smoke_nomiss_3 |    .990091   .1340145    -0.07   0.941     .7593817    1.290893
+            imd_2 |   1.149184   .1364537     1.17   0.242     .9105798     1.45031
+            imd_3 |   1.081144   .1290428     0.65   0.513     .8556306    1.366095
+            imd_4 |   .8897381   .1132411    -0.92   0.359     .6933074    1.141822
+     hypertension |   .9631638   .1099397    -0.33   0.742     .7700879    1.204648
+      respiratory |   1.047938   .1166278     0.42   0.674     .8425645    1.303371
+               cf |   1.034544   .1150548     0.31   0.760     .8319253    1.286512
+      asthmacat_2 |   .8894451   .3190961    -0.33   0.744     .4402944    1.796781
+      asthmacat_3 |   .8291707   .2669277    -0.58   0.561     .4411883    1.558346
+          cardiac |   .9594397    .109126    -0.36   0.716     .7677196    1.199037
+        diabcat_2 |   1.059426   .1277203     0.48   0.632     .8364753    1.341801
+        diabcat_3 |      .8785   .2249321    -0.51   0.613     .5318623    1.451057
+        diabcat_4 |   6.02e-09   .0000902    -0.00   0.999            0           .
+               af |   .9927653   .1118675    -0.06   0.949     .7960326    1.238119
+           dvt_pe |   .9860965    .109203    -0.13   0.899     .7936976    1.225134
+              pad |   .9756855   .0909329    -0.26   0.792     .8127906    1.171227
+   cancerExhaem_2 |    1.82371   1.066936     1.03   0.304     .5793919     5.74036
+   cancerExhaem_3 |   1.103513   .2930924     0.37   0.711     .6556905    1.857189
+   cancerExhaem_4 |   .7807322   .0784902    -2.46   0.014     .6411024     .950773
+     cancerHaem_2 |   6.01e-09   .0000801    -0.00   0.999            0           .
+     cancerHaem_3 |   1.343981   .4125689     0.96   0.336     .7363685    2.452962
+     cancerHaem_4 |   1.094109   .1239199     0.79   0.427     .8762998    1.366056
+            liver |   1.055452   .1170255     0.49   0.626     .8492972    1.311648
+           stroke |   .9206504   .1049055    -0.73   0.468     .7363813     1.15103
+         dementia |   .9303849    .105947    -0.63   0.526     .7442736    1.163035
+              tia |   .9704189   .1105427    -0.26   0.792     .7762415     1.21317
+            neuro |   .8783294   .1015676    -1.12   0.262     .7002077    1.101763
+       kidneyfn_2 |   1.170263   1.180455     0.16   0.876     .1620571    8.450815
+       kidneyfn_3 |   1.046866   .1631601     0.29   0.769     .7713058    1.420875
+       transplant |    .914904   .1124938    -0.72   0.469     .7189759    1.164224
+         dialysis |   .9055038   .1592366    -0.56   0.572     .6415093    1.278138
+           spleen |   .9722522   .0899523    -0.30   0.761     .8110099    1.165552
+       autoimmune |   1.033587   .1140378     0.30   0.765     .8325923    1.283104
+              ibd |   .9062744    .102769    -0.87   0.385     .7256643    1.131836
+immunosuppression |   .9401667   .1063838    -0.55   0.586      .753161    1.173605
+              smi |   .8994138   .1041982    -0.92   0.360     .7167155    1.128684
+               ds |   1.048089    .117217     0.42   0.675     .8417838    1.304955
+              ldr |   .9947911   .0903626    -0.06   0.954     .8325538    1.188643
+         region_2 |   1.031154   .1705779     0.19   0.853     .7456142    1.426044
+         region_3 |    .963456   .1518914    -0.24   0.813     .7073554    1.312279
+         region_4 |   1.072432   .1768711     0.42   0.672     .7762206     1.48168
+         region_5 |   .7407469   .1575677    -1.41   0.158     .4882102    1.123913
+         region_6 |   .9439255   .1845314    -0.30   0.768     .6434773    1.384657
+            _rcs1 |   1.584596   .0360057    20.26   0.000     1.515575    1.656761
+            _rcs2 |   1.019745   .0188086     1.06   0.289     .9835392    1.057283
+            _rcs3 |   .9934062   .0099546    -0.66   0.509     .9740858     1.01311
+            _rcs4 |   1.009439   .0056418     1.68   0.093      .998442    1.020558
+            _rcs5 |   1.004547   .0034471     1.32   0.186     .9978139    1.011326
+            _rcs6 |   1.002625   .0024158     1.09   0.277     .9979012    1.007371
+            _rcs7 |   1.001371   .0018209     0.75   0.451     .9978084    1.004946
+            _rcs8 |   1.000646    .001327     0.49   0.627      .998048     1.00325
+            _rcs9 |   .9998174   .0010307    -0.18   0.859     .9977993    1.001839
+           _rcs10 |   1.001174   .0007937     1.48   0.139     .9996199    1.002731
+            _cons |   .0523755    .027769    -5.56   0.000      .018528    .1480566
+-----------------------------------------------------------------------------------
+Note: Estimates are transformed only in the first equation.
+
+. estat ic
+
+Akaike's information criterion and Bayesian information criterion
+
+-----------------------------------------------------------------------------
+       Model |          N   ll(null)  ll(model)      df        AIC        BIC
+-------------+---------------------------------------------------------------
+           . |      5,072          .  -2165.427      66   4462.853   4893.931
+-----------------------------------------------------------------------------
+Note: BIC uses N = number of observations. See [R] BIC note.
+
+. timer off 1
+
+. timer list 1
+   1:      5.25 /        1 =       5.2550
+
+.                         
+. 
+. 
+. 
+. *****************************************************
+. *   Survival predictions from Royston-Parmar model  *
+. *****************************************************
+. 
+. * Predict absolute risk at 90 days
+. gen time90 = 90
+
+. predict surv90_royp, surv timevar(time90)
+
+. gen risk90_royp = 1-surv90_royp
+
+. drop surv90_royp
+
+. 
+. /*  Quantiles of predicted day risk   */
+. 
+. centile risk90_royp, c(50 70 80 90)
+
+                                                       -- Binom. Interp. --
+    Variable |       Obs  Percentile    Centile        [95% Conf. Interval]
+-------------+-------------------------------------------------------------
+ risk90_royp |    11,142         50    .9893533        .9890051    .9896469
+             |                   70    .9944207        .9942532    .9945964
+             |                   80     .996347        .9962109    .9964662
+             |                   90    .9979682        .9978895    .9980501
+
+. 
+. global p50 = r(c_1) 
+
+. global p70 = r(c_2) 
+
+. global p80 = r(c_3) 
+
+. global p90 = r(c_4) 
+
+. 
+. 
+. 
+. 
+. *********************************************************
+. *   Obtain predicted risks by comorbidity with 95% CIs  *
+. *********************************************************
+. 
+. * Collapse data to one row per age (i.e. per year)
+. bysort age: keep if _n==1
+(11,110 observations deleted)
+
+. 
+. * Keep only variables needed for the risk prediction
+. keep age age? _rcs1- _d_rcs5  _st _d _t _t0
+
+. 
+. * Sex
+. gen male = `j'
+
+. 
+. * Set time to 90 days (for the risk prediction period)
+. gen time90 = 90
+
+. 
+. 
+. 
+. /*  Initially set values to "no comorbidity"  */
+. 
+. 
+. foreach var in                                                                                          ///
+>         hypertension respiratory cf asthmacat_2 asthmacat_3     ///
+>         cardiac diabcat_2 diabcat_3     diabcat_4 af dvt_pe pad         ///     
+>         cancerExhaem_2 cancerExhaem_3 cancerExhaem_4                    ///
+>         cancerHaem_2 cancerHaem_3 cancerHaem_4                                  ///
+>         liver stroke dementia tia neuro                                                 ///
+>         kidneyfn_2 kidneyfn_3 transplant dialysis                               ///
+>         spleen autoimmune ibd immunosuppression                                 ///
+>         smi ldr ds      {
+  2.         gen `var' = 0
+  3. }
+
+. 
+. 
+. /*  Non-smoker, non-obese, middle IMD, White, Midlands  */
+. 
+. 
+. foreach var in                                                                                          ///
+>         ethnicity_2 ethnicity_3 ethnicity_4 ethnicity_5                 ///
+>         smoke_nomiss_2 smoke_nomiss_3                                                   ///                      
+>         obesecat_2 obesecat_3 obesecat_4 obesecat_5                             ///
+>         imd_2 imd_3 imd_4 imd_5                                                                 ///
+>         region_2 region_3 region_4 region_5 region_6 region_7   {
+  2.         gen `var' = 0
+  3. }
+
+. replace imd_3    = 1 
+(32 real changes made)
+
+. replace region_3 = 1
+(32 real changes made)
+
+. 
+. 
+. 
+. /*  Predict survival at 90 days under each comorbidity separately   */
+. 
+. * Set age and sex to baseline values
+. gen cons = 0
+
+. 
+. foreach var of varlist cons                                                     ///
+>                 respiratory cf asthmacat_2 asthmacat_3                  ///
+>                 cardiac diabcat_2 diabcat_3 diabcat_4                   ///
+>                 hypertension af dvt_pe pad                                              ///     
+>                 cancerExhaem_2 cancerExhaem_3 cancerExhaem_4    ///
+>                 cancerHaem_2 cancerHaem_3 cancerHaem_4                  ///
+>                 liver stroke dementia tia neuro                                 ///
+>                 kidneyfn_2 kidneyfn_3 transplant dialysis               ///
+>                 spleen autoimmune ibd immunosuppression                 ///
+>                 smi ldr ds                                                                              ///
+>                 {
+  2.                                 
+.         * Reset that value to "yes"
+.         replace `var' = 1
+  3.         
+.         * Predict under that comorbidity (age and sex left at original values)
+.         predict pred_`var', surv timevar(time90) ci
+  4.         
+.         * Change to risk, not survival
+.         gen risk_`var' = 1 - pred_`var'
+  5.         gen risk_`var'_uci = 1 - pred_`var'_lci
+  6.         gen risk_`var'_lci = 1 - pred_`var'_uci
+  7.         drop pred_`var' pred_`var'_lci pred_`var'_uci
+  8.         
+.         * Reset that value back to "no"
+.         replace `var' = 0
+  9. }
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 missing values generated)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 missing values generated)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+(32 real changes made)
+
+. 
+. keep age male risk*
+
+. 
+. 
+. * Save relevant percentiles
+. gen p50 = $p50 
+
+. gen p70 = $p70 
+
+. gen p80 = $p80 
+
+. gen p90 = $p90 
+
+. 
+. 
+. * Save data
+. outsheet using "output/ar_wave`i'_male`j'_`out'.out", replace
+(note: file output/ar_wave2_male0_covidadmission.out not found)
+
+. 
+. 
+. 
+. 
+. 
+. 
+. *****************************
+. *  Graph all comorbidities  *
+. *****************************                   
+. 
+. * Graph title and labelling
+. *local opts = "ylab(0 (0.001) 0.009, angle(0)) xlab(20 (20) 50) xmtick(20 (5) 50)"
+.         
+. local wave1 = "Wave 1"
+
+. local wave2 = "Wave 2"
+
+. local male0 = "Female"
+
+. local male1 = "Male"
+
+. 
+. 
+. * Risk 
+. qui summ risk_cons if age==50 
+
+. gen risk_age_50 = r(mean) 
+(32 missing values generated)
+
+. 
+. 
+. * All comorbidities
+. sort age
+
+. twoway  (line risk_respiratory                  age, lwidth(vthin) lcolor(eltblue))                                             ///
+>                 (line risk_cf                                   age, lwidth(vthin) lcolor(eltblue) lpattern(dash))                   
+>    ///
+>                 (line risk_asthmacat_2                  age, lwidth(vthin) lcolor(blue))                                             
+>            ///
+>                 (line risk_asthmacat_3                  age, lwidth(vthin) lcolor(midblue))                                          
+>    ///
+>                 (line risk_hypertension                 age, lwidth(vthin) lcolor(olive_teal))                                       
+>    ///
+>                 (line risk_cardiac                              age, lwidth(vthin) lcolor(mint))                                     
+>                    ///
+>                 (line risk_diabcat_2                    age, lwidth(vthin) lcolor(midgreen))                                         
+>    ///
+>                 (line risk_diabcat_3                    age, lwidth(vthin) lcolor(green))                                            
+>            ///
+>                 (line risk_diabcat_4                    age, lwidth(vthin) lcolor(dkgreen))                                          
+>    ///
+>                 (line risk_liver                                age, lwidth(vthin) lcolor(olive))                                    
+>                    ///
+>                 (line risk_kidneyfn_2                   age, lwidth(vthin) lcolor(stone))                                            
+>            ///
+>                 (line risk_kidneyfn_3                   age, lwidth(vthin) lcolor(sand))                                             
+>            ///
+>                 (line risk_transplant                   age, lwidth(vthin) lcolor(sienna))                                           
+>    ///
+>                 (line risk_dialysis                             age, lwidth(vthin) lcolor(sienna*0.7))                               
+>            ///
+>                 (line risk_stroke                               age, lwidth(vthin) lcolor(pink))                                     
+>                    ///
+>                 (line risk_dementia                     age, lwidth(vthin) lcolor(pink) lpattern(dash))                         ///
+>                 (line risk_tia                                  age, lwidth(vthin) lcolor(pink) lpattern(dot))                       
+>    ///
+>                 (line risk_neuro                                age, lwidth(vthin) lcolor(maroon))                                   
+>                    ///
+>                 (line risk_cancerExhaem_2               age, lwidth(vthin) lcolor(gs3) lpattern(dash))                          ///
+>                 (line risk_cancerExhaem_3               age, lwidth(vthin) lcolor(gs5) lpattern(dash))                          ///
+>                 (line risk_cancerExhaem_4               age, lwidth(vthin) lcolor(gs7) lpattern(dash))                          ///
+>                 (line risk_cancerHaem_2                 age, lwidth(vthin) lcolor(sandb) lpattern(dash))                        ///
+>                 (line risk_cancerHaem_3                 age, lwidth(vthin) lcolor(gold)         lpattern(dash))                 ///
+>                 (line risk_cancerHaem_4                 age, lwidth(vthin) lcolor(yellow)       lpattern(dash))                 ///
+>                 (line risk_spleen                               age, lwidth(vthin) lcolor(orange_red)  lpattern(dot))           ///
+>                 (line risk_autoimmune                   age, lwidth(vthin) lcolor(magenta))                                          
+>    ///
+>                 (line risk_ibd                                  age, lwidth(vthin) lcolor(magenta))                                  
+>            ///
+>                 (line risk_immunosuppression    age, lwidth(vthin) lcolor(red) lpattern(dash))                          ///
+>                 (line risk_smi                                  age, lwidth(vthin) lcolor(red) lpattern(dash))                       
+>    ///
+>                 (line risk_ldr                                  age, lwidth(vthin) lcolor(red) lpattern(dash))                       
+>    ///
+>                 (line risk_ds                                   age, lwidth(vthin) lcolor(red) lpattern(dash))                       
+>    ///
+>                 (line risk_cons                                 age, lwidth(vthin) lcolor(black))                                    
+>                    ///
+>                 (line risk_age_50                               age, lpattern(dot) lcolor(black))                                    
+>                    ///
+>                 ,       xlab(20 (20) 50) xmtick(20 (5) 50)                                                                           
+>                                    /// 
+>                 subtitle("`male`j'', `wave`i''")                                                                                     
+>                                    ///
+>                 legend(order(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31) ///
+>                 size(tiny) col(4)                                       ///
+>                 label(1 "Respiratory")                          ///
+>                 label(2 "CF")                                           ///
+>                 label(3 "Asthma mild")                          ///
+>                 label(4 "Asthma sev")                           ///
+>                 label(5 "Hypertension")                         ///
+>                 label(6 "Cardiac")                                      ///
+>                 label(7 "Diab, control")                        /// 
+>                 label(8 "Diab, uncontrol")              ///
+>                 label(9 "Diab, unknown")                        ///
+>                 label(10 "Liver")                                       ///
+>                 label(11 "Red kidney")                          ///
+>                 label(12 "Poor kidney")                         ///
+>                 label(13 "Transplant")                          ///
+>                 label(14 "Dialysis")                            ///
+>                 label(15 "Stroke")                                      ///
+>                 label(16 "Dementia")                            ///
+>                 label(17 "TIA")                                         ///
+>                 label(18 "Neurological")                        ///
+>                 label(19 "Canc. Oth (<1yr)")            ///
+>                 label(20 "Canc. Oth (2-4yr)")           ///
+>                 label(21 "Canc. Oth (5+yr)")            ///
+>                 label(22 "Canc. Haem (<1yr)")           ///
+>                 label(23 "Canc. Haem (2-4yr)")          ///
+>                 label(24 "Canc. Haem (5+yr)")           ///
+>                 label(25 "Spleen")                                      ///
+>                 label(26 "RA/SLE/psoriasis")            ///
+>                 label(27 "Immunosuppression")           ///
+>                 label(28 "SMI")                                         ///
+>                 label(29 "Learning disability")         ///
+>                 label(30 "Down's Syndrome")             ///
+>                 label(31 "No comorbidity")                      ///
+>                 colfirst) 
+
+.         graph export output/ar_wave`i'_male`j'_`out'.svg, as(svg) replace width(1600)
+(note: file output/ar_wave2_male0_covidadmission.svg not found)
+(file output/ar_wave2_male0_covidadmission.svg written in SVG format)
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/AAR002_risk_by_age_wav
+> e2_male0_covidadmission.log
+  log type:  text
+ closed on:  17 Feb 2021, 13:58:33
+---------------------------------------------------------------------------------------------------------------------------------------

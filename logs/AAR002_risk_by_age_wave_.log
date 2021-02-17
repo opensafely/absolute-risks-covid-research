@@ -1,0 +1,75 @@
+---------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/AAR002_risk_by_age_wav
+> e_.log
+  log type:  text
+ opened on:  17 Feb 2021, 13:48:48
+
+. 
+. 
+.         
+. ****************
+. *   Open data  *
+. ****************
+. 
+. use "analysis/data_aranalysis_cohort`i'.dta", replace   
+file analysis/data_aranalysis_cohort.dta not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. do "analysis/AAR002_1_risk_by_age.do" 1 covidadmission 1
+
+. ********************************************************************************
+. *
+. *       Do-file:                AAR002_1_risk_by_age.do
+. *
+. *       Programmed by:  Fizz & Krishnan
+. *
+. *       Data used:              analysis/data_aranalysis_cohort`i'.dta
+. *
+. *       Data created:   analysis/ar_wave`i'_male`j'_`outcome.out
+. *
+. *       Other output:   Log file:  logs/AAR002_1_risk_by_age
+. *                                       output/ar_wave`i'_male`j'_`outcome'.svg
+. *
+. ********************************************************************************
+. *
+. *       Purpose:                This do-file performs survival analysis using Royston-Parmar
+. *                                       flexible hazard modelling. 
+. *
+. *                                       These analyses will be helpful in considering how 
+. *                                       comorbidities and demographic factors affect risk, 
+. *                                       comparatively.
+. *  
+. ********************************************************************************
+. *       
+. *       Stata routines needed:   stpm2 (which needs rcsgen)       
+. *
+. ********************************************************************************
+. 
+. 
+. 
+. * Set wave (i=1 or 2), sex (j=1 (male) or 0 (female) and
+. *  outcome (coviddeath or covidadmission)
+. local i = 1
+
+. local out = "covidadmission"
+
+. 
+. adopath ++ `c(pwd)'/analysis/ado
+  [1]              "C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research/analysis/ado"
+  [2]              "C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research/analysis"
+  [3]              "C:\Users\emsuewil\Documents/analysis"
+  [4]  (BASE)      "C:\Program Files\Stata16\ado\base/"
+  [5]  (SITE)      "C:\Program Files\Stata16\ado\site/"
+  [6]              "."
+  [7]  (PERSONAL)  "C:\Users\emsuewil\ado\personal/"
+  [8]  (PLUS)      "C:\Users\emsuewil\ado\plus/"
+  [9]  (OLDPLACE)  "c:\ado/"
+
+. 
+. * Open a log file
+. capture log close

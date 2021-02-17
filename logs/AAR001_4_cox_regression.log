@@ -1,0 +1,429 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /workspace/logs/AAR001_4_cox_regression.log
+  log type:  text
+ opened on:  17 Feb 2021, 11:00:23
+
+. 
+. 
+. 
+. * Open dataset (complete case ethnicity)
+. use "analysis/data_aranalysis_cohort`i'.dta", clear 
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for absolute risk work)
+
+. drop if ethnicity_5>=.
+(0 observations deleted)
+
+. 
+. 
+. * Keep under 50s only
+. drop if age>=50
+(187 observations deleted)
+
+. 
+. 
+. 
+. /*  Declare data to be survival  */
+. 
+. stset stime_`out'`i', fail(`out'`i') scale(365.25)
+
+     failure event:  coviddeath2 != 0 & coviddeath2 < .
+obs. time interval:  (0, stime_coviddeath2]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+        235  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+        235  observations remaining, representing
+          2  failures in single-record/single-failure data
+     80.123  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .3586585
+
+. 
+. 
+.                 
+. /*  Fit Cox models  */
+.                         
+. forvalues j = 0 (1) 1 {
+  2.         capture erase coefs_cox_3_`j'.ster
+  3. 
+.         stcox           age1 age2 age3                                  ///
+>                                 ib2.obesecat                                 
+>    ///
+>                                 i.smoke_nomiss                               
+>    ///
+>                                 i.ethnicity_5                                
+>    ///
+>                                 i.imd                                        
+>            ///
+>                                 i.respiratory                                
+>    ///
+>                                 i.cf                                         
+>            ///
+>                                 i.asthmacat                                  
+>            ///
+>                                 i.cardiac                                    
+>            ///
+>                                 i.hypertension                               
+>    ///
+>                                 i.diabcat                                    
+>            ///
+>                                 i.af                                         
+>            ///
+>                                 i.dvt_pe                                     
+>            ///
+>                                 i.pad                                        
+>            ///
+>                                 i.cancerExhaem                               
+>    ///
+>                                 i.cancerHaem                                 
+>    ///
+>                                 i.liver                                      
+>            ///
+>                                 i.stroke                                     
+>            ///
+>                                 i.dementia                                   
+>            ///
+>                                 i.tia                                        
+>            ///
+>                                 i.neuro                                      
+>            ///
+>                                 i.kidneyfn                                   
+>            ///
+>                                 i.transplant                                 
+>    ///
+>                                 i.dialysis                                   
+>            ///
+>                                 i.spleen                                     
+>            ///
+>                                 i.autoimmune                                 
+>    ///
+>                                 i.ibd                                        
+>            ///
+>                                 i.immunosuppression                          
+>    ///
+>                                 i.smi                                        
+>            ///
+>                                 i.ds                                         
+>            ///
+>                                 i.ldr                                        
+>            ///
+>                                 i.fracture                                   
+>            ///
+>                                 if male==`j'                                 
+>    ///
+>                                 , strata(stp)
+  4.         estimates save coefs_cox_4_`j', replace
+  5. }
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+note: 4.cancerExhaem omitted because of collinearity
+note: 1.cancerHaem omitted because of collinearity
+note: 1.liver omitted because of collinearity
+note: 1.stroke omitted because of collinearity
+note: 1.dementia omitted because of collinearity
+note: 1.tia omitted because of collinearity
+note: 1.neuro omitted because of collinearity
+note: 3.kidneyfn omitted because of collinearity
+note: 1.transplant omitted because of collinearity
+note: 1.dialysis omitted because of collinearity
+note: 1.spleen omitted because of collinearity
+note: 1.autoimmune omitted because of collinearity
+note: 1.ibd omitted because of collinearity
+note: 1.immunosuppression omitted because of collinearity
+note: 1.smi omitted because of collinearity
+note: 1.ds omitted because of collinearity
+note: 1.ldr omitted because of collinearity
+note: 0.fracture omitted because of collinearity
+Iteration 0:   log likelihood = -.69314718
+Iteration 1:   log likelihood = -.12692801
+Iteration 2:   log likelihood = -.04256624
+Iteration 3:   log likelihood = -.01520045
+Iteration 4:   log likelihood = -.00553366
+Iteration 5:   log likelihood = -.00202801
+Iteration 6:   log likelihood = -.00074503
+Iteration 7:   log likelihood = -.00027394
+Iteration 8:   log likelihood = -.00010076
+Iteration 9:   log likelihood = -.00003706
+Iteration 10:  log likelihood = -.00001363
+Iteration 11:  log likelihood = -5.016e-06
+Iteration 12:  log likelihood = -1.845e-06
+Iteration 13:  log likelihood = -6.788e-07
+Iteration 14:  log likelihood = -2.497e-07
+Iteration 15:  log likelihood = -9.187e-08
+Iteration 16:  log likelihood = -3.380e-08
+Iteration 17:  log likelihood = -1.243e-08
+Iteration 18:  log likelihood = -4.574e-09
+Iteration 19:  log likelihood = -1.683e-09
+Iteration 20:  log likelihood = -6.190e-10
+Iteration 21:  log likelihood = -2.277e-10
+Iteration 22:  log likelihood = -8.377e-11
+Iteration 23:  log likelihood = -3.082e-11
+Iteration 24:  log likelihood = -1.134e-11
+Iteration 25:  log likelihood = -4.171e-12
+Iteration 26:  log likelihood = -1.535e-12
+Iteration 27:  log likelihood = -5.649e-13
+Iteration 28:  log likelihood = -2.061e-13
+Iteration 29:  log likelihood = -7.816e-14
+Iteration 30:  log likelihood = -2.842e-14
+Iteration 31:  log likelihood = -7.105e-15
+Iteration 32:  log likelihood =          0
+Refining estimates:
+Iteration 0:   log likelihood =          0
+Iteration 1:   log likelihood =          0
+
+Stratified Cox regr. -- no ties
+
+No. of subjects =           25                  Number of obs    =          25
+No. of failures =            1
+Time at risk    =  8.558521561
+                                                LR chi2(5)       =        1.39
+Log likelihood  =            0                  Prob > chi2      =      0.9258
+
+------------------------------------------------------------------------------
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        age1 |   .1427991   613872.2    -0.00   1.000            0           .
+        age2 |   .2097383   3.30e+07    -0.00   1.000            0           .
+        age3 |          1  (omitted)
+             |
+    obesecat |
+Underwei..)  |          1  (omitted)
+Obese I ..)  |   707.9139   9.96e+10     0.00   1.000            0           .
+Obese II..)  |          1  (omitted)
+Obese II..)  |          1  (omitted)
+             |
+smoke_nomiss |
+    Current  |          1  (omitted)
+             |
+ ethnicity_5 |
+      Mixed  |          1  (omitted)
+Asian or ..  |          1  (omitted)
+      Black  |   4.267951   6.00e+08     0.00   1.000            0           .
+      Other  |          1  (omitted)
+             |
+         imd |
+          4  |          1  (omitted)
+5 most de..  |          1  (omitted)
+             |
+1.respirat~y |          1  (omitted)
+        1.cf |          1  (omitted)
+             |
+   asthmacat |
+Yes, no OCS  |          1  (omitted)
+   1.cardiac |          1  (omitted)
+1.hyperten~n |          1  (omitted)
+             |
+     diabcat |
+Controlle..  |   4.267951   6.00e+08     0.00   1.000            0           .
+Uncontrol..  |          1  (omitted)
+             |
+        1.af |          1  (omitted)
+    1.dvt_pe |          1  (omitted)
+       1.pad |          1  (omitted)
+             |
+cancerExhaem |
+   5+ years  |          1  (omitted)
+             |
+  cancerHaem |
+      Never  |          1  (omitted)
+     1.liver |          1  (omitted)
+    1.stroke |          1  (omitted)
+  1.dementia |          1  (omitted)
+       1.tia |          1  (omitted)
+     1.neuro |          1  (omitted)
+             |
+    kidneyfn |
+Stage 4/5..  |          1  (omitted)
+1.transplant |          1  (omitted)
+  1.dialysis |          1  (omitted)
+    1.spleen |          1  (omitted)
+1.autoimmune |          1  (omitted)
+       1.ibd |          1  (omitted)
+1.immunosu~n |          1  (omitted)
+       1.smi |          1  (omitted)
+        1.ds |          1  (omitted)
+       1.ldr |          1  (omitted)
+  0.fracture |          1  (omitted)
+------------------------------------------------------------------------------
+                                                             Stratified by stp
+(note: file coefs_cox_4_0.ster not found)
+file coefs_cox_4_0.ster saved
+
+         failure _d:  coviddeath2
+   analysis time _t:  stime_coviddeath2/365.25
+
+note: 2.asthmacat omitted because of collinearity
+note: 1.cardiac omitted because of collinearity
+note: 1.hypertension omitted because of collinearity
+note: 2.diabcat omitted because of collinearity
+note: 1.af omitted because of collinearity
+note: 1.dvt_pe omitted because of collinearity
+note: 1.pad omitted because of collinearity
+note: 3.cancerExhaem omitted because of collinearity
+note: 4.cancerExhaem omitted because of collinearity
+note: 4.cancerHaem omitted because of collinearity
+note: 1.liver omitted because of collinearity
+note: 1.stroke omitted because of collinearity
+note: 1.dementia omitted because of collinearity
+note: 1.tia omitted because of collinearity
+note: 1.neuro omitted because of collinearity
+note: 3.kidneyfn omitted because of collinearity
+note: 1.transplant omitted because of collinearity
+note: 0.dialysis omitted because of collinearity
+note: 1.spleen omitted because of collinearity
+note: 1.autoimmune omitted because of collinearity
+note: 1.ibd omitted because of collinearity
+note: 1.immunosuppression omitted because of collinearity
+note: 1.smi omitted because of collinearity
+note: 1.ds omitted because of collinearity
+note: 1.ldr omitted because of collinearity
+note: 0.fracture omitted because of collinearity
+Iteration 0:   log likelihood = -.69314718
+Iteration 1:   log likelihood = -.12692801
+Iteration 2:   log likelihood = -.04256624
+Iteration 3:   log likelihood = -.01520045
+Iteration 4:   log likelihood = -.00553366
+Iteration 5:   log likelihood = -.00202801
+Iteration 6:   log likelihood = -.00074503
+Iteration 7:   log likelihood = -.00027394
+Iteration 8:   log likelihood = -.00010076
+Iteration 9:   log likelihood = -.00003706
+Iteration 10:  log likelihood = -.00001363
+Iteration 11:  log likelihood = -5.016e-06
+Iteration 12:  log likelihood = -1.845e-06
+Iteration 13:  log likelihood = -6.788e-07
+Iteration 14:  log likelihood = -2.497e-07
+Iteration 15:  log likelihood = -9.187e-08
+Iteration 16:  log likelihood = -3.380e-08
+Iteration 17:  log likelihood = -1.243e-08
+Iteration 18:  log likelihood = -4.574e-09
+Iteration 19:  log likelihood = -1.683e-09
+Iteration 20:  log likelihood = -6.190e-10
+Iteration 21:  log likelihood = -2.277e-10
+Iteration 22:  log likelihood = -8.376e-11
+Iteration 23:  log likelihood = -3.081e-11
+Iteration 24:  log likelihood = -1.134e-11
+Iteration 25:  log likelihood = -4.178e-12
+Iteration 26:  log likelihood = -1.535e-12
+Iteration 27:  log likelihood = -5.684e-13
+Iteration 28:  log likelihood = -1.990e-13
+Iteration 29:  log likelihood = -8.527e-14
+Iteration 30:  log likelihood = -2.842e-14
+Iteration 31:  log likelihood =          0
+Refining estimates:
+Iteration 0:   log likelihood =          0
+Iteration 1:   log likelihood =          0
+
+Stratified Cox regr. -- no ties
+
+No. of subjects =           18                  Number of obs    =          18
+No. of failures =            1
+Time at risk    =  6.335386721
+                                                LR chi2(3)       =        1.39
+Log likelihood  =            0                  Prob > chi2      =      0.7088
+
+------------------------------------------------------------------------------
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        age1 |   68.36412          .        .       .            .           .
+        age2 |   35.52246   1.82e+09     0.00   1.000            0           .
+        age3 |   1.27e+10          .        .       .            .           .
+             |
+    obesecat |
+Underwei..)  |          1  (omitted)
+Obese I ..)  |   2.439487   5.92e+08     0.00   1.000            0           .
+Obese II..)  |          1  (omitted)
+Obese II..)  |   .3597759   8.03e+07    -0.00   1.000            0           .
+             |
+smoke_nomiss |
+     Former  |          1  (omitted)
+    Current  |          1  (omitted)
+             |
+ ethnicity_5 |
+      Mixed  |          1  (omitted)
+Asian or ..  |          1  (omitted)
+      Black  |          1  (omitted)
+      Other  |          1  (omitted)
+             |
+         imd |
+          4  |          1  (omitted)
+5 most de..  |          1  (omitted)
+             |
+1.respirat~y |          1  (omitted)
+        1.cf |          1  (omitted)
+             |
+   asthmacat |
+Yes, no OCS  |          1  (omitted)
+   1.cardiac |          1  (omitted)
+1.hyperten~n |          1  (omitted)
+             |
+     diabcat |
+Controlle..  |          1  (omitted)
+        1.af |          1  (omitted)
+    1.dvt_pe |          1  (omitted)
+       1.pad |          1  (omitted)
+             |
+cancerExhaem |
+2-5 years..  |          1  (omitted)
+   5+ years  |          1  (omitted)
+             |
+  cancerHaem |
+   5+ years  |          1  (omitted)
+     1.liver |          1  (omitted)
+    1.stroke |          1  (omitted)
+  1.dementia |          1  (omitted)
+       1.tia |          1  (omitted)
+     1.neuro |          1  (omitted)
+             |
+    kidneyfn |
+Stage 4/5..  |          1  (omitted)
+1.transplant |          1  (omitted)
+  0.dialysis |          1  (omitted)
+    1.spleen |          1  (omitted)
+1.autoimmune |          1  (omitted)
+       1.ibd |          1  (omitted)
+1.immunosu~n |          1  (omitted)
+       1.smi |          1  (omitted)
+        1.ds |          1  (omitted)
+       1.ldr |          1  (omitted)
+  0.fracture |          1  (omitted)
+------------------------------------------------------------------------------
+                                                             Stratified by stp
+(note: file coefs_cox_4_1.ster not found)
+file coefs_cox_4_1.ster saved
+
+. 
+. 
+. 
+. 
+. *********************************************
+. *  Read in estimates and format for tables  *
+. *********************************************
+. 
+. * Read in programs to format output
+. qui do "analysis/000_HR_table.do"
+
+. 
+. forvalues j = 0 (1) 1 {
+  2.         * Cox model
+.         crtablehr,      estimates(coefs_cox_4_`j')              ///
+>                                 outputfile(output/hr_`out'_wave`i'_male`j'.tx
+> t)
+  3. }
+(note: file output/hr_coviddeath_wave2_male0.txt not found)
+(note: file output/hr_coviddeath_wave2_male1.txt not found)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /workspace/logs/AAR001_4_cox_regression.log
+  log type:  text
+ closed on:  17 Feb 2021, 11:00:23
+-------------------------------------------------------------------------------

@@ -1,0 +1,517 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /workspace/logs/AL004_2_cox_regression.log
+  log type:  text
+ opened on:  17 Feb 2021, 13:32:59
+
+. 
+. 
+. * Categories of various exposures
+. local lo_ldr            = 0
+
+. local hi_ldr            = 1
+
+. local lo_ldr_cat        = 0
+
+. local hi_ldr_cat        = 2
+
+. local hi_ldr            = 1
+
+. local lo_ldr_carecat= 0
+
+. local hi_ldr_carecat= 2
+
+. local lo_ds             = 0
+
+. local hi_ds             = 1
+
+. local lo_cp             = 0
+
+. local hi_cp             = 1
+
+. local lo_ldr_group      = 0
+
+. local hi_ldr_group      = 5
+
+. 
+. * Open temporary file to post results
+. tempfile ldrfile
+
+. tempname ldrresults
+
+. 
+. postfile `ldrresults'   wave str15(outcome) str15(exposure) str20(model)     
+>    ///
+>                                                 expcat lnhr sehr using `ldrfi
+> le'
+
+. 
+. 
+. * Open dataset (complete case ethnicity)
+. use "analysis/data_ldanalysis_cohort`i'.dta", clear 
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+
+. drop if ethnicity_5>=.
+(11,202 observations deleted)
+
+. 
+. * Only keep data for adults
+. keep if child==0
+(6,485 observations deleted)
+
+. 
+. /*  Declare data to be survival  */
+. 
+. stset stime_`out'`i', fail(`out'`i') scale(365.25)
+
+     failure event:  covidadmission2 != 0 & covidadmission2 < .
+obs. time interval:  (0, stime_covidadmission2]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+     27,050  total observations
+      2,862  observations end on or before enter()
+------------------------------------------------------------------------------
+     24,188  observations remaining, representing
+      2,294  failures in single-record/single-failure data
+  9,755.469  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .4462697
+
+. 
+. 
+. /*  Obtain rates  */
+.                         
+. strate `exp',                                                                
+>                            ///
+>         output(analysis/data_temp_`i'_`out'_`exp', replace)     ///
+>         per(10000)
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Estimated rates (per 10000) and lower/upper bounds of 95% confidence intervals
+(24188 records included in the analysis)
+
+  +----------------------------------------------------------------+
+  |            ldr_group     D        Y     Rate    Lower    Upper |
+  |----------------------------------------------------------------|
+  | No DS, no CP, no LDR   918   0.3837   2392.7   2242.8   2552.6 |
+  |       DS but not LDR   229   0.0925   2475.0   2174.3   2817.2 |
+  |           DS and LDR   156   0.0605   2580.1   2205.4   3018.5 |
+  |       CP but not LDR   284   0.1193   2380.4   2119.0   2674.0 |
+  |           CP and LDR   170   0.0715   2376.5   2044.8   2762.0 |
+  |----------------------------------------------------------------|
+  |  LD with no DS or CP   537   0.2480   2164.9   1989.3   2356.0 |
+  +----------------------------------------------------------------+
+
+
+.                 
+.                 
+. /*  Fit Cox models  */
+.                         
+. * Confounder only model
+. stcox i.`exp' age1 age2 age3 male i.ethnicity_5,        ///
+>         strata(stpcode) cluster(household_id) 
+
+         failure _d:  covidadmission2
+   analysis time _t:  stime_covidadmission2/365.25
+
+Iteration 0:   log pseudolikelihood = -15061.343
+Iteration 1:   log pseudolikelihood = -15054.108
+Iteration 2:   log pseudolikelihood = -15054.103
+Refining estimates:
+Iteration 0:   log pseudolikelihood = -15054.103
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects      =       24,188             Number of obs    =      24,188
+No. of failures      =        2,294
+Time at risk         =  9755.468857
+                                                Wald chi2(13)    =       14.69
+Log pseudolikelihood =   -15054.103             Prob > chi2      =      0.3272
+
+                       (Std. Err. adjusted for 1,187 clusters in household_id)
+------------------------------------------------------------------------------
+             |               Robust
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   ldr_group |
+DS but no..  |   1.037679   .0743582     0.52   0.606     .9017116     1.19415
+ DS and LDR  |   1.078496   .0955619     0.85   0.394     .9065594    1.283041
+CP but no..  |   .9929526   .0688586    -0.10   0.919     .8667623    1.137515
+ CP and LDR  |   .9972294   .0831748    -0.03   0.973     .8468371     1.17433
+LD with n..  |   .9051161   .0491975    -1.83   0.067     .8136494    1.006865
+             |
+        age1 |   1.030374   .0130666     2.36   0.018      1.00508    1.056305
+        age2 |   .9307577    .028201    -2.37   0.018     .8770939    .9877048
+        age3 |   1.189599   .0877375     2.35   0.019     1.029487    1.374611
+        male |   1.024828   .0435471     0.58   0.564     .9429351    1.113834
+             |
+ ethnicity_5 |
+      Mixed  |    1.02111   .0692542     0.31   0.758     .8940085     1.16628
+Asian or ..  |   1.019881   .0664884     0.30   0.763     .8975483    1.158888
+      Black  |   1.030561   .0666933     0.47   0.642     .9077953     1.16993
+      Other  |   .9378071   .0662466    -0.91   0.363     .8165536    1.077066
+------------------------------------------------------------------------------
+                                                         Stratified by stpcode
+
+. forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+  2.         capture qui di _b[`k'.`exp']
+  3.         if _rc==0 {
+  4.                 post `ldrresults' (`i') ("`out'") ("`exp'")             //
+> /
+>                         ("Confounders")                                      
+>                    ///
+>                         (`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+  5.         }
+  6. }
+
+. 
+. 
+. postclose `ldrresults'
+
+. 
+. use `ldrfile', clear
+
+. 
+. *************************
+. *  Tidy output for HRs  *
+. *************************
+. 
+. * Outcome
+. rename outcome out
+
+. gen outcome     = 1 if out=="coviddeath"
+(6 missing values generated)
+
+. replace outcome = 2 if out=="covidadmission"
+(6 real changes made)
+
+. replace outcome = 3 if out=="composite"
+(0 real changes made)
+
+. 
+. label define outcome    1 "COVID-19 death"              ///
+>                                                 2 "COVID-19 admission"  ///
+>                                                 3 "Composite"
+
+. label values outcome outcome
+
+. drop out
+
+. 
+. * Exposure
+. rename exposure exp
+
+. gen     exposure = 1 if exp=="ldr"
+(6 missing values generated)
+
+. replace exposure = 2 if exp=="ldr_cat"
+(0 real changes made)
+
+. replace exposure = 3 if exp=="ldr_carecat"
+(0 real changes made)
+
+. replace exposure = 4 if exp=="ds"
+(0 real changes made)
+
+. replace exposure = 5 if exp=="cp"
+(0 real changes made)
+
+. replace exposure = 6 if exp=="ldr_group"
+(6 real changes made)
+
+. 
+. label define exposure   1 "Learning disability register"        ///
+>                                                 2 "LDR Severe vs mild"       
+>                    ///
+>                                                 3 "LDR by residential care"  
+>                    ///
+>                                                 4 "Down's syndrome"          
+>                            ///
+>                                                 5 "Cerebral Palsy"           
+>                            ///
+>                                                 6 "Combined grouping"        
+>                    
+
+. label values exposure exposure                                          
+
+. drop exp
+
+. 
+. * Categories of exposure
+. gen category     = "No"                                         if expcat==0
+(5 missing values generated)
+
+. replace category = "Yes"                                        if inlist(exp
+> osure, 1, 4, 5) & expcat==1
+(0 real changes made)
+
+. 
+. replace category = "LDR, mild"                          if inlist(exposure, 2
+> ) & expcat==1
+(0 real changes made)
+
+. replace category = "LDR, profound"                      if inlist(exposure, 2
+> ) & expcat==2
+(0 real changes made)
+
+. 
+. replace category = "LDR, community"             if inlist(exposure, 3) & expc
+> at==1
+(0 real changes made)
+
+. replace category = "LDR, residential care"      if inlist(exposure, 3) & expc
+> at==2
+(0 real changes made)
+
+. 
+. replace category = "DS but not LDR"             if inlist(exposure, 6) & expc
+> at==1
+variable category was str2 now str14
+(1 real change made)
+
+. replace category = "DS and LDR"                         if inlist(exposure, 6
+> ) & expcat==2
+(1 real change made)
+
+. replace category = "CP but not LDR"             if inlist(exposure, 6) & expc
+> at==3
+(1 real change made)
+
+. replace category = "CP and LDR"                         if inlist(exposure, 6
+> ) & expcat==4
+(1 real change made)
+
+. replace category = "LDR with no DS or CP"       if inlist(exposure, 6) & expc
+> at==5
+variable category was str14 now str20
+(1 real change made)
+
+. 
+. * Model adjustment
+. gen     adjustment = 1 if model=="Confounders"
+
+. replace adjustment = 2 if model=="Confounders+IMD"
+(0 real changes made)
+
+. replace adjustment = 3 if model=="Confounders+Resid"
+(0 real changes made)
+
+. replace adjustment = 4 if model=="Confounders_Comorb"
+(0 real changes made)
+
+. label define adj        1 "Confounders"                         ///     
+>                                         2 "Confounders with IMD"        ///
+>                                         3 "Confounders with care"       ///
+>                                         4 "Confounders with comorbidities"   
+>    
+
+. label values adjustment adj
+
+. drop model
+
+. 
+. * Hazard ratio with 95% confidence interval
+. gen cl = exp(lnhr - invnorm(0.975)*sehr)
+
+. gen cu = exp(lnhr + invnorm(0.975)*sehr)
+
+. gen hr = exp(lnhr)
+
+. 
+. gen hr_ci =   string(round(hr, 0.01)) + " (" ///
+>                         + string(round(cl, 0.01)) + ", " ///
+>                         + string(round(cu, 0.01)) + ")"
+
+. replace hr_ci = "" if expcat==0
+(1 real change made)
+
+. drop cl cu hr lnhr sehr
+
+. 
+. * Put in wide format
+. reshape wide hr_ci, i(wave outcome exposure expcat) j(adjust)
+(note: j = 1)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                        6   ->       6
+Number of variables                   7   ->       6
+j variable (1 values)        adjustment   ->   (dropped)
+xij variables:
+                                  hr_ci   ->   hr_ci1
+-----------------------------------------------------------------------------
+
+. rename hr_ci1 hr_conf
+
+. 
+. order wave outcome exposure category hr*
+
+. sort wave outcome exposure expcat
+
+. 
+. * Save data
+. outsheet using "output/output_hrs_main_`i'_`out'_`exp'", replace
+(note: file output/output_hrs_main_2_covidadmission_ldr_group.out not found)
+
+. 
+. 
+. 
+. ***************************
+. *  Tidy output for rates  *
+. ***************************
+. 
+. use "analysis/data_temp_`i'_`out'_`exp'", clear
+(Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work)
+
+. gen out  = "`out'"
+
+. gen exp  = "`exp'" 
+
+. gen wave = `i'
+
+. 
+. * Outcome
+. gen outcome     = 1 if out=="coviddeath"
+(6 missing values generated)
+
+. replace outcome = 2 if out=="covidadmission"
+(6 real changes made)
+
+. replace outcome = 3 if out=="composite"
+(0 real changes made)
+
+. 
+. label define outcome    1 "COVID-19 death"              ///
+>                                                 2 "COVID-19 admission"  ///
+>                                                 3 "Composite"
+
+. label values outcome outcome
+
+. drop out
+
+. 
+. * Exposure
+. gen     exposure = 1 if exp=="ldr"
+(6 missing values generated)
+
+. replace exposure = 2 if exp=="ldr_cat"
+(0 real changes made)
+
+. replace exposure = 3 if exp=="ldr_carecat"
+(0 real changes made)
+
+. replace exposure = 4 if exp=="ds"
+(0 real changes made)
+
+. replace exposure = 5 if exp=="cp"
+(0 real changes made)
+
+. replace exposure = 6 if exp=="ldr_group"
+(6 real changes made)
+
+. 
+. label define exposure   1 "Learning disability register"        ///
+>                                                 2 "LDR Severe vs mild"       
+>                    ///
+>                                                 3 "LDR by residential care"  
+>                    ///
+>                                                 4 "Down's syndrome"          
+>                            ///
+>                                                 5 "Cerebral Palsy"           
+>                            ///
+>                                                 6 "Combined grouping"        
+>                    
+
+. label values exposure exposure                                          
+
+. drop exp
+
+. 
+. * Categories of exposure
+. rename ldr_group expcat
+
+. gen category     = "No"                                         if expcat==0
+(5 missing values generated)
+
+. replace category = "Yes"                                        if inlist(exp
+> osure, 1, 4, 5) & expcat==1
+(0 real changes made)
+
+. 
+. replace category = "LDR, mild"                          if inlist(exposure, 2
+> ) & expcat==1
+(0 real changes made)
+
+. replace category = "LDR, profound"                      if inlist(exposure, 2
+> ) & expcat==2
+(0 real changes made)
+
+. 
+. replace category = "LDR, community"             if inlist(exposure, 3) & expc
+> at==1
+(0 real changes made)
+
+. replace category = "LDR, residential care"      if inlist(exposure, 3) & expc
+> at==2
+(0 real changes made)
+
+. 
+. replace category = "DS but not LDR"             if inlist(exposure, 6) & expc
+> at==1
+variable category was str2 now str14
+(1 real change made)
+
+. replace category = "DS and LDR"                         if inlist(exposure, 6
+> ) & expcat==2
+(1 real change made)
+
+. replace category = "CP but not LDR"             if inlist(exposure, 6) & expc
+> at==3
+(1 real change made)
+
+. replace category = "CP and LDR"                         if inlist(exposure, 6
+> ) & expcat==4
+(1 real change made)
+
+. replace category = "LDR with no DS or CP"       if inlist(exposure, 6) & expc
+> at==5
+variable category was str14 now str20
+(1 real change made)
+
+. 
+. * Rename remaining variables
+. rename _D events
+
+. rename _Y pyr_10000
+
+. rename _Rate rate_per_10000
+
+. rename _Lower rate_cl
+
+. rename _Upper rate_cu
+
+. 
+. order wave outcome exposure category events pyr rate*
+
+. sort wave outcome exposure expcat
+
+. 
+. 
+. * Save data
+. outsheet using "output/output_rates_`i'_`out'_`exp'", replace
+(note: file output/output_rates_2_covidadmission_ldr_group.out not found)
+
+. 
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /workspace/logs/AL004_2_cox_regression.log
+  log type:  text
+ closed on:  17 Feb 2021, 13:33:02
+-------------------------------------------------------------------------------

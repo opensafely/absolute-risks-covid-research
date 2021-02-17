@@ -165,7 +165,7 @@ study = StudyDefinition(
         round_to_nearest=100,
         return_expectations={
             "rate": "universal",
-            "category": {"ratios": {"100": 0.1, "200": 0.2, "300": 0.7}},
+            "category": {"ratios": {"100": 0.2, "200": 0.2, "300": 0.2, "400": 0.2, "500": 0.2}},
         },
     ),
     ### HOUSEHOLD INFORMATION
@@ -400,12 +400,18 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     respiratory=patients.with_these_clinical_events(
         other_respiratory_codes,
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # CARDIAC - CARDIAC DISEASE, DIABETES
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/7
@@ -414,6 +420,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # ATRIAL FIBRILLATION
     af=patients.with_these_clinical_events(
@@ -421,6 +430,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
 
     # Deep vein thrombosis / pulmonary embolism
@@ -429,6 +441,9 @@ study = StudyDefinition(
             return_first_date_in_period=True,
             on_or_before="index_date - 1 day",
             include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # PAD surgery
     pad_surg=patients.with_these_clinical_events(
@@ -436,6 +451,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Amputation (limb)
     amputate=patients.with_these_clinical_events(
@@ -443,6 +461,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
 
     # Diabetes
@@ -452,6 +473,9 @@ study = StudyDefinition(
         on_or_before="index_date - 1 day",
         return_first_date_in_period=True,
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Hypertension
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/23
@@ -460,6 +484,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # STROKE, DEMENTIA, OTHER NEUROLOGICAL
     stroke=patients.with_these_clinical_events(
@@ -467,12 +494,18 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     dementia=patients.with_these_clinical_events(
         dementia,
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/14
     neuro=patients.with_these_clinical_events(
@@ -480,12 +513,18 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     tia=patients.with_these_clinical_events(
             tia,
             return_first_date_in_period=True,
             on_or_before="index_date - 1 day",
             include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # CANCER
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/32
@@ -494,18 +533,27 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     haem_cancer=patients.with_these_clinical_events(
         haem_cancer_codes,
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     other_cancer=patients.with_these_clinical_events(
         other_cancer_codes,
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     #  KIDNEY TRANSPLANT AND DIALYSIS (most recent)
     #  https://github.com/ebmdatalab/tpp-sql-notebook/issues/31
@@ -514,12 +562,18 @@ study = StudyDefinition(
         return_last_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     dialysis=patients.with_these_clinical_events(
         dialysis_codes,
         return_last_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # LIVER DISEASE, DIALYSIS AND TRANSPLANT
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/12
@@ -528,12 +582,18 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     transplant_notkidney=patients.with_these_clinical_events(
         transplant_notkidney_codes,
         return_first_date_in_period=True,
         on_or_before="2020-02-29",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # SPLEEN PROBLEMS, HIV, IMMUNODEFICIENCY
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/13
@@ -542,24 +602,36 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     sickle_cell=patients.with_these_clinical_events(
         sickle_cell_codes,
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     hiv=patients.with_these_clinical_events(
         hiv_codes,
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     perm_immuno=patients.with_these_clinical_events(
         permanent_immune_codes,
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Aplastic anaemia and temporary immunosuppression
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/36
@@ -568,12 +640,18 @@ study = StudyDefinition(
         return_last_date_in_period=True,
         between=["index_date - 1 year", "index_date"],
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     aplastic_anaemia=patients.with_these_clinical_events(
         aplastic_codes,
         return_last_date_in_period=True,
         between=["index_date - 1 year", "index_date"],
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
 
     # # https://github.com/ebmdatalab/tpp-sql-notebook/issues/49
@@ -582,6 +660,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Inflammatory bowel disease
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/50
@@ -590,6 +671,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Severe Mental Illness
     smi=patients.with_these_clinical_events(
@@ -597,6 +681,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Fragility fracture in two years
     fracture=patients.with_these_clinical_events(
@@ -604,6 +691,9 @@ study = StudyDefinition(
         return_last_date_in_period=True,
         between=["index_date - 2 years", "index_date"],
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
 
 
@@ -625,6 +715,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Down's Syndrome
     ds=patients.with_these_clinical_events(
@@ -632,6 +725,9 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
     # Cerebral Palsy
     cp=patients.with_these_clinical_events(
@@ -639,5 +735,8 @@ study = StudyDefinition(
         return_first_date_in_period=True,
         on_or_before="index_date - 1 day",
         include_month=True,
+        return_expectations={
+            "incidence": 0.2,
+        },
     ),
 )
