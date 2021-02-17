@@ -180,8 +180,9 @@ keep age age? _rcs1- _d_rcs5  _st _d _t _t0
 * Sex
 gen male = `j'
 
-* Set time to 90 days (for the risk prediction period)
-gen time90 = 90
+
+* Set time to 80 days (for the risk prediction period)
+gen time80 = 80
 
 
 
@@ -238,7 +239,7 @@ foreach var of varlist cons 							///
 	replace `var' = 1
 	
 	* Predict under that comorbidity (age and sex left at original values)
-	predict pred_`var', surv timevar(time90) ci
+	predict pred_`var', surv timevar(time80) ci
 	
 	* Change to risk, not survival
 	gen risk_`var' = 1 - pred_`var'
@@ -314,16 +315,16 @@ twoway 	(line risk_respiratory 			age, lwidth(vthin) lcolor(eltblue)) 						///
 		(line risk_cancerHaem_4			age, lwidth(vthin) lcolor(yellow) 	lpattern(dash))			///
 		(line risk_spleen 				age, lwidth(vthin) lcolor(orange_red)  lpattern(dot))		///
 		(line risk_autoimmune 			age, lwidth(vthin) lcolor(magenta)) 	  					///
-		(line risk_ibd 					age, lwidth(vthin) lcolor(magenta)) 	  					///
+		(line risk_ibd 					age, lwidth(vthin) lcolor(magenta) lpattern(dash_dot))		///
 		(line risk_immunosuppression	age, lwidth(vthin) lcolor(red) lpattern(dash))				///
-		(line risk_smi					age, lwidth(vthin) lcolor(red) lpattern(dash))				///
-		(line risk_ldr					age, lwidth(vthin) lcolor(red) lpattern(dash))				///
-		(line risk_ds					age, lwidth(vthin) lcolor(red) lpattern(dash))				///
+		(line risk_smi					age, lwidth(vthin) lcolor(red) lpattern(dash_dot))			///
+		(line risk_ldr					age, lwidth(vthin) lcolor(red) lpattern(dot))				///
+		(line risk_ds					age, lwidth(vthin) lcolor(red) lpattern(dot))				///
 		(line risk_cons 				age, lwidth(vthin) lcolor(black)) 	  						///
-		(line risk_age_50 				age, lpattern(dot) lcolor(black))							///
-		, 	xlab(20 (20) 50) xmtick(20 (5) 50)														/// 
+		(line risk_age_50 				age, lcolor(black))											///
+		, 	xlab(20 (10) 50) xmtick(20 (5) 50)														/// 
 		subtitle("`male`j'', `wave`i''")											 				///
-		legend(order(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31) ///
+		legend(order(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32) ///
 		size(tiny) col(4)					///
 		label(1 "Respiratory") 				///
 		label(2 "CF") 						///
@@ -351,11 +352,12 @@ twoway 	(line risk_respiratory 			age, lwidth(vthin) lcolor(eltblue)) 						///
 		label(24 "Canc. Haem (5+yr)") 		///
 		label(25 "Spleen") 					///
 		label(26 "RA/SLE/psoriasis") 		///
-		label(27 "Immunosuppression") 		///
-		label(28 "SMI") 	  				///
-		label(29 "Learning disability") 	///
-		label(30 "Down's Syndrome") 	  	///
-		label(31 "No comorbidity") 	  		///
+		label(27 "IBD") 					///
+		label(28 "Immunosuppression") 		///
+		label(29 "SMI") 	  				///
+		label(30 "Learning disability") 	///
+		label(31 "Down's Syndrome") 	  	///
+		label(32 "No comorbidity") 	  		///
 		colfirst) 
 	graph export output/ar_wave`i'_male`j'_`out'.svg, as(svg) replace width(1600)
 

@@ -102,6 +102,8 @@ use "analysis/data_ldanalysis_cohort1.dta", clear
 * Complete case for ethnicity  
 drop if ethnicity_5>=.
 
+* Keep adults only
+keep if child==0
 
 
 /* Table: Demographic variables  */
@@ -167,6 +169,8 @@ tabulatevariable, variable(tia) start(1) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
 tabulatevariable, variable(dementia) start(1) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
+tabulatevariable, variable(neuro) start(1) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
 tabulatevariable, variable(kidneyfn) start(2) end(3) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
 tabulatevariable, variable(spleen) start(1) end(1) file(tablecontent) binexp(ldr)
@@ -175,7 +179,7 @@ tabulatevariable, variable(transplant) start(1) end(1) file(tablecontent) binexp
 file write tablecontent _n 
 tabulatevariable, variable(immunosuppression) start(1) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
-tabulatevariable, variable(cancerHaem) start(2) end(3) file(tablecontent) binexp(ldr)
+tabulatevariable, variable(cancerHaem) start(2) end(4) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
 tabulatevariable, variable(cancerExhaem1yr) start(1) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
@@ -186,8 +190,55 @@ file write tablecontent _n
 
 tabulatevariable, variable(smi) start(1) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
-tabulatevariable, variable(neuro) start(1) end(1) file(tablecontent) binexp(ldr)
+
+
+
+/*  Children  */
+
+
+use "analysis/data_ldanalysis_cohort1.dta", clear 
+
+* Complete case for ethnicity  
+drop if ethnicity_5>=.
+
+* Keep children (<16) only
+keep if child==1
+
+
+/* Table: Demographic variables  */
+
+gen byte cons=1
+tabulatevariable, variable(cons) start(1) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
+
+tabulatevariable, variable(male) start(0) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
+tabulatevariable, variable(ethnicity_5) start(1) end(5) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
+tabulatevariable, variable(region_7) start(1) end(7) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
+tabulatevariable, variable(imd) start(1) end(5) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
+
+
+/* Table: Learning disability  */
+
+tabulatevariable, variable(ld_profound) start(0) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
+tabulatevariable, variable(resid_care_ldr) start(0) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
+tabulatevariable, variable(ds) start(0) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
+tabulatevariable, variable(cp) start(0) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
+
 
 	
 file close tablecontent
