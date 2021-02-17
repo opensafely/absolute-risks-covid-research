@@ -1,6 +1,6 @@
 ********************************************************************************
 *
-*	Do-file:		AAR001_4_cox_regression.do
+*	Do-file:		AAR001_cox_regression.do
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
@@ -10,10 +10,13 @@
 *
 *	Data created:	None
 *
-*	Other output:	Log file:  logs/AAR001_4_cox_regression.log
+*	Other output:	Log file:  logs/AAR001_cox_regression_wave`i'_`out'.log
 *					Estimates:	output/
-*									hr_coviddeath_wave2_male0.txt
-*									hr_coviddeath_wave2_male1.txt
+*									hr_wave`i'_male0_`out'.txt
+*									hr_wave`i'_male1_`out'.txt
+*
+*									i=wave (1/2), 
+*									out=coviddeath or covidadmission							
 *
 ********************************************************************************
 *
@@ -23,24 +26,46 @@
 ********************************************************************************
 
 
-* Set wave (1 or 2), outcome (coviddeath, covidadmission or composite)
-local i = 2
-local out = "coviddeath"
 
 
-clear all
-set more off
+**********************
+*  Input parameters  *
+**********************
+
+local wave 		`1'
+local outcome  	`2'
+
+local i = `wave'
+local out = "`outcome'"
+
+
+noi di "Wave:" `i'
+noi di "Outcome: `out'"
+
+
+
+**************************
+*  Adopath and log file  *
+**************************
+
+adopath ++ `c(pwd)'/analysis/ado
 
 * Open a log file
 cap log close
-log using "logs/AAR001_4_cox_regression", replace t
+log using "logs/AAR001_cox_regression_wave`i'_`out'", replace t
 
 
 
-* Open dataset (complete case ethnicity)
+
+***************
+*  Open data  *
+***************
+
+* Open dataset
 use "analysis/data_aranalysis_cohort`i'.dta", clear 
-drop if ethnicity_5>=.
 
+* Complete case ethnicity
+drop if ethnicity_5>=.
 
 * Keep under 50s only
 drop if age>=50
@@ -56,7 +81,7 @@ stset stime_`out'`i', fail(`out'`i') scale(365.25)
 /*  Fit Cox models  */
 			
 forvalues j = 0 (1) 1 {
-	capture erase coefs_cox_3_`j'.ster
+	capture erase coefs_cox_1_`j'.ster
 
 	stcox 		age1 age2 age3					///
 				ib2.obesecat					///
@@ -92,7 +117,7 @@ forvalues j = 0 (1) 1 {
 				i.fracture						///
 				if male==`j'					///
 				, strata(stp)
-	estimates save coefs_cox_4_`j', replace
+	estimates save coefs_cox_1_`j', replace
 }
 
 
@@ -107,8 +132,8 @@ qui do "analysis/000_HR_table.do"
 
 forvalues j = 0 (1) 1 {
 	* Cox model
-	crtablehr, 	estimates(coefs_cox_4_`j')		///
-				outputfile(output/hr_`out'_wave`i'_male`j'.txt)
+	crtablehr, 	estimates(coefs_cox_1_`j')		///
+				outputfile(output/hr_wave`i'_male`j'_`out'.txt)
 }
 
 log close
