@@ -345,6 +345,9 @@ forvalues i = 1 (1) 2 {
 	*  Exposures: learning disability  *
 	************************************
 
+	* People coded as having a profound learning disability
+	* but not on the LDR:  add to LDR group (TPP-specific code mapping issue)
+	noi recode ldr 0=1 if ld_profound==1 & ldr==0
 	
 	* Split LDR into moderate-mild and severe-profound
 	noi tab ldr ld_profound, m
