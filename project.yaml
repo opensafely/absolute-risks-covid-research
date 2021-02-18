@@ -66,6 +66,15 @@ actions:
       moderately_sensitive:
         log: logs/AAR001_describe_cohort.log
 
+  tabulate_cohort_ar:
+    run: stata-mp:latest analysis/AR001b_tabulate_cohort_descriptives.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AR001b_tabulate_cohort_descriptives.log
+        model: output/basetable1_ar.txt
+
+
   cox_regression_child:
     run: stata-mp:latest analysis/AL005_cox_regression_child.do
     needs: [create_analysis]
