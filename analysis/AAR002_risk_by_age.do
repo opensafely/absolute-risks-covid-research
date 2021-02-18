@@ -69,7 +69,7 @@ rename ethnicity_5 ethnicity
 rename region_7 region
 
 * Keep under 50s only
-drop if age>=50
+drop if age>50
 
 
 /*  Declare data to be survival  */
@@ -283,7 +283,7 @@ local male1 = "Male"
 
 
 * Risk 
-qui summ risk_cons if age==49
+qui summ risk_cons if age==50
 gen risk_age_50 = r(mean) 
 
 
