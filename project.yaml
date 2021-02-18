@@ -68,7 +68,7 @@ actions:
 
   tabulate_cohort_ar:
     run: stata-mp:latest analysis/AR001b_tabulate_cohort_descriptives.do
-    needs: [create_analysis]
+    needs: [create_analysis_ar]
     outputs:
       moderately_sensitive:
         log: logs/AR001b_tabulate_cohort_descriptives.log
