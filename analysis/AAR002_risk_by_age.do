@@ -149,15 +149,15 @@ timer list 1
 *   Survival predictions from Royston-Parmar model  *
 *****************************************************
 
-* Predict absolute risk at 90 days
-gen time90 = 90
-predict surv90_royp, surv timevar(time90)
-gen risk90_royp = 1-surv90_royp
-drop surv90_royp
+* Predict absolute risk at 80 days
+gen time80 = 80
+predict surv80_royp, surv timevar(time80)
+gen risk80_royp = 1-surv80_royp
+drop surv80_royp
 
 /*  Quantiles of predicted day risk   */
 
-centile risk90_royp, c(50 70 80 90)
+centile risk80_royp, c(50 70 80 90)
 
 global p50 = r(c_1) 
 global p70 = r(c_2) 
@@ -218,7 +218,7 @@ replace region_3 = 1
 
 
 
-/*  Predict survival at 90 days under each comorbidity separately   */
+/*  Predict survival at 80 days under each comorbidity separately   */
 
 * Set age and sex to baseline values
 gen cons = 0
