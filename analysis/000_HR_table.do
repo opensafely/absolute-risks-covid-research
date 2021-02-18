@@ -266,13 +266,12 @@ program define crtablehr
 	* Loop over variables (terms) in model
 	tokenize $vars
 	while "`1'"!= "" {
-		if !regexm("`1'", "o.") {
+		if !regexm("`1'", "o\.") {
 				term_to_text, term("`1'")
 				local termtext = r(term)
 			
-			if regexm("`1'", "b.") {
+			if regexm("`1'", "b\.") {
 				file write tablecontents ("`termtext' (Ref)")  _tab %4.2f (1)		
-			
 			}
 			else {
 				* Print HRs and 95% CIs
