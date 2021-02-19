@@ -74,8 +74,7 @@ drop if age>50
 
 /*  Declare data to be survival  */
 
-stset stime_`out'`i'_nocensor, fail(`out'`i'_nocensor) ///
-	scale(365.25) id(patient_id)
+stset stime_`out'`i'_nocensor, fail(`out'`i'_nocensor) id(patient_id)
 
 
 
