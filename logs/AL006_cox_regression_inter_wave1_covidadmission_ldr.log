@@ -214,3 +214,37 @@ Asian or Asian British  |   .9740147   .0549276    -0.47   0.641     .8720949   
 -----------------------------------------------------------------------------------------
                                                          Stratified by stpcode
 
+. do "C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\analysis\AL003_cumulative_incidenc
+> e.do"
+
+. ********************************************************************************
+. *
+. *       Do-file:                AL003_cumulative_incidence.do
+. *
+. *       Programmed by:  Fizz & Krishnan & John
+. *
+. *       Data used:              analysis/
+. *                                                       data_ldanalysis_cohort1.dta
+. *
+. *       Data created:   None
+. *
+. *       Other output:   Log file:  logs/AL003_cumulative_incidence.log
+. *                                       Graph:  output/
+. *                                                               cumincidence_coviddeath.svg
+. *                                                               cumincidence_composite.svg
+. *
+. ********************************************************************************
+. *
+. *       Purpose:                This do-file graphs the cumulative incidence of learning
+. *                                       disability for adults.
+. *  
+. ********************************************************************************
+. 
+. 
+. clear all
+
+. set more off
+
+. 
+. * Open a log file
+. cap log close

@@ -36,8 +36,10 @@ use "analysis/data_ldanalysis_cohort1", clear
 drop if ethnicity_5>=.
 keep if child==0
 
+gen agesq = age*age
+
 * Cycle over outcomes: mortality, composite (hospitalisation or mortality) 
-foreach out in coviddeath composite  {
+foreach out in coviddeath composite {
 
 	/*  Declare data to be survival  */
 
@@ -45,7 +47,7 @@ foreach out in coviddeath composite  {
 	
 	* Fit flexible survival model, adjusting for sex age and ethnicity
 	xi i.ethnicity_5 i.male 
-	stpm2 ldr age1 age2 age3 _I*, df(2) scale(hazard) eform 
+	stpm2 ldr age agesq  _I*, df(2) scale(hazard) eform 
 
 	summ _t 
 	local tmax=r(max)
