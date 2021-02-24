@@ -28,7 +28,7 @@ log using "logs/AL001_describe_cohort", replace text
 
 
 * Add ado files
-adopath++ `c(pwd)'\analysis
+adopath++ `c(pwd)'\analysis\ado
 
 
 * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
@@ -111,7 +111,32 @@ forvalues i = 1 (1) 2 {
 	sum household_size, d
 	safetab resid_care_old resid_care_ldr
 	
+	* Temporary data checks
+	gen tempold = (age>=65)
+	replace tempold = . if age>=.
+	gen templdr  = (ldr == 1)
+	
+	bysort household_id: egen num_old = sum(tempold)
+	bysort household_id: egen num_ldr = sum(templdr)
+	
+	noi tab num_old
+	noi tab num_ldr
+	
+	recode num_old 0/4=0 5/max=1, gen(resid_care_old2)
+	recode num_ldr 0/4=0 5/max=1, gen(resid_care_ldr2)
 
+	tab resid_care_old2
+	tab resid_care_ldr2
+	
+	tab resid_care_old2 resid_care_old
+	tab resid_care_ldr2 resid_care_ldr
+ 	
+	tab resid_care_ldr2 ldr 
+	tab resid_care_ldr2 ldr_cat
+	tab resid_care_ldr2 ldr_carecat
+	
+	bysort resid_care_old: summ age
+	
 	
 	
 	*******************************************
