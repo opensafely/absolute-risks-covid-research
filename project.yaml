@@ -74,15 +74,6 @@ actions:
         log: logs/AR001b_tabulate_cohort_descriptives.log
         model: output/basetable1_ar.txt
 
-
-  cox_regression_child:
-    run: stata-mp:latest analysis/AL005_cox_regression_child.do
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL005_cox_regression_child.log
-        hrs: output/ldcox_covidadmission.out
-
   cumulative_incidence:
     run: stata-mp:latest analysis/AL003_cumulative_incidence.do
     needs: [create_analysis]
@@ -285,6 +276,14 @@ actions:
         log: logs/AL004_cox_regression_wave2_coviddeath_ldr_group.log
         hrs: output/ldcox_wave2_coviddeath_ldr_group.out
 
+  cox_regression_child:
+    run: stata-mp:latest analysis/AL005_cox_regression_child.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL005_cox_regression_child.log
+        hrs: output/ldcox_covidadmission.out
+
   cox_ldinta1:
     run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 covidadmission ldr
     needs: [create_analysis]
@@ -380,7 +379,6 @@ actions:
       moderately_sensitive:
         log: logs/AL006_cox_regression_inter_wave2_covidadmission_ldr_group.log
         hrs: output/ldcox_inter_wave2_covidadmission_ldr_group.out
-
 
 
   cox_ldintd1:
@@ -480,102 +478,101 @@ actions:
         hrs: output/ldcox_inter_wave2_coviddeath_ldr_group.out
 
 
+  cox_ldresta1:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr.log
+        hrs: output/ldcox_restrict_wave1_covidadmission_ldr.out
 
-cox_ldresta1:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr.log
-      hrs: output/ldcox_restrict_wave1_covidadmission_ldr.out
+  cox_ldresta2:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr.log
+        hrs: output/ldcox_restrict_wave2_covidadmission_ldr.out
 
-cox_ldresta2:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr.log
-      hrs: output/ldcox_restrict_wave2_covidadmission_ldr.out
+  cox_ldresta3:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_cat
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_cat.log
+        hrs: output/ldcox_restrict_wave1_covidadmission_ldr_cat.out
 
-cox_ldresta3:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_cat
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_cat.log
-      hrs: output/ldcox_restrict_wave1_covidadmission_ldr_cat.out
+  cox_ldresta4:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_cat
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_cat.log
+        hrs: output/ldcox_restrict_wave2_covidadmission_ldr_cat.out
 
-cox_ldresta4:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_cat
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_cat.log
-      hrs: output/ldcox_restrict_wave2_covidadmission_ldr_cat.out
+  cox_ldresta5:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_carecat
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_carecat.log
+        hrs: output/ldcox_restrict_wave1_covidadmission_ldr_carecat.out
 
-cox_ldresta5:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_carecat
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_carecat.log
-      hrs: output/ldcox_restrict_wave1_covidadmission_ldr_carecat.out
+  cox_ldresta6:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_carecat
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_carecat.log
+        hrs: output/ldcox_restrict_wave2_covidadmission_ldr_carecat.out
 
-cox_ldresta6:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_carecat
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_carecat.log
-      hrs: output/ldcox_restrict_wave2_covidadmission_ldr_carecat.out
+  cox_ldresta7:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ds
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ds.log
+        hrs: output/ldcox_restrict_wave1_covidadmission_ds.out
 
-cox_ldresta7:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ds
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ds.log
-      hrs: output/ldcox_restrict_wave1_covidadmission_ds.out
+  cox_ldresta8:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ds
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ds.log
+        hrs: output/ldcox_restrict_wave2_covidadmission_ds.out
 
-cox_ldresta8:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ds
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ds.log
-      hrs: output/ldcox_restrict_wave2_covidadmission_ds.out
+  cox_ldresta9:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission cp
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_cp.log
+        hrs: output/ldcox_restrict_wave1_covidadmission_cp.out
 
-cox_ldresta9:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission cp
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave1_covidadmission_cp.log
-      hrs: output/ldcox_restrict_wave1_covidadmission_cp.out
+  cox_ldresta10:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission cp
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_cp.log
+        hrs: output/ldcox_restrict_wave2_covidadmission_cp.out
 
-cox_ldresta10:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission cp
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave2_covidadmission_cp.log
-      hrs: output/ldcox_restrict_wave2_covidadmission_cp.out
+  cox_ldresta11:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_group
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_group.log
+        hrs: output/ldcox_restrict_wave1_covidadmission_ldr_group.out
 
-cox_ldresta11:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_group
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_group.log
-      hrs: output/ldcox_restrict_wave1_covidadmission_ldr_group.out
-
-cox_ldresta12:
-  run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_group
-  needs: [create_analysis]
-  outputs:
-    moderately_sensitive:
-      log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_group.log
-      hrs: output/ldcox_restrict_wave2_covidadmission_ldr_group.out
+  cox_ldresta12:
+    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_group
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_group.log
+        hrs: output/ldcox_restrict_wave2_covidadmission_ldr_group.out
 
 
   cox_ldnoncovid1:
