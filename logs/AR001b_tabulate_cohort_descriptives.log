@@ -1,27 +1,26 @@
----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/AR001b_tabulate_cohort
-> _descriptives.log
+       log:  /workspace/logs/AR001b_tabulate_cohort_descriptives.log
   log type:  text
- opened on:  18 Feb 2021, 14:07:22
+ opened on:  25 Feb 2021, 18:15:00
 
 . 
 . * Add ado files
 . adopath++ `c(pwd)'\analysis
-  [1]              "C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\analysis"
-  [2]              "C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research/analysis/ado"
-  [3]  (BASE)      "C:\Program Files\Stata16\ado\base/"
-  [4]  (SITE)      "C:\Program Files\Stata16\ado\site/"
-  [5]              "."
-  [6]  (PERSONAL)  "C:\Users\emsuewil\ado\personal/"
-  [7]  (PLUS)      "C:\Users\emsuewil\ado\plus/"
-  [8]  (OLDPLACE)  "c:\ado/"
+  [1]              "/workspace\analysis"
+  [2]  (BASE)      "/usr/local/stata/ado/base/"
+  [3]  (SITE)      "/usr/local/ado/"
+  [4]              "."
+  [5]  (PERSONAL)  "~/ado/personal/"
+  [6]  (PLUS)      "~/ado/plus/"
+  [7]  (OLDPLACE)  "~/ado/"
 
 . 
 . 
 . *************************************************
 . *   Program: generaterow                                                *
-. *                                                                                               *
+. *                                                                            
+>                    *
 . *       Generic code to output one row of table         *
 . *************************************************
 . 
@@ -34,13 +33,15 @@
 .         safecount if `binexp'==1
   3.         local expdenom = r(N)
   4.         safecount if `variable' `condition' & `binexp'==1
-  5.         file write `file' ("`variable'") _tab ("`condition'") _tab (r(N)) (" (") %2.0f (100*(r(N))/`expdenom') (")") _tab
+  5.         file write `file' ("`variable'") _tab ("`condition'") _tab (r(N)) 
+> (" (") %2.0f (100*(r(N))/`expdenom') (")") _tab
   6. 
 .         * Counts among unexposed
 .         safecount if `binexp'==0
   7.         local unexpdenom = r(N)
   8.         safecount if `variable' `condition' & `binexp'==0
-  9.         file write `file' (r(N)) (" (") %2.0f (100*(r(N))/`unexpdenom') (")") _n
+  9.         file write `file' (r(N)) (" (") %2.0f (100*(r(N))/`unexpdenom') ("
+> )") _n
  10. 
 . end
 
@@ -50,7 +51,8 @@
 . 
 . *************************************************
 . *   Program: tabulatevariable                                   *
-. *                                                                                               *
+. *                                                                            
+>                    *
 . *       Generic code to output one section                      *
 . *   (variable) within table                                             *
 . *************************************************
@@ -112,7 +114,8 @@
 . 
 . gen byte cons=1
 
-. tabulatevariable, variable(cons) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(cons) start(1) end(1) file(tablecontent) binexp(co
+> viddeath2_nocensor)
   513
   513
   12,183
@@ -121,7 +124,8 @@
 . file write tablecontent _n 
 
 . 
-. tabulatevariable, variable(agegroup) start(1) end(7) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(agegroup) start(1) end(7) file(tablecontent) binex
+> p(coviddeath2_nocensor)
   513
   0
   12,183
@@ -154,7 +158,8 @@
 . file write tablecontent _n 
 
 . 
-. tabulatevariable, variable(male) start(0) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(male) start(0) end(1) file(tablecontent) binexp(co
+> viddeath2_nocensor)
   513
   271
   12,183
@@ -167,7 +172,8 @@
 . file write tablecontent _n 
 
 . 
-. tabulatevariable, variable(ethnicity_5) start(1) end(5) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(ethnicity_5) start(1) end(5) file(tablecontent) bi
+> nexp(coviddeath2_nocensor)
   513
   109
   12,183
@@ -192,7 +198,8 @@
 . file write tablecontent _n 
 
 . 
-. tabulatevariable, variable(region_7) start(1) end(7) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(region_7) start(1) end(7) file(tablecontent) binex
+> p(coviddeath2_nocensor)
   513
   48
   12,183
@@ -225,7 +232,8 @@
 . file write tablecontent _n 
 
 . 
-. tabulatevariable, variable(imd) start(1) end(5) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(imd) start(1) end(5) file(tablecontent) binexp(cov
+> iddeath2_nocensor)
   513
   207
   12,183
@@ -250,7 +258,8 @@
 . file write tablecontent _n 
 
 . 
-. tabulatevariable, variable(obesecat) start(1) end(5) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(obesecat) start(1) end(5) file(tablecontent) binex
+> p(coviddeath2_nocensor)
   513
   22
   12,183
@@ -275,7 +284,8 @@
 . file write tablecontent _n 
 
 . 
-. tabulatevariable, variable(smoke_nomiss) start(1) end(3) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(smoke_nomiss) start(1) end(3) file(tablecontent) b
+> inexp(coviddeath2_nocensor)
   513
   436
   12,183
@@ -296,7 +306,8 @@
 . 
 . /* Table: Comorbidities  */
 . 
-. tabulatevariable, variable(asthmacat) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(asthmacat) start(1) end(1) file(tablecontent) bine
+> xp(coviddeath2_nocensor)
   513
   84
   12,183
@@ -304,7 +315,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(cf) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(cf) start(1) end(1) file(tablecontent) binexp(covi
+> ddeath2_nocensor)
   513
   114
   12,183
@@ -312,7 +324,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(respiratory) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(respiratory) start(1) end(1) file(tablecontent) bi
+> nexp(coviddeath2_nocensor)
   513
   92
   12,183
@@ -320,7 +333,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(cardiac) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(cardiac) start(1) end(1) file(tablecontent) binexp
+> (coviddeath2_nocensor)
   513
   94
   12,183
@@ -328,7 +342,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(af) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(af) start(1) end(1) file(tablecontent) binexp(covi
+> ddeath2_nocensor)
   513
   87
   12,183
@@ -336,7 +351,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(dvt_pe) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(dvt_pe) start(1) end(1) file(tablecontent) binexp(
+> coviddeath2_nocensor)
   513
   107
   12,183
@@ -344,7 +360,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(pad) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(pad) start(1) end(1) file(tablecontent) binexp(cov
+> iddeath2_nocensor)
   513
   182
   12,183
@@ -352,7 +369,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(diabcat) start(2) end(4) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(diabcat) start(2) end(4) file(tablecontent) binexp
+> (coviddeath2_nocensor)
   513
   98
   12,183
@@ -369,7 +387,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(liver) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(liver) start(1) end(1) file(tablecontent) binexp(c
+> oviddeath2_nocensor)
   513
   97
   12,183
@@ -377,7 +396,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(stroke) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(stroke) start(1) end(1) file(tablecontent) binexp(
+> coviddeath2_nocensor)
   513
   86
   12,183
@@ -385,7 +405,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(tia) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(tia) start(1) end(1) file(tablecontent) binexp(cov
+> iddeath2_nocensor)
   513
   95
   12,183
@@ -393,7 +414,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(dementia) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(dementia) start(1) end(1) file(tablecontent) binex
+> p(coviddeath2_nocensor)
   513
   107
   12,183
@@ -401,7 +423,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(neuro) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(neuro) start(1) end(1) file(tablecontent) binexp(c
+> oviddeath2_nocensor)
   513
   86
   12,183
@@ -409,7 +432,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(kidneyfn) start(2) end(3) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(kidneyfn) start(2) end(3) file(tablecontent) binex
+> p(coviddeath2_nocensor)
   513
 
 ** COUNT <=5 **
@@ -422,7 +446,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(spleen) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(spleen) start(1) end(1) file(tablecontent) binexp(
+> coviddeath2_nocensor)
   513
   180
   12,183
@@ -430,7 +455,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(transplant) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(transplant) start(1) end(1) file(tablecontent) bin
+> exp(coviddeath2_nocensor)
   513
   177
   12,183
@@ -438,7 +464,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(immunosuppression) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(immunosuppression) start(1) end(1) file(tableconte
+> nt) binexp(coviddeath2_nocensor)
   513
   89
   12,183
@@ -446,7 +473,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(cancerHaem) start(2) end(4) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(cancerHaem) start(2) end(4) file(tablecontent) bin
+> exp(coviddeath2_nocensor)
   513
 
 ** COUNT <=5 **
@@ -463,7 +491,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(cancerExhaem) start(2) end(4) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(cancerExhaem) start(2) end(4) file(tablecontent) b
+> inexp(coviddeath2_nocensor)
   513
 
 ** COUNT <=5 **
@@ -480,7 +509,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(autoimmune) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(autoimmune) start(1) end(1) file(tablecontent) bin
+> exp(coviddeath2_nocensor)
   513
   99
   12,183
@@ -488,7 +518,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(ibd) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(ibd) start(1) end(1) file(tablecontent) binexp(cov
+> iddeath2_nocensor)
   513
   104
   12,183
@@ -496,7 +527,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(smi) start(1) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(smi) start(1) end(1) file(tablecontent) binexp(cov
+> iddeath2_nocensor)
   513
   105
   12,183
@@ -504,7 +536,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(ld) start(0) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(ld) start(0) end(1) file(tablecontent) binexp(covi
+> ddeath2_nocensor)
   513
   303
   12,183
@@ -516,7 +549,8 @@
 
 . file write tablecontent _n 
 
-. tabulatevariable, variable(ds) start(0) end(1) file(tablecontent) binexp(coviddeath2_nocensor)
+. tabulatevariable, variable(ds) start(0) end(1) file(tablecontent) binexp(covi
+> ddeath2_nocensor)
   513
   424
   12,183
@@ -536,8 +570,7 @@
 . * Close log
 . log close
       name:  <unnamed>
-       log:  C:\Users\emsuewil\Documents\Work\Covid\OpenSAFELY\Absolute_risks\absolute-risks-covid-research\logs/AR001b_tabulate_cohort
-> _descriptives.log
+       log:  /workspace/logs/AR001b_tabulate_cohort_descriptives.log
   log type:  text
- closed on:  18 Feb 2021, 14:07:22
----------------------------------------------------------------------------------------------------------------------------------------
+ closed on:  25 Feb 2021, 18:15:01
+-------------------------------------------------------------------------------

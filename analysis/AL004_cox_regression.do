@@ -143,7 +143,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	* Confounders with physical comorbidities that are indicators for vaccination 
 	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
 				obese40 								///
-				respiratory severe_asthma				///
+				respiratory asthma_severe				///
 				cardiac af dvt_pe i.diabcat		 		///
 				liver stroke tia dementia				///
 				i.kidneyfn								///
@@ -164,7 +164,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
 				imd resid_care_ldr 						///
 				obese40 								///
-				respiratory severe_asthma				///
+				respiratory asthma_severe				///
 				cardiac af dvt_pe i.diabcat		 		///
 				liver stroke tia dementia				///
 				i.kidneyfn								///

@@ -1,0 +1,998 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /workspace/logs/AL006_cox_regression_inter_wave1_covidadmission_ds
+> .log
+  log type:  text
+ opened on:  25 Feb 2021, 20:11:32
+
+. 
+. 
+. * Categories of various exposures
+. local lo_ldr            = 0
+
+. local hi_ldr            = 1
+
+. local lo_ldr_cat        = 0
+
+. local hi_ldr_cat        = 2
+
+. local hi_ldr            = 1
+
+. local lo_ldr_carecat= 0
+
+. local hi_ldr_carecat= 2
+
+. local lo_ds             = 0
+
+. local hi_ds             = 1
+
+. local lo_cp             = 0
+
+. local hi_cp             = 1
+
+. local lo_ldr_group      = 0
+
+. local hi_ldr_group      = 5
+
+. 
+. * Open temporary file to post results
+. tempfile ldrfile
+
+. tempname ldrresults
+
+. 
+. postfile `ldrresults'   wave str15(outcome) str15(exposure) str20(model)     
+>    ///
+>                                                 expcat agebroad lnhr sehr usi
+> ng `ldrfile'
+
+. 
+. 
+.         * Open dataset (complete case ethnicity)
+.         use "analysis/data_ldanalysis_cohort`i'.dta", clear 
+(Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work)
+
+.         drop if ethnicity_5>=.
+(12,499 observations deleted)
+
+. 
+.         * Only keep data for adults
+.         keep if child==0
+(7,126 observations deleted)
+
+. 
+.         
+.         /*  Declare data to be survival  */
+. 
+.         stset stime_`out'`i', fail(`out'`i') scale(365.25)
+
+     failure event:  covidadmission1 != 0 & covidadmission1 < .
+obs. time interval:  (0, stime_covidadmission1]
+ exit on or before:  failure
+    t for analysis:  time/365.25
+
+------------------------------------------------------------------------------
+     30,365  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+     30,365  observations remaining, representing
+      2,991  failures in single-record/single-failure data
+ 13,799.439  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =  .5037645
+
+. 
+.         
+.                 
+.         /*  Fit Cox models  */
+.         
+.         * Confounder only model
+.         stcox i.`exp'##i.agebroad age1 age2 age3 male i.ethnicity_5,    ///
+>                 strata(stpcode) cluster(household_id) 
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Iteration 0:   log pseudolikelihood = -20307.744
+Iteration 1:   log pseudolikelihood = -20302.216
+Iteration 2:   log pseudolikelihood = -20302.211
+Iteration 3:   log pseudolikelihood = -20302.211
+Refining estimates:
+Iteration 0:   log pseudolikelihood = -20302.211
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects      =       30,365             Number of obs    =      30,365
+No. of failures      =        2,991
+Time at risk         =  13799.43874
+                                                Wald chi2(13)    =       10.98
+Log pseudolikelihood =   -20302.211             Prob > chi2      =      0.6125
+
+                       (Std. Err. adjusted for 1,207 clusters in household_id)
+------------------------------------------------------------------------------
+             |               Robust
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        1.ds |   1.010332   .0529385     0.20   0.844     .9117247    1.119605
+             |
+    agebroad |
+     65-<75  |   1.135095   .1149205     1.25   0.211     .9307954    1.384237
+        75+  |   1.106291   .2023369     0.55   0.581     .7730145    1.583257
+             |
+ ds#agebroad |
+   1#65-<75  |   .8223436   .1261763    -1.27   0.202     .6087644    1.110855
+      1#75+  |   .9429159   .1402845    -0.40   0.693     .7044229    1.262154
+             |
+        age1 |   .9977587   .0114613    -0.20   0.845     .9755459    1.020477
+        age2 |   1.004937   .0291453     0.17   0.865     .9494069    1.063716
+        age3 |   .9807156   .0751253    -0.25   0.799      .843993    1.139587
+        male |   .9842212   .0355617    -0.44   0.660     .9169323    1.056448
+             |
+ ethnicity_5 |
+      Mixed  |    1.06707   .0591809     1.17   0.242     .9571599    1.189602
+Asian or ..  |    .974481   .0549767    -0.46   0.647     .8724723    1.088416
+      Black  |   .9460621   .0530499    -0.99   0.323     .8475962    1.055967
+      Other  |   .9302952   .0559301    -1.20   0.229     .8268864    1.046636
+------------------------------------------------------------------------------
+                                                         Stratified by stpcode
+
+.         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+  2.                 capture qui di _b[`k'.`exp']
+  3.                 if _rc==0 {
+  4.                         post `ldrresults' (`i') ("`out'") ("`exp'")       
+>       ///
+>                                 ("Confounders")                              
+>                            ///
+>                                 (`k') (1) (_b[`k'.`exp']) (_se[`k'.`exp'])
+  5.                 }
+  6.                 forvalues l = 2 (1) 3 {
+  7.                         capture qui di _b[`k'.`exp'#`l'.agebroad]
+  8.                         if _rc==0 {
+  9.                             lincom `k'.`exp' + `k'.`exp'#`l'.agebroad
+ 10.                                 post `ldrresults' (`i') ("`out'") ("`exp'"
+> )             ///
+>                                         ("Confounders")                      
+>                                    ///
+>                                         (`k') (`l') (r(estimate)) (r(se))
+ 11.                         }
+ 12.                 }
+ 13.         }
+
+ ( 1)  0b.ds + 0b.ds#2o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  0b.ds + 0b.ds#3o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#2.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.1853177   .1428291    -1.30   0.194    -.4652575    .0946221
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#3.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.0484989   .1389172    -0.35   0.727    -.3207716    .2237737
+------------------------------------------------------------------------------
+
+.         
+.         * Confounders with deprivation
+.         stcox i.`exp'##i.agebroad age1 age2 age3 male i.ethnicity_5 imd, ///
+>                 strata(stpcode) cluster(household_id) 
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Iteration 0:   log pseudolikelihood = -20307.744
+Iteration 1:   log pseudolikelihood = -20302.209
+Iteration 2:   log pseudolikelihood = -20302.203
+Iteration 3:   log pseudolikelihood = -20302.203
+Refining estimates:
+Iteration 0:   log pseudolikelihood = -20302.203
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects      =       30,365             Number of obs    =      30,365
+No. of failures      =        2,991
+Time at risk         =  13799.43874
+                                                Wald chi2(14)    =       10.99
+Log pseudolikelihood =   -20302.203             Prob > chi2      =      0.6870
+
+                       (Std. Err. adjusted for 1,207 clusters in household_id)
+------------------------------------------------------------------------------
+             |               Robust
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        1.ds |   1.010291   .0529221     0.20   0.845      .911713    1.119528
+             |
+    agebroad |
+     65-<75  |   1.135161   .1149522     1.25   0.211     .9308091    1.384378
+        75+  |   1.106484   .2024033     0.55   0.580     .7731069    1.583621
+             |
+ ds#agebroad |
+   1#65-<75  |   .8223453   .1261723    -1.27   0.202     .6087718    1.110846
+      1#75+  |   .9427321   .1402693    -0.40   0.692     .7042679     1.26194
+             |
+        age1 |   .9977582    .011461    -0.20   0.845     .9755461    1.020476
+        age2 |   1.004942   .0291433     0.17   0.865     .9494155    1.063717
+        age3 |   .9806892    .075114    -0.25   0.799     .8439861    1.139535
+        male |   .9842028    .035565    -0.44   0.659     .9169079    1.056437
+             |
+ ethnicity_5 |
+      Mixed  |   1.067101   .0591907     1.17   0.242     .9571728    1.189653
+Asian or ..  |   .9745409   .0549936    -0.46   0.648     .8725023    1.088513
+      Black  |   .9460985   .0530596    -0.99   0.323     .8476153    1.056024
+      Other  |   .9303064   .0559331    -1.20   0.230     .8268923    1.046654
+             |
+         imd |   1.001607   .0129186     0.12   0.901     .9766039     1.02725
+------------------------------------------------------------------------------
+                                                         Stratified by stpcode
+
+.         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+  2.                 capture qui di _b[`k'.`exp']
+  3.                 if _rc==0 {
+  4.                         post `ldrresults' (`i') ("`out'") ("`exp'")     //
+> /
+>                                 ("Confounders+IMD")                          
+>                    ///
+>                                 (`k') (1) (_b[`k'.`exp']) (_se[`k'.`exp'])
+  5.                 }       
+  6.                 forvalues l = 2 (1) 3 {
+  7.                         capture qui di _b[`k'.`exp'#`l'.agebroad]
+  8.                         if _rc==0 {
+  9.                             lincom `k'.`exp' + `k'.`exp'#`l'.agebroad
+ 10.                                 post `ldrresults' (`i') ("`out'") ("`exp'"
+> )             ///
+>                                         ("Confounders+IMD")                  
+>                            ///
+>                                         (`k') (`l') (r(estimate)) (r(se))
+ 11.                         }
+ 12.                 }
+ 13.         }
+
+ ( 1)  0b.ds + 0b.ds#2o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  0b.ds + 0b.ds#3o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#2.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.1853563   .1428194    -1.30   0.194    -.4652771    .0945646
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#3.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.0487345   .1389031    -0.35   0.726    -.3209795    .2235106
+------------------------------------------------------------------------------
+
+.         
+.         * Confounders with residential care
+.         stcox i.`exp'##i.agebroad age1 age2 age3 male   ///
+>                                 i.ethnicity_5 resid_care_ldr,           ///
+>                 strata(stpcode) cluster(household_id) 
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Iteration 0:   log pseudolikelihood = -20307.744
+Iteration 1:   log pseudolikelihood = -20301.753
+Iteration 2:   log pseudolikelihood = -20301.746
+Iteration 3:   log pseudolikelihood = -20301.746
+Refining estimates:
+Iteration 0:   log pseudolikelihood = -20301.746
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects      =       30,365             Number of obs    =      30,365
+No. of failures      =        2,991
+Time at risk         =  13799.43874
+                                                Wald chi2(14)    =       12.00
+Log pseudolikelihood =   -20301.746             Prob > chi2      =      0.6059
+
+                       (Std. Err. adjusted for 1,207 clusters in household_id)
+------------------------------------------------------------------------------
+             |               Robust
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        1.ds |   1.010103   .0529264     0.19   0.848     .9115177     1.11935
+             |
+    agebroad |
+     65-<75  |   1.133622   .1147889     1.24   0.215      .929559    1.382483
+        75+  |   1.105315   .2021921     0.55   0.584     .7722864    1.581954
+             |
+ ds#agebroad |
+   1#65-<75  |    .823533   .1263552    -1.27   0.206       .60965    1.112452
+      1#75+  |   .9429526   .1402916    -0.39   0.693      .704448    1.262208
+             |
+        age1 |   .9977916   .0114608    -0.19   0.847     .9755798    1.020509
+        age2 |    1.00484   .0291395     0.17   0.868       .94932    1.063606
+        age3 |   .9810239   .0751371    -0.25   0.802     .8442783    1.139918
+        male |   .9841242   .0355607    -0.44   0.658     .9168374    1.056349
+             |
+ ethnicity_5 |
+      Mixed  |   1.066971   .0591817     1.17   0.243     .9570598    1.189505
+Asian or ..  |   .9738164   .0549423    -0.47   0.638     .8718718    1.087681
+      Black  |    .945809   .0530376    -0.99   0.320     .8473661    1.055689
+      Other  |   .9299087     .05592    -1.21   0.227     .8265201     1.04623
+             |
+resid_care~r |   .9163715   .0797769    -1.00   0.316      .772624    1.086863
+------------------------------------------------------------------------------
+                                                         Stratified by stpcode
+
+.         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+  2.                 capture qui di _b[`k'.`exp']
+  3.                 if _rc==0 {
+  4.                         post `ldrresults' (`i') ("`out'") ("`exp'")     //
+> /
+>                                 ("Confounders+Resid")                        
+>                    ///
+>                                 (`k') (1) (_b[`k'.`exp']) (_se[`k'.`exp'])
+  5.                 }               
+  6.                 forvalues l = 2 (1) 3 {
+  7.                         capture qui di _b[`k'.`exp'#`l'.agebroad]
+  8.                         if _rc==0 {
+  9.                             lincom `k'.`exp' + `k'.`exp'#`l'.agebroad
+ 10.                                 post `ldrresults' (`i') ("`out'") ("`exp'"
+> )             ///
+>                                         ("Confounders+Resid")                
+>                            ///
+>                                         (`k') (`l') (r(estimate)) (r(se))
+ 11.                         }
+ 12.                 }
+ 13.         }
+
+ ( 1)  0b.ds + 0b.ds#2o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  0b.ds + 0b.ds#3o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#2.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.1840997   .1428183    -1.29   0.197    -.4640184     .095819
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#3.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.0486873   .1389293    -0.35   0.726    -.3209838    .2236092
+------------------------------------------------------------------------------
+
+.         
+.         * Confounders with physical comorbidities that are indicators for vac
+> cination 
+.         stcox i.`exp'##i.agebroad age1 age2 age3 male           ///
+>                                 i.ethnicity_5                                
+>                    ///
+>                                 obese40                                      
+>                            ///
+>                                 respiratory asthma_severe                    
+>            ///
+>                                 cardiac af dvt_pe i.diabcat                  
+>            ///
+>                                 liver stroke tia dementia                    
+>            ///
+>                                 i.kidneyfn                                   
+>                            ///
+>                                 spleen transplant dialysis                   
+>            ///
+>                                 immunosuppression cancerHaem                 
+>    ///
+>                                 autoimmune ibd cancerExhaem1yr,              
+>    ///
+>                 strata(stpcode) cluster(household_id) 
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Iteration 0:   log pseudolikelihood = -2953.2419
+Iteration 1:   log pseudolikelihood = -2935.3756
+Iteration 2:   log pseudolikelihood = -2935.1498
+Iteration 3:   log pseudolikelihood = -2935.0885
+Iteration 4:   log pseudolikelihood =  -2935.066
+Iteration 5:   log pseudolikelihood = -2935.0578
+Iteration 6:   log pseudolikelihood = -2935.0547
+Iteration 7:   log pseudolikelihood = -2935.0536
+Iteration 8:   log pseudolikelihood = -2935.0532
+Iteration 9:   log pseudolikelihood =  -2935.053
+Iteration 10:  log pseudolikelihood =  -2935.053
+Iteration 11:  log pseudolikelihood =  -2935.053
+Iteration 12:  log pseudolikelihood = -2935.0529
+Iteration 13:  log pseudolikelihood = -2935.0529
+Iteration 14:  log pseudolikelihood = -2935.0529
+Iteration 15:  log pseudolikelihood = -2935.0529
+Iteration 16:  log pseudolikelihood = -2935.0529
+Iteration 17:  log pseudolikelihood = -2935.0529
+Iteration 18:  log pseudolikelihood = -2935.0529
+Iteration 19:  log pseudolikelihood = -2935.0529
+Iteration 20:  log pseudolikelihood = -2935.0529
+Iteration 21:  log pseudolikelihood = -2935.0529
+Iteration 22:  log pseudolikelihood = -2935.0529
+Iteration 23:  log pseudolikelihood = -2935.0529
+Iteration 24:  log pseudolikelihood = -2935.0529
+Iteration 25:  log pseudolikelihood = -2935.0529
+Iteration 26:  log pseudolikelihood = -2935.0529
+Iteration 27:  log pseudolikelihood = -2935.0529
+Iteration 28:  log pseudolikelihood = -2935.0529
+Refining estimates:
+Iteration 0:   log pseudolikelihood = -2935.0529
+Iteration 1:   log pseudolikelihood = -2935.0529
+Iteration 2:   log pseudolikelihood = -2935.0529
+Iteration 3:   log pseudolikelihood = -2935.0529
+Iteration 4:   log pseudolikelihood = -2935.0529
+Iteration 5:   log pseudolikelihood = -2935.0529
+Iteration 6:   log pseudolikelihood = -2935.0529
+Iteration 7:   log pseudolikelihood = -2935.0529
+Iteration 8:   log pseudolikelihood = -2935.0529
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects      =        6,087             Number of obs    =       6,087
+No. of failures      =          570
+Time at risk         =  2776.616016
+                                                Wald chi2(36)    =     8911.28
+Log pseudolikelihood =   -2935.0529             Prob > chi2      =      0.0000
+
+                         (Std. Err. adjusted for 986 clusters in household_id)
+------------------------------------------------------------------------------
+             |               Robust
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        1.ds |   1.084502   .1308386     0.67   0.501     .8561267    1.373797
+             |
+    agebroad |
+     65-<75  |   1.294599   .2705418     1.24   0.217     .8595154    1.949922
+        75+  |   .9034095   .3618656    -0.25   0.800     .4120323    1.980788
+             |
+ ds#agebroad |
+   1#65-<75  |   .6165109   .2091955    -1.43   0.154     .3170368    1.198869
+      1#75+  |   .9364463   .3466531    -0.18   0.859     .4532999    1.934551
+             |
+        age1 |   1.008475   .0266469     0.32   0.749     .9575769    1.062078
+        age2 |   .9684231   .0633339    -0.49   0.624     .8519173    1.100862
+        age3 |   1.103525   .1844375     0.59   0.556      .795274    1.531256
+        male |   .9838719   .0850981    -0.19   0.851     .8304539    1.165632
+             |
+ ethnicity_5 |
+      Mixed  |   1.037513   .1319246     0.29   0.772     .8086476    1.331153
+Asian or ..  |    1.02512   .1263145     0.20   0.840     .8051756    1.305146
+      Black  |    .832075   .1091568    -1.40   0.161      .643423     1.07604
+      Other  |   .8164709   .1095223    -1.51   0.131     .6277108    1.061993
+             |
+     obese40 |   .9642634   .0952512    -0.37   0.713     .7945347     1.17025
+ respiratory |   1.077775   .1067112     0.76   0.449     .8876666    1.308597
+asthma_sev~e |   .8257972   .1159337    -1.36   0.173     .6271525    1.087361
+     cardiac |   1.230206   .1187563     2.15   0.032     1.018142     1.48644
+          af |   .9990806   .1056955    -0.01   0.993     .8119879    1.229282
+      dvt_pe |   1.152058   .1150506     1.42   0.156     .9472589    1.401134
+             |
+     diabcat |
+Controlle..  |   1.110492   .1259705     0.92   0.356     .8891149    1.386988
+Uncontrol..  |   .8198493   .1972557    -0.83   0.409     .5116052    1.313812
+Diabetes,..  |   2.14e-16   8.65e-17   -89.48   0.000     9.73e-17    4.73e-16
+             |
+       liver |   1.200637   .1191068     1.84   0.065     .9884846    1.458322
+      stroke |    .984081   .1025336    -0.15   0.878     .8023101    1.207034
+         tia |   1.141066   .1195796     1.26   0.208     .9291975    1.401244
+    dementia |   .9642012   .1035155    -0.34   0.734     .7812386    1.190013
+             |
+    kidneyfn |
+Stage 3a/..  |   1.297131   .6063426     0.56   0.578     .5189084    3.242479
+Stage 4/5..  |   1.018941   .1401883     0.14   0.892      .778106    1.334318
+             |
+      spleen |   1.040605   .0904478     0.46   0.647     .8776082    1.233874
+  transplant |   1.209912   .1311921     1.76   0.079      .978266     1.49641
+    dialysis |   .9108826   .1421413    -0.60   0.550     .6708636    1.236775
+immunosupp~n |   1.070498   .0960518     0.76   0.448     .8978642    1.276324
+  cancerHaem |   .9971511   .0347814    -0.08   0.935     .9312589    1.067706
+  autoimmune |   .8940981   .1007482    -0.99   0.321     .7169198    1.115064
+         ibd |    .958129   .1033878    -0.40   0.692     .7754865    1.183787
+cancerExha~r |   1.070128    .608517     0.12   0.905     .3510821    3.261839
+------------------------------------------------------------------------------
+                                                         Stratified by stpcode
+
+.         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+  2.                 capture qui di _b[`k'.`exp']
+  3.                 if _rc==0 {
+  4.                         post `ldrresults' (`i') ("`out'") ("`exp'") ///
+>                         ("Confounders+Comorb")                               
+>            ///
+>                         (`k') (1) (_b[`k'.`exp']) (_se[`k'.`exp'])
+  5.                 }
+  6.                                 forvalues l = 2 (1) 3 {
+  7.                         capture qui di _b[`k'.`exp'#`l'.agebroad]
+  8.                         if _rc==0 {
+  9.                             lincom `k'.`exp' + `k'.`exp'#`l'.agebroad
+ 10.                                 post `ldrresults' (`i') ("`out'") ("`exp'"
+> )             ///
+>                                         ("Confounders+Comorb")               
+>                            ///
+>                                         (`k') (`l') (r(estimate)) (r(se))
+ 11.                         }
+ 12.                 }
+ 13.         }
+
+ ( 1)  0b.ds + 0b.ds#2o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  0b.ds + 0b.ds#3o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#2.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.4025583   .3190006    -1.26   0.207    -1.027788    .2226713
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#3.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   .0154578   .3570187     0.04   0.965     -.684286    .7152016
+------------------------------------------------------------------------------
+
+.         
+.         * All variables
+.         stcox i.`exp'##i.agebroad age1 age2 age3 male           ///
+>                                 i.ethnicity_5 imd resid_care_ldr             
+>    ///
+>                                 obese40                                      
+>                            ///
+>                                 respiratory asthma_severe                    
+>            ///
+>                                 cardiac af dvt_pe i.diabcat                  
+>            ///
+>                                 liver stroke tia dementia                    
+>            ///
+>                                 i.kidneyfn                                   
+>                            ///
+>                                 spleen transplant dialysis                   
+>            ///
+>                                 immunosuppression cancerHaem                 
+>    ///
+>                                 autoimmune ibd cancerExhaem1yr,              
+>    ///
+>                                 strata(stpcode) cluster(household_id) 
+
+         failure _d:  covidadmission1
+   analysis time _t:  stime_covidadmission1/365.25
+
+Iteration 0:   log pseudolikelihood = -2953.2419
+Iteration 1:   log pseudolikelihood = -2934.8789
+Iteration 2:   log pseudolikelihood = -2934.6434
+Iteration 3:   log pseudolikelihood = -2934.5822
+Iteration 4:   log pseudolikelihood = -2934.5598
+Iteration 5:   log pseudolikelihood = -2934.5515
+Iteration 6:   log pseudolikelihood = -2934.5485
+Iteration 7:   log pseudolikelihood = -2934.5473
+Iteration 8:   log pseudolikelihood = -2934.5469
+Iteration 9:   log pseudolikelihood = -2934.5468
+Iteration 10:  log pseudolikelihood = -2934.5467
+Iteration 11:  log pseudolikelihood = -2934.5467
+Iteration 12:  log pseudolikelihood = -2934.5467
+Iteration 13:  log pseudolikelihood = -2934.5467
+Iteration 14:  log pseudolikelihood = -2934.5467
+Iteration 15:  log pseudolikelihood = -2934.5467
+Iteration 16:  log pseudolikelihood = -2934.5467
+Iteration 17:  log pseudolikelihood = -2934.5467
+Iteration 18:  log pseudolikelihood = -2934.5467
+Iteration 19:  log pseudolikelihood = -2934.5467
+Iteration 20:  log pseudolikelihood = -2934.5467
+Iteration 21:  log pseudolikelihood = -2934.5467
+Iteration 22:  log pseudolikelihood = -2934.5467
+Iteration 23:  log pseudolikelihood = -2934.5467
+Iteration 24:  log pseudolikelihood = -2934.5467
+Iteration 25:  log pseudolikelihood = -2934.5467
+Iteration 26:  log pseudolikelihood = -2934.5467
+Iteration 27:  log pseudolikelihood = -2934.5467
+Iteration 28:  log pseudolikelihood = -2934.5467
+Iteration 29:  log pseudolikelihood = -2934.5467
+Refining estimates:
+Iteration 0:   log pseudolikelihood = -2934.5467
+Iteration 1:   log pseudolikelihood = -2934.5467
+Iteration 2:   log pseudolikelihood = -2934.5467
+Iteration 3:   log pseudolikelihood = -2934.5467
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects      =        6,087             Number of obs    =       6,087
+No. of failures      =          570
+Time at risk         =  2776.616016
+                                                Wald chi2(38)    =     7049.58
+Log pseudolikelihood =   -2934.5467             Prob > chi2      =      0.0000
+
+                         (Std. Err. adjusted for 986 clusters in household_id)
+------------------------------------------------------------------------------
+             |               Robust
+          _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        1.ds |   1.086964   .1311562     0.69   0.490     .8580387    1.376968
+             |
+    agebroad |
+     65-<75  |   1.299836    .270906     1.26   0.208      .863943    1.955655
+        75+  |   .9079573   .3637192    -0.24   0.810     .4140779    1.990897
+             |
+ ds#agebroad |
+   1#65-<75  |   .6162483   .2091702    -1.43   0.154     .3168375    1.198602
+      1#75+  |   .9437963   .3487025    -0.16   0.876     .4574953    1.947018
+             |
+        age1 |   1.008578   .0265852     0.32   0.746      .957795    1.062053
+        age2 |   .9681614   .0632088    -0.50   0.620     .8518733    1.100324
+        age3 |   1.103811   .1842207     0.59   0.554     .7958533    1.530932
+        male |   .9857473   .0854297    -0.17   0.868     .8317567    1.168248
+             |
+ ethnicity_5 |
+      Mixed  |   1.039468   .1322176     0.30   0.761     .8101032    1.333772
+Asian or ..  |   1.024795   .1262184     0.20   0.842     .8050061    1.304593
+      Black  |   .8332135   .1093602    -1.39   0.164     .6442215    1.077649
+      Other  |   .8191091   .1100467    -1.49   0.137     .6294822     1.06586
+             |
+         imd |   .9966501   .0281174    -0.12   0.905      .943037    1.053311
+resid_care~r |   .8182078   .1530522    -1.07   0.283     .5670739    1.180559
+     obese40 |   .9653596   .0953184    -0.36   0.721     .7955043    1.171482
+ respiratory |   1.077638   .1067669     0.75   0.450     .8874424    1.308596
+asthma_sev~e |   .8269855   .1161232    -1.35   0.176     .6280212    1.088984
+     cardiac |   1.230424   .1188441     2.15   0.032     1.018214    1.486862
+          af |   .9997469   .1057402    -0.00   0.998     .8125705     1.23004
+      dvt_pe |   1.151904   .1150639     1.42   0.157      .947086    1.401015
+             |
+     diabcat |
+Controlle..  |   1.109746   .1258672     0.92   0.359     .8885468    1.386011
+Uncontrol..  |   .8200445   .1973343    -0.82   0.410     .5116884    1.314224
+Diabetes,..  |   1.18e-14   4.75e-15   -79.47   0.000     5.34e-15    2.60e-14
+             |
+       liver |   1.201983   .1192406     1.85   0.064     .9895929    1.459958
+      stroke |   .9850323   .1025768    -0.14   0.885     .8031751    1.208066
+         tia |   1.140366   .1193814     1.25   0.210     .9288266    1.400083
+    dementia |    .962442   .1029688    -0.36   0.720     .7803817    1.186976
+             |
+    kidneyfn |
+Stage 3a/..  |   1.285713   .6037951     0.54   0.593     .5121578    3.227634
+Stage 4/5..  |   1.019313   .1401677     0.14   0.889     .7784975    1.334621
+             |
+      spleen |   1.040815   .0904415     0.46   0.645     .8778266    1.234067
+  transplant |   1.206539   .1305492     1.74   0.083     .9759783    1.491566
+    dialysis |   .9127276   .1424655    -0.59   0.559       .67217    1.239376
+immunosupp~n |   1.069722   .0961224     0.75   0.453     .8969831    1.275727
+  cancerHaem |     .99765   .0347834    -0.07   0.946      .931753    1.068207
+  autoimmune |     .89281   .1007675    -1.00   0.315     .7156286    1.113859
+         ibd |    .960455   .1036434    -0.37   0.708     .7773618    1.186672
+cancerExha~r |   1.073193   .6106828     0.12   0.901     .3518159    3.273709
+------------------------------------------------------------------------------
+                                                         Stratified by stpcode
+
+.         forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+  2.                 capture qui di _b[`k'.`exp']
+  3.                 if _rc==0 {
+  4.                         post `ldrresults' (`i') ("`out'") ("`exp'")     //
+> /
+>                         ("All")                                              
+>                                    ///
+>                         (`k') (1) (_b[`k'.`exp']) (_se[`k'.`exp'])
+  5.                 }
+  6.                                 forvalues l = 2 (1) 3 {
+  7.                         capture qui di _b[`k'.`exp'#`l'.agebroad]
+  8.                         if _rc==0 {
+  9.                             lincom `k'.`exp' + `k'.`exp'#`l'.agebroad
+ 10.                                 post `ldrresults' (`i') ("`out'") ("`exp'"
+> )     ///
+>                                         ("All")                              
+>                                    ///
+>                                         (`k') (`l') (r(estimate)) (r(se))
+ 11.                         }
+ 12.                 }
+ 13.         }
+
+ ( 1)  0b.ds + 0b.ds#2o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  0b.ds + 0b.ds#3o.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |          0  (omitted)
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#2.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |  -.4007165   .3190332    -1.26   0.209     -1.02601    .2245771
+------------------------------------------------------------------------------
+
+ ( 1)  1.ds + 1.ds#3.agebroad = 0
+
+------------------------------------------------------------------------------
+          _t |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   .0255439   .3561187     0.07   0.943    -.6724359    .7235236
+------------------------------------------------------------------------------
+
+. 
+. postclose `ldrresults'
+
+. 
+. use `ldrfile', clear
+
+. 
+. 
+. *************************
+. *  Tidy output for HRs  *
+. *************************
+. 
+. * Outcome
+. rename outcome out
+
+. gen outcome     = 1 if out=="coviddeath"
+(30 missing values generated)
+
+. replace outcome = 2 if out=="covidadmission"
+(30 real changes made)
+
+. replace outcome = 3 if out=="composite"
+(0 real changes made)
+
+. 
+. label define outcome    1 "COVID-19 death"              ///
+>                                                 2 "COVID-19 admission"  ///
+>                                                 3 "Composite"
+
+. label values outcome outcome
+
+. drop out
+
+. 
+. * Exposure
+. rename exposure exp
+
+. gen     exposure = 1 if exp=="ldr"
+(30 missing values generated)
+
+. replace exposure = 2 if exp=="ldr_cat"
+(0 real changes made)
+
+. replace exposure = 3 if exp=="ldr_carecat"
+(0 real changes made)
+
+. replace exposure = 4 if exp=="ds"
+(30 real changes made)
+
+. replace exposure = 5 if exp=="cp"
+(0 real changes made)
+
+. replace exposure = 6 if exp=="ldr_group"
+(0 real changes made)
+
+. 
+. label define exposure   1 "Learning disability register"        ///
+>                                                 2 "LDR Severe vs mild"       
+>                    ///
+>                                                 3 "LDR by residential care"  
+>                    ///
+>                                                 4 "Down's syndrome"          
+>                            ///
+>                                                 5 "Cerebral Palsy"           
+>                            ///
+>                                                 6 "Combined grouping"        
+>                    
+
+. label values exposure exposure                                          
+
+. drop exp
+
+. 
+. * Age categories
+. label define agebroad   1 "16-<65"              ///
+>                                                 2 "65-<75"              ///
+>                                                 3 "75+"
+
+. label values agebroad agebroad
+
+. 
+. 
+. * Categories of exposure
+. gen category     = "No"                                         if expcat==0
+(15 missing values generated)
+
+. replace category = "Yes"                                        if inlist(exp
+> osure, 1, 4, 5) & expcat==1
+variable category was str2 now str3
+(15 real changes made)
+
+. 
+. replace category = "LDR, mild"                          if inlist(exposure, 2
+> ) & expcat==1
+(0 real changes made)
+
+. replace category = "LDR, profound"                      if inlist(exposure, 2
+> ) & expcat==2
+(0 real changes made)
+
+. 
+. replace category = "LDR, community"             if inlist(exposure, 3) & expc
+> at==1
+(0 real changes made)
+
+. replace category = "LDR, residential care"      if inlist(exposure, 3) & expc
+> at==2
+(0 real changes made)
+
+. 
+. replace category = "DS but not LDR"             if inlist(exposure, 6) & expc
+> at==1
+(0 real changes made)
+
+. replace category = "DS and LDR"                         if inlist(exposure, 6
+> ) & expcat==2
+(0 real changes made)
+
+. replace category = "CP but not LDR"             if inlist(exposure, 6) & expc
+> at==3
+(0 real changes made)
+
+. replace category = "CP and LDR"                         if inlist(exposure, 6
+> ) & expcat==4
+(0 real changes made)
+
+. replace category = "LDR with no DS or CP"       if inlist(exposure, 6) & expc
+> at==5
+(0 real changes made)
+
+. 
+. * Model adjustment
+. gen     adjustment = 1 if model=="Confounders"
+(24 missing values generated)
+
+. replace adjustment = 2 if model=="Confounders+IMD"
+(6 real changes made)
+
+. replace adjustment = 3 if model=="Confounders+Resid"
+(6 real changes made)
+
+. replace adjustment = 4 if model=="Confounders+Comorb"
+(6 real changes made)
+
+. replace adjustment = 5 if model=="All"
+(6 real changes made)
+
+. label define adj        1 "Confounders"                                      
+>    ///     
+>                                         2 "Confounders with IMD"             
+>            ///
+>                                         3 "Confounders with care"            
+>            ///
+>                                         4 "Confounders with comorbidities"   
+>    ///
+>                                         5 "All"
+
+. label values adjustment adj
+
+. drop model
+
+. 
+. * Hazard ratio with 95% confidence interval
+. gen cl = exp(lnhr - invnorm(0.975)*sehr)
+
+. gen cu = exp(lnhr + invnorm(0.975)*sehr)
+
+. gen hr = exp(lnhr)
+
+. 
+. gen hr_ci =   string(round(hr, 0.01)) + " (" ///
+>                         + string(round(cl, 0.01)) + ", " ///
+>                         + string(round(cu, 0.01)) + ")"
+
+. replace hr_ci = "" if expcat==0
+(15 real changes made)
+
+. drop cl cu hr lnhr sehr
+
+. 
+. * Put in wide format
+. reshape wide hr_ci, i(wave outcome exposure expcat agebroad) j(adjust)
+(note: j = 1 2 3 4 5)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                       30   ->       6
+Number of variables                   8   ->      11
+j variable (5 values)        adjustment   ->   (dropped)
+xij variables:
+                                  hr_ci   ->   hr_ci1 hr_ci2 ... hr_ci5
+-----------------------------------------------------------------------------
+
+. rename hr_ci1 hr_conf
+
+. rename hr_ci2 hr_conf_imd
+
+. rename hr_ci3 hr_conf_resid
+
+. rename hr_ci4 hr_conf_comorb
+
+. 
+. 
+. order wave outcome exposure agebroad category hr*
+
+. sort wave outcome exposure agebroad expcat
+
+. 
+. * Save data
+. outsheet using "output/ldcox_inter_wave`i'_`out'_`exp'", replace
+(note: file output/ldcox_inter_wave1_covidadmission_ds.out not found)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /workspace/logs/AL006_cox_regression_inter_wave1_covidadmission_ds
+> .log
+  log type:  text
+ closed on:  25 Feb 2021, 20:11:44
+-------------------------------------------------------------------------------
