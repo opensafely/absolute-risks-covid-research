@@ -102,20 +102,6 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	stset stime_`out'`i', fail(`out'`i') scale(365.25)
 
 	
-	/*  Create broad age strata  */
-	
-	* Broad age strata
-	drop agebroad
-	gen agebroad = 1 if age<50
-	recode agebroad .=2 if age < 75
-	recode agebroad .=3 if age < .
-	
-	capture label drop agebroad
-	label define agebroad 	1 "16-<50" 		///
-							2 "50-<75" 		///
-							3 "75+"
-	label values agebroad agebroad
-		
 		
 	/*  Fit Cox models  */
 	
@@ -162,7 +148,8 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	}
 	
 	* Confounders with residential care
-	stcox i.`exp'##i.agebroad age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
+	stcox i.`exp'##i.agebroad age1 age2 age3 male	///
+				i.ethnicity_5 resid_care_ldr, 		///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 		capture qui di _b[`k'.`exp']
@@ -183,7 +170,10 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	}
 	
 	* Confounders with physical comorbidities that are indicators for vaccination 
-	stcox i.`exp'##i.agebroad age1 age2 age3 male i.ethnicity_5 	///
+	stcox i.`exp'##i.agebroad age1 age2 age3 male 		///
+				i.ethnicity_5 							///
+				obese40 								///
+				respiratory severe_asthma				///
 				cardiac af dvt_pe i.diabcat		 		///
 				liver stroke tia dementia				///
 				i.kidneyfn								///
@@ -195,7 +185,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 		capture qui di _b[`k'.`exp']
 		if _rc==0 {
 			post `ldrresults' (`i') ("`out'") ("`exp'") ///
-			("Confounders_Comorb") 						///
+			("Confounders+Comorb") 						///
 			(`k') (1) (_b[`k'.`exp']) (_se[`k'.`exp'])
 		}
 				forvalues l = 2 (1) 3 {
@@ -203,7 +193,37 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 			if _rc==0 {
 			    lincom `k'.`exp' + `k'.`exp'#`l'.agebroad
 				post `ldrresults' (`i') ("`out'") ("`exp'")		///
-					("Confounders_Comorb") 						///
+					("Confounders+Comorb") 						///
+					(`k') (`l') (r(estimate)) (r(se))
+			}
+		}
+	}
+	
+	* All variables
+	stcox i.`exp'##i.agebroad age1 age2 age3 male 		///
+				i.ethnicity_5 imd resid_care_ldr 		///
+				obese40 								///
+				respiratory severe_asthma				///
+				cardiac af dvt_pe i.diabcat		 		///
+				liver stroke tia dementia				///
+				i.kidneyfn								///
+				spleen transplant dialysis				///
+				immunosuppression cancerHaem			///
+				autoimmune ibd cancerExhaem1yr, 		///
+				strata(stpcode) cluster(household_id) 
+	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+		capture qui di _b[`k'.`exp']
+		if _rc==0 {
+			post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+			("All") 										///
+			(`k') (1) (_b[`k'.`exp']) (_se[`k'.`exp'])
+		}
+				forvalues l = 2 (1) 3 {
+			capture qui di _b[`k'.`exp'#`l'.agebroad]
+			if _rc==0 {
+			    lincom `k'.`exp' + `k'.`exp'#`l'.agebroad
+				post `ldrresults' (`i') ("`out'") ("`exp'")	///
+					("All") 								///
 					(`k') (`l') (r(estimate)) (r(se))
 			}
 		}
@@ -249,8 +269,8 @@ label values exposure exposure
 drop exp
 
 * Age categories
-label define agebroad 	1 "16-<50" 		///
-						2 "50-<75" 		///
+label define agebroad 	1 "16-<65" 		///
+						2 "65-<75" 		///
 						3 "75+"
 label values agebroad agebroad
 
@@ -275,11 +295,13 @@ replace category = "LDR with no DS or CP" 	if inlist(exposure, 6) & expcat==5
 gen 	adjustment = 1 if model=="Confounders"
 replace adjustment = 2 if model=="Confounders+IMD"
 replace adjustment = 3 if model=="Confounders+Resid"
-replace adjustment = 4 if model=="Confounders_Comorb"
-label define adj 	1 "Confounders" 			///	
-					2 "Confounders with IMD"	///
-					3 "Confounders with care"	///
-					4 "Confounders with comorbidities"	
+replace adjustment = 4 if model=="Confounders+Comorb"
+replace adjustment = 5 if model=="All"
+label define adj 	1 "Confounders" 					///	
+					2 "Confounders with IMD"			///
+					3 "Confounders with care"			///
+					4 "Confounders with comorbidities"	///
+					5 "All"
 label values adjustment adj
 drop model
 

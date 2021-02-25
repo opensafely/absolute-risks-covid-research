@@ -16,7 +16,7 @@
 *
 * 						i = Wave (1 or 2)
 *						out = outcome (coviddeath covidadmission)
-*						exp = exposure (ldr ldr_cat ldr_carecat ds cp ldr_group
+*						exp = exposure (ldr ldr_cat ldr_carecat ds cp ldr_group)
 *
 ********************************************************************************
 *
@@ -142,6 +142,8 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	
 	* Confounders with physical comorbidities that are indicators for vaccination 
 	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
+				obese40 								///
+				respiratory severe_asthma				///
 				cardiac af dvt_pe i.diabcat		 		///
 				liver stroke tia dementia				///
 				i.kidneyfn								///
@@ -153,10 +155,32 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 		capture qui di _b[`k'.`exp']
 		if _rc==0 {
 			post `ldrresults' (`i') ("`out'") ("`exp'") ///
-			("Confounders_Comorb") 						///
+			("Confounders+Comorb") 						///
 			(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
 		}
 	}
+	
+	* All variables
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
+				imd resid_care_ldr 						///
+				obese40 								///
+				respiratory severe_asthma				///
+				cardiac af dvt_pe i.diabcat		 		///
+				liver stroke tia dementia				///
+				i.kidneyfn								///
+				spleen transplant dialysis				///
+				immunosuppression cancerHaem			///
+				autoimmune ibd cancerExhaem1yr, 		///
+		strata(stpcode) cluster(household_id) 
+	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+		capture qui di _b[`k'.`exp']
+		if _rc==0 {
+			post `ldrresults' (`i') ("`out'") ("`exp'") ///
+			("All") 						///
+			(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+		}
+	}
+	
 
 postclose `ldrresults'
 
@@ -216,11 +240,13 @@ replace category = "LDR with no DS or CP" 	if inlist(exposure, 6) & expcat==5
 gen 	adjustment = 1 if model=="Confounders"
 replace adjustment = 2 if model=="Confounders+IMD"
 replace adjustment = 3 if model=="Confounders+Resid"
-replace adjustment = 4 if model=="Confounders_Comorb"
-label define adj 	1 "Confounders" 			///	
-					2 "Confounders with IMD"	///
-					3 "Confounders with care"	///
-					4 "Confounders with comorbidities"	
+replace adjustment = 4 if model=="Confounders+Comorb"
+replace adjustment = 5 if model=="All"
+label define adj 	1 "Confounders" 					///	
+					2 "Confounders with IMD"			///
+					3 "Confounders with care"			///
+					4 "Confounders with comorbidities"	///
+					5 "All"	
 label values adjustment adj
 drop model
 
@@ -241,6 +267,7 @@ rename hr_ci1 hr_conf
 rename hr_ci2 hr_conf_imd
 rename hr_ci3 hr_conf_resid
 rename hr_ci4 hr_conf_comorb
+rename hr_ci5 hr_all
 
 
 order wave outcome exposure category hr*

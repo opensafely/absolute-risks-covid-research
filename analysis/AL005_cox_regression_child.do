@@ -12,8 +12,7 @@
 *
 *	Other output:	Log file:  logs/AL005_cox_regression_child.log
 *					Estimates:	output/
-*									output_hrs_main_child
-*									output_rates_child
+*									ldcox_covidadmission.out
 *
 ********************************************************************************
 *
@@ -129,21 +128,30 @@ forvalues i = 1 (1) 2 {
 			
 			* Confounders with physical comorbidities that are indicators for vaccination 
 			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
-						cardiac af dvt_pe i.diabcat		 		///
-						liver stroke tia dementia				///
-						i.kidneyfn								///
-						spleen transplant dialysis				///
-						immunosuppression cancerHaem			///
-						autoimmune ibd cancerExhaem1yr, 		///
+						obese40, 										///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
 				if _rc==0 {
 				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
-					("Confounders_Comorb") 						///
+					("Confounders+Comorb") 							///
 					(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
 				}
 			}
+			
+			* All 
+			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
+						imd resid_care_ldr obese40, 					///
+				strata(stpcode) cluster(household_id) 
+			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+			    capture qui di _b[`k'.`exp']
+				if _rc==0 {
+				    post `ldrresults' (`i') ("`out'") ("`exp'") 		///
+					("All")					 							///
+					(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+				}
+			}
+			
 		}
 	}
 }
@@ -205,11 +213,13 @@ replace category = "LDR with no DS or CP" 	if inlist(exposure, 6) & expcat==5
 gen 	adjustment = 1 if model=="Confounders"
 replace adjustment = 2 if model=="Confounders+IMD"
 replace adjustment = 3 if model=="Confounders+Resid"
-replace adjustment = 4 if model=="Confounders_Comorb"
-label define adj 	1 "Confounders" 			///	
-					2 "Confounders with IMD"	///
-					3 "Confounders with care"	///
-					4 "Confounders with comorbidities"	
+replace adjustment = 4 if model=="Confounders+Comorb"
+replace adjustment = 5 if model=="All"
+label define adj 	1 "Confounders" 				///	
+					2 "Confounders with IMD"		///
+					3 "Confounders with care"		///
+					4 "Confounders with obesity"	///	
+					5 "All"	
 label values adjustment adj
 drop model
 
@@ -229,14 +239,15 @@ reshape wide hr_ci, i(wave outcome exposure expcat) j(adjust)
 rename hr_ci1 hr_conf
 rename hr_ci2 hr_conf_imd
 rename hr_ci3 hr_conf_resid
-rename hr_ci4 hr_conf_comorb
+rename hr_ci4 hr_conf_obese
+rename hr_ci5 hr_conf_all
 
 
 order wave outcome exposure category hr*
 sort wave outcome exposure expcat
 
 * Save data
-outsheet using "output/output_hrs_main_child", replace
+save "output/output_hrs_main_child", replace
 
 
 
@@ -245,30 +256,21 @@ outsheet using "output/output_hrs_main_child", replace
 ***************************
 
 forvalues i = 1 (1) 2 {
-	foreach out in coviddeath covidadmission composite  {
+	foreach out in covidadmission  {
 		local expnow = "ldr"
-		use "analysis/data_temp`out'_`expnow'_`i'", clear
+		use "analysis/data_tempcovidadmission_`expnow'_`i'", clear
 		gen exp = "`expnow'"
 		foreach exp in ldr_cat ldr_carecat ds cp ldr_group {
 			rename `expnow' `exp'
-			append using "analysis/data_temp`out'_`exp'_`i'"
-			erase "analysis/data_temp`out'_`expnow'_`i'.dta"
+			append using "analysis/data_tempcovidadmission_`exp'_`i'"
+			erase "analysis/data_tempcovidadmission_`expnow'_`i'.dta"
 			replace exp = "`exp'" if exp==""
 			local expnow = "`exp'"
 		}
-		erase "analysis/data_temp`out'_`expnow'_`i'.dta"
+		erase "analysis/data_tempcovidadmission_`expnow'_`i'.dta"
 		gen out = "`out'"
-		save "analysis/data_temp`out'_`i'", replace
+		save "analysis/data_tempcovidadmission_`i'", replace
 	}
-	use "analysis/data_tempcoviddeath_`i'"
-	append using "analysis/data_tempcovidadmission_`i'"
-	append using "analysis/data_tempcomposite_`i'"
-
-	* Delete unneeded datasets
-	erase "analysis/data_tempcoviddeath_`i'.dta"
-	erase "analysis/data_tempcovidadmission_`i'.dta"
-	erase "analysis/data_tempcomposite_`i'.dta"
-
 	gen wave = `i'
 	save "analysis/data_temp_`i'.dta"
 }
@@ -337,8 +339,24 @@ sort wave outcome exposure expcat
 
 
 * Save data
-outsheet using "output/output_rates_child", replace
+save "output/output_rates_child", replace
 
 
+
+
+
+******************************
+*  Combine HR and rate data  *
+******************************
+
+use "output/output_rates_child"
+merge 1:1 wave outcome exposure category ///
+	using "output/output_hrs_main_child", assert(match) nogen
+sort wave outcome exposure category
+
+erase "output/output_rates_child.dta"
+erase "output/output_hrs_main_child.dta"
+
+outsheet using "output/ldcox_covidadmission.out", replace
 
 log close

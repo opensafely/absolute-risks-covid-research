@@ -60,11 +60,16 @@ forvalues i = 1 (1) 2 {
 	bysort household_id: egen num_old = sum(tempold)
 	bysort household_id: egen num_ldr = sum(templdr)
 	
+	* Handle missing household IDs
+	replace num_old = 0	if household_id==0
+	replace num_ldr = 0	if household_id==0
+
 	recode num_old 0/4=0 5/max=1, gen(resid_care_old)
 	recode num_ldr 0/4=0 5/max=1, gen(resid_care_ldr)
 	drop templdr tempold num_old num_ldr
 	
 	order resid_care_old resid_care_ldr, after(household_id)
+	
 	
 	
 	
