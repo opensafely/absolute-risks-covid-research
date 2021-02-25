@@ -122,6 +122,9 @@ forvalues i = 1 (1) 2 {
 	noi tab num_old
 	noi tab num_ldr
 	
+	noi tab num_old if household_id!=0
+	noi tab num_ldr if household_id!=0
+	
 	recode num_old 0/4=0 5/max=1, gen(resid_care_old2)
 	recode num_ldr 0/4=0 5/max=1, gen(resid_care_ldr2)
 
@@ -137,7 +140,13 @@ forvalues i = 1 (1) 2 {
 	
 	bysort resid_care_old: summ age
 	
+	tab resid_care_old2 if household_id!=0
+	tab resid_care_ldr2 if household_id!=0
 	
+	
+	tab resid_care_ldr2 ldr  if household_id!=0
+	tab resid_care_ldr2 ldr_cat if household_id!=0
+	tab resid_care_ldr2 ldr_carecat if household_id!=0
 	
 	*******************************************
 	*  Describe comorbidities (adjusted for)  *
