@@ -1,0 +1,4 @@
+wave	outcome	exposure	category	hr_conf	hr_conf_imd	hr_conf_resid	expcat
+1	"COVID-19 admission"	"LDR by residential care"	"No"	""	""	""	0
+1	"COVID-19 admission"	"LDR by residential care"	"LDR, community"	"6.98 (1.65, 29.51)"	"6.92 (1.62, 29.55)"	"6.98 (1.65, 29.51)"	1
+1	"COVID-19 admission"	"LDR by residential care"	"LDR, residential care"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	2

@@ -1,0 +1,4 @@
+wave	outcome	exposure	category	hr_conf	hr_conf_imd	hr_conf_resid	expcat
+2	"COVID-19 admission"	"LDR Severe vs mild"	"No"	""	""	""	0
+2	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, mild"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	1
+2	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, profound"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	2

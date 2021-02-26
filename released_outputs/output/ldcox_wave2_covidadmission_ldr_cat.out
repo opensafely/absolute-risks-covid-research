@@ -1,0 +1,4 @@
+wave	outcome	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
+2	"COVID-19 admission"	"LDR Severe vs mild"	"Not on LDR"	"No"	27228	4.5e+02	60.824	60.106	61.551	""	""	""	""	""
+2	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, mild"	"LDR, mild"	281	2.34835	119.658	106.455	134.500	"3.27 (2.91, 3.67)"	"2.93 (2.6, 3.3)"	"3.09 (2.73, 3.5)"	"2.86 (2.54, 3.21)"	"2.53 (2.24, 2.87)"
+2	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, profound"	"LDR, profound"	102	0.51016	199.938	164.670	242.760	"5.27 (4.31, 6.44)"	"4.92 (4.03, 6.02)"	"4.63 (3.76, 5.69)"	"5.1 (4.18, 6.21)"	"4.32 (3.53, 5.29)"

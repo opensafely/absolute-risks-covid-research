@@ -1,0 +1,7 @@
+wave	outcome	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
+1	"COVID-19 death"	"Combined grouping"	"No DS, no CP, no LDR"	"No"	13682	7.1e+02	19.190	18.871	19.514	""	""	""	""	""
+1	"COVID-19 death"	"Combined grouping"	"DS but not LDR"	"DS but not LDR"	[REDACTED]	0.045027	44.418	11.109	177.601	"13.45 (3.23, 56.04)"	"12.8 (3.06, 53.55)"	"13.39 (3.22, 55.59)"	"13.08 (3.09, 55.3)"	"12.48 (2.94, 52.9)"
+1	"COVID-19 death"	"Combined grouping"	"DS and LDR"	"DS and LDR"	[REDACTED]	0.353161	107.600	78.294	147.875	"39.8 (28.87, 54.88)"	"37.57 (27.24, 51.81)"	"32.38 (22.94, 45.68)"	"16.6 (11.95, 23.07)"	"14.06 (9.98, 19.81)"
+1	"COVID-19 death"	"Combined grouping"	"CP but not LDR"	"CP but not LDR"	[REDACTED]	0.569912	24.565	14.549	41.478	"3.82 (2.3, 6.36)"	"3.58 (2.15, 5.95)"	"3.8 (2.28, 6.31)"	"3.73 (2.23, 6.23)"	"3.55 (2.12, 5.92)"
+1	"COVID-19 death"	"Combined grouping"	"CP and LDR"	"CP and LDR"	[REDACTED]	0.346523	46.173	28.287	75.368	"12.02 (7.47, 19.33)"	"11.1 (6.9, 17.86)"	"9.86 (5.95, 16.33)"	"11.89 (7.42, 19.04)"	"9.97 (6.12, 16.26)"
+1	"COVID-19 death"	"Combined grouping"	"LD with no DS or CP"	"LDR with no DS or CP"	[REDACTED]	3.815494	43.769	37.610	50.937	"6.78 (5.82, 7.89)"	"6.01 (5.16, 7)"	"5.92 (4.93, 7.1)"	"5.67 (4.86, 6.62)"	"4.83 (4.08, 5.72)"
