@@ -1,0 +1,3 @@
+wave	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
+2	"Down's syndrome"	0	"No"	54116	6.0e+02	89.753	89.000	90.512	""	""	""	""	""
+2	"Down's syndrome"	1	"Yes"	55	0.33609	163.644	125.639	213.146	"9.52 (7.19, 12.6)"	"9.17 (6.92, 12.13)"	"6.6 (4.97, 8.77)"	"6.38 (4.84, 8.41)"	"4.66 (3.49, 6.22)"

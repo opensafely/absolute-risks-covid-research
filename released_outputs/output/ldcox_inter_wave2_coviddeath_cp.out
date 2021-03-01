@@ -1,0 +1,7 @@
+wave	outcome	exposure	agebroad	category	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_ci5	expcat
+2	"COVID-19 death"	"Cerebral Palsy"	"16-<65"	"No"	""	""	""	""	""	0
+2	"COVID-19 death"	"Cerebral Palsy"	"16-<65"	"Yes"	"5.78 (3.09, 10.8)"	"5.39 (2.89, 10.06)"	"4.13 (2.19, 7.79)"	"5.57 (2.98, 10.4)"	"4.26 (2.27, 7.99)"	1
+2	"COVID-19 death"	"Cerebral Palsy"	"65-<75"	"No"	""	""	""	""	""	0
+2	"COVID-19 death"	"Cerebral Palsy"	"65-<75"	"Yes"	"6.78 (3.84, 11.97)"	"6.14 (3.5, 10.79)"	"5.13 (2.87, 9.16)"	"6.6 (3.76, 11.61)"	"5.26 (2.97, 9.3)"	1
+2	"COVID-19 death"	"Cerebral Palsy"	"75+"	"No"	""	""	""	""	""	0
+2	"COVID-19 death"	"Cerebral Palsy"	"75+"	"Yes"	"2.13 (.93, 4.89)"	"2.02 (.87, 4.68)"	"1.72 (.73, 4.08)"	"2.33 (.99, 5.53)"	"2.02 (.84, 4.86)"	1

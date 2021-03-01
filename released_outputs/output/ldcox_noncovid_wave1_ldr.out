@@ -1,0 +1,3 @@
+wave	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
+1	"Learning disability register"	0	"No"	69207	713.5911	96.984	96.264	97.709	""	""	""	""	""
+1	"Learning disability register"	1	"Yes"	596	4.5152	131.999	121.816	143.034	"3.71 (3.42, 4.03)"	"3.38 (3.1, 3.68)"	"3.32 (3, 3.69)"	"3.44 (3.17, 3.73)"	"2.99 (2.72, 3.29)"

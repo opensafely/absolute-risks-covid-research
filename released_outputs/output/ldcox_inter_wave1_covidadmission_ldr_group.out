@@ -1,0 +1,19 @@
+wave	outcome	exposure	agebroad	category	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_ci5	expcat
+1	"COVID-19 admission"	"Combined grouping"	"16-<65"	"No"	""	""	""	""	""	0
+1	"COVID-19 admission"	"Combined grouping"	"16-<65"	"DS but not LDR"	"3.13 (.76, 12.92)"	"3.1 (.75, 12.78)"	"3.11 (.75, 12.85)"	"2.69 (.65, 11.15)"	"2.64 (.64, 10.98)"	1
+1	"COVID-19 admission"	"Combined grouping"	"16-<65"	"DS and LDR"	"11.16 (8.74, 14.25)"	"10.86 (8.5, 13.87)"	"9.71 (7.6, 12.42)"	"7.46 (5.83, 9.53)"	"6.47 (5.05, 8.28)"	2
+1	"COVID-19 admission"	"Combined grouping"	"16-<65"	"CP but not LDR"	"3.34 (2.19, 5.1)"	"3.16 (2.07, 4.82)"	"3.32 (2.18, 5.07)"	"3.17 (2.08, 4.84)"	"3.05 (2, 4.65)"	3
+1	"COVID-19 admission"	"Combined grouping"	"16-<65"	"CP and LDR"	"9.22 (6.62, 12.84)"	"8.75 (6.29, 12.16)"	"7.96 (5.76, 10.99)"	"8.47 (6.09, 11.79)"	"7.13 (5.17, 9.83)"	4
+1	"COVID-19 admission"	"Combined grouping"	"16-<65"	"LDR with no DS or CP"	"4.49 (3.98, 5.08)"	"4.11 (3.63, 4.65)"	"4.13 (3.63, 4.69)"	"3.83 (3.39, 4.34)"	"3.37 (2.97, 3.83)"	5
+1	"COVID-19 admission"	"Combined grouping"	"65-<75"	"No"	""	""	""	""	""	0
+1	"COVID-19 admission"	"Combined grouping"	"65-<75"	"DS but not LDR"	"17.96 (2.49, 129.55)"	"18.21 (2.54, 130.39)"	"17.64 (2.53, 122.85)"	"20.37 (2.78, 149.06)"	"20.08 (2.84, 142.19)"	1
+1	"COVID-19 admission"	"Combined grouping"	"65-<75"	"DS and LDR"	"13.66 (6.66, 28.02)"	"12.62 (6.15, 25.9)"	"10.36 (4.99, 21.49)"	"8.13 (3.87, 17.09)"	"6.04 (2.86, 12.75)"	2
+1	"COVID-19 admission"	"Combined grouping"	"65-<75"	"CP but not LDR"	"4.45 (2.43, 8.15)"	"4.08 (2.24, 7.45)"	"4.41 (2.41, 8.08)"	"4.3 (2.35, 7.88)"	"4.07 (2.22, 7.44)"	3
+1	"COVID-19 admission"	"Combined grouping"	"65-<75"	"CP and LDR"	"4.59 (1.89, 11.16)"	"4.12 (1.69, 10.03)"	"3.87 (1.58, 9.45)"	"4.84 (2.05, 11.43)"	"3.87 (1.61, 9.27)"	4
+1	"COVID-19 admission"	"Combined grouping"	"65-<75"	"LDR with no DS or CP"	"6.44 (5.31, 7.81)"	"5.74 (4.73, 6.97)"	"5.65 (4.65, 6.87)"	"5.69 (4.69, 6.91)"	"4.73 (3.89, 5.74)"	5
+1	"COVID-19 admission"	"Combined grouping"	"75+"	"No"	""	""	""	""	""	0
+1	"COVID-19 admission"	"Combined grouping"	"75+"	"DS but not LDR"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	1
+1	"COVID-19 admission"	"Combined grouping"	"75+"	"DS and LDR"	"6.78 (.93, 49.66)"	"6.16 (.84, 45.11)"	"5.9 (.82, 42.4)"	"6.85 (.89, 52.88)"	"5.87 (.78, 44.02)"	2
+1	"COVID-19 admission"	"Combined grouping"	"75+"	"CP but not LDR"	"2.56 (1.21, 5.41)"	"2.45 (1.16, 5.18)"	"2.54 (1.2, 5.37)"	"2.88 (1.35, 6.14)"	"2.79 (1.3, 5.96)"	3
+1	"COVID-19 admission"	"Combined grouping"	"75+"	"CP and LDR"	"5.76 (1.79, 18.55)"	"5.47 (1.71, 17.5)"	"4.67 (1.44, 15.14)"	"8.12 (2.51, 26.29)"	"6.5 (2.01, 21.06)"	4
+1	"COVID-19 admission"	"Combined grouping"	"75+"	"LDR with no DS or CP"	"3.47 (2.71, 4.45)"	"3.08 (2.4, 3.94)"	"3.02 (2.33, 3.92)"	"3.5 (2.72, 4.5)"	"2.85 (2.19, 3.7)"	5

@@ -1,0 +1,7 @@
+wave	outcome	exposure	agebroad	category	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_ci5	expcat
+2	"COVID-19 admission"	"Down's syndrome"	"16-<65"	"No"	""	""	""	""	""	0
+2	"COVID-19 admission"	"Down's syndrome"	"16-<65"	"Yes"	"6.83 (5.1, 9.14)"	"6.67 (4.98, 8.92)"	"5.15 (3.81, 6.95)"	"5.09 (3.8, 6.81)"	"4 (2.97, 5.39)"	1
+2	"COVID-19 admission"	"Down's syndrome"	"65-<75"	"No"	""	""	""	""	""	0
+2	"COVID-19 admission"	"Down's syndrome"	"65-<75"	"Yes"	"13.01 (5.9, 28.67)"	"12.35 (5.62, 27.14)"	"7.98 (3.64, 17.48)"	"9.71 (4.45, 21.18)"	"6.33 (2.95, 13.59)"	1
+2	"COVID-19 admission"	"Down's syndrome"	"75+"	"No"	""	""	""	""	""	0
+2	"COVID-19 admission"	"Down's syndrome"	"75+"	"Yes"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	1
