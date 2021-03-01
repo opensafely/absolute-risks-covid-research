@@ -1,0 +1,7 @@
+wave	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
+2	"Combined grouping"	"No DS, no CP, no LDR"	"No"	53672	6.0e+02	89.612	88.858	90.374	""	""	""	""	""
+2	"Combined grouping"	"DS but not LDR"	"DS but not LDR"	0	0.037694	0.000			"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"
+2	"Combined grouping"	"DS and LDR"	"DS and LDR"	55	0.296973	185.202	142.190	241.225	"11.07 (8.41, 14.56)"	"10.66 (8.1, 14.02)"	"9.95 (7.56, 13.11)"	"7.06 (5.37, 9.28)"	"6.39 (4.85, 8.43)"
+2	"Combined grouping"	"CP but not LDR"	"CP but not LDR"	29	0.481257	60.259	41.875	86.713	"1.78 (1.25, 2.53)"	"1.69 (1.19, 2.4)"	"1.77 (1.24, 2.52)"	"1.8 (1.27, 2.56)"	"1.73 (1.22, 2.46)"
+2	"Combined grouping"	"CP and LDR"	"CP and LDR"	31	0.293381	105.665	74.310	150.248	"4.87 (3.43, 6.91)"	"4.58 (3.22, 6.52)"	"4.37 (3.02, 6.31)"	"5.11 (3.58, 7.3)"	"4.53 (3.13, 6.55)"
+2	"Combined grouping"	"LD with no DS or CP"	"LDR with no DS or CP"	384	3.238897	118.559	107.274	131.030	"3.53 (3.21, 3.89)"	"3.23 (2.93, 3.56)"	"3.29 (2.94, 3.68)"	"3.36 (3.05, 3.71)"	"3 (2.7, 3.34)"

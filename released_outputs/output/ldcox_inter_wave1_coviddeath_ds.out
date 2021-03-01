@@ -1,0 +1,7 @@
+wave	outcome	exposure	agebroad	category	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_ci5	expcat
+1	"COVID-19 death"	"Down's syndrome"	"16-<65"	"No"	""	""	""	""	""	0
+1	"COVID-19 death"	"Down's syndrome"	"16-<65"	"Yes"	"39.59 (28, 55.96)"	"38.2 (27.03, 53.99)"	"21.42 (14.13, 32.47)"	"17.3 (12.22, 24.51)"	"11.52 (7.77, 17.08)"	1
+1	"COVID-19 death"	"Down's syndrome"	"65-<75"	"No"	""	""	""	""	""	0
+1	"COVID-19 death"	"Down's syndrome"	"65-<75"	"Yes"	"43.23 (22.76, 82.14)"	"40.11 (21.1, 76.24)"	"17.69 (8.77, 35.65)"	"16.14 (8.29, 31.43)"	"8.81 (4.43, 17.55)"	1
+1	"COVID-19 death"	"Down's syndrome"	"75+"	"No"	""	""	""	""	""	0
+1	"COVID-19 death"	"Down's syndrome"	"75+"	"Yes"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	1

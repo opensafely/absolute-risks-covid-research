@@ -1,0 +1,4 @@
+wave	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
+2	"LDR by residential care"	"Not on LDR"	"No"	53701	6.0e+02	89.583	88.829	90.344	""	""	""	""	""
+2	"LDR by residential care"	"LDR, not in residential care"	"LDR, community"	397	3.50543	113.253	102.643	124.960	"3.83 (3.48, 4.21)"	"3.5 (3.19, 3.86)"	"3.83 (3.48, 4.21)"	"3.58 (3.25, 3.94)"	"3.38 (3.07, 3.71)"
+2	"LDR by residential care"	"LDR, in residential care"	"LDR, residential care"	73	0.32382	225.434	179.223	283.560	"4.45 (3.51, 5.65)"	"4.16 (3.27, 5.29)"	"1.04 (.7, 1.56)"	"4.22 (3.32, 5.36)"	"1.67 (1.12, 2.5)"

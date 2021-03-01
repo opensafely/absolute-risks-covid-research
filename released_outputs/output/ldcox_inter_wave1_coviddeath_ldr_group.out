@@ -1,0 +1,19 @@
+wave	outcome	exposure	agebroad	category	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_ci5	expcat
+1	"COVID-19 death"	"Combined grouping"	"16-<65"	"No"	""	""	""	""	""	0
+1	"COVID-19 death"	"Combined grouping"	"16-<65"	"DS but not LDR"	"13.84 (1.89, 101.16)"	"14.03 (1.92, 102.52)"	"13.76 (1.88, 100.55)"	"10.05 (1.34, 75.13)"	"9.83 (1.31, 73.84)"	1
+1	"COVID-19 death"	"Combined grouping"	"16-<65"	"DS and LDR"	"44.7 (31.49, 63.44)"	"42.94 (30.25, 60.95)"	"36.77 (25.37, 53.28)"	"18.79 (13.19, 26.76)"	"16.21 (11.22, 23.43)"	2
+1	"COVID-19 death"	"Combined grouping"	"16-<65"	"CP but not LDR"	"4.51 (1.68, 12.12)"	"4.19 (1.56, 11.25)"	"4.48 (1.67, 12.02)"	"4.34 (1.62, 11.66)"	"4.12 (1.53, 11.07)"	3
+1	"COVID-19 death"	"Combined grouping"	"16-<65"	"CP and LDR"	"14.02 (7.13, 27.55)"	"13.1 (6.66, 25.79)"	"11.54 (5.79, 23)"	"12.67 (6.42, 24.99)"	"10.65 (5.38, 21.1)"	4
+1	"COVID-19 death"	"Combined grouping"	"16-<65"	"LDR with no DS or CP"	"8.83 (6.87, 11.37)"	"7.94 (6.17, 10.23)"	"7.89 (6.06, 10.27)"	"7.38 (5.73, 9.5)"	"6.46 (5, 8.34)"	5
+1	"COVID-19 death"	"Combined grouping"	"65-<75"	"No"	""	""	""	""	""	0
+1	"COVID-19 death"	"Combined grouping"	"65-<75"	"DS but not LDR"	"51.58 (7.04, 378.09)"	"52.23 (7.14, 382.04)"	"50.86 (7.14, 362.17)"	"55.48 (7.52, 409.59)"	"53.88 (7.39, 393.06)"	1
+1	"COVID-19 death"	"Combined grouping"	"65-<75"	"DS and LDR"	"38.44 (18.67, 79.13)"	"35.39 (17.18, 72.9)"	"28.12 (13.45, 58.82)"	"13.48 (6.39, 28.47)"	"10.55 (5.02, 22.16)"	2
+1	"COVID-19 death"	"Combined grouping"	"65-<75"	"CP but not LDR"	"6.56 (2.92, 14.74)"	"6 (2.68, 13.42)"	"6.5 (2.89, 14.59)"	"6.23 (2.78, 13.97)"	"5.89 (2.63, 13.18)"	3
+1	"COVID-19 death"	"Combined grouping"	"65-<75"	"CP and LDR"	"12.34 (5.08, 30.02)"	"11.08 (4.55, 26.97)"	"10.23 (4.15, 25.21)"	"11.43 (4.81, 27.13)"	"9.52 (3.94, 23.01)"	4
+1	"COVID-19 death"	"Combined grouping"	"65-<75"	"LDR with no DS or CP"	"9.62 (7.47, 12.39)"	"8.53 (6.62, 10.99)"	"8.31 (6.34, 10.88)"	"7.54 (5.84, 9.73)"	"6.38 (4.91, 8.3)"	5
+1	"COVID-19 death"	"Combined grouping"	"75+"	"No"	""	""	""	""	""	0
+1	"COVID-19 death"	"Combined grouping"	"75+"	"DS but not LDR"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	1
+1	"COVID-19 death"	"Combined grouping"	"75+"	"DS and LDR"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	"0 (0, 0)"	2
+1	"COVID-19 death"	"Combined grouping"	"75+"	"CP but not LDR"	"2.17 (.85, 5.55)"	"2.07 (.81, 5.31)"	"2.16 (.84, 5.52)"	"2.16 (.85, 5.5)"	"2.07 (.82, 5.24)"	3
+1	"COVID-19 death"	"Combined grouping"	"75+"	"CP and LDR"	"8.9 (2.86, 27.68)"	"8.45 (2.72, 26.22)"	"6.84 (2.1, 22.31)"	"11.64 (3.78, 35.84)"	"9.53 (2.98, 30.45)"	4
+1	"COVID-19 death"	"Combined grouping"	"75+"	"LDR with no DS or CP"	"4.05 (3.06, 5.37)"	"3.57 (2.68, 4.74)"	"3.45 (2.52, 4.73)"	"3.53 (2.65, 4.72)"	"2.94 (2.16, 4)"	5
