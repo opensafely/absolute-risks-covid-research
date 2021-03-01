@@ -45,7 +45,7 @@ foreach out in coviddeath composite {
 	
 	* Fit flexible survival model, adjusting for sex age and ethnicity
 	xi i.ethnicity_5 i.male 
-	stpm2 ldr age1 age2 age3  _I*, df(2) scale(hazard) eform lininit
+	stpm2 ldr age1 age2 age3  _I*, df(4) scale(hazard) eform lininit
 
 	summ _t 
 	local tmax=r(max)
@@ -67,10 +67,10 @@ foreach out in coviddeath composite {
 
 	* Graph titles
 	local title_coviddeath = "Cumulative mortality (%)"
-	local label_coviddeath = "0(0.05)0.15"
+	local label_coviddeath = "0(0.25)0.1"
 
 	local title_composite = "Cumulative mortality or admission (%)"
-	local label_composite = "0(0.1)0.5"
+	local label_composite = "0(0.25)1.9"
 	
 	
 	* Graph
