@@ -67,7 +67,7 @@ foreach out in coviddeath composite {
 
 	* Graph titles
 	local title_coviddeath = "Cumulative mortality (%)"
-	local label_coviddeath = "0(0.25)0.1"
+	local label_coviddeath = "0(0.025)0.1"
 
 	local title_composite = "Cumulative mortality or admission (%)"
 	local label_composite = "0(0.25)1.9"
