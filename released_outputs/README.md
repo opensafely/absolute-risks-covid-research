@@ -31,6 +31,7 @@
   * [output/ldcox_covidadmission.txt](output/ldcox_covidadmission.txt)
   * [output/ldcox_inter_wave1_covidadmission_cp.out](output/ldcox_inter_wave1_covidadmission_cp.out)
   * [output/ldcox_inter_wave1_covidadmission_ds.out](output/ldcox_inter_wave1_covidadmission_ds.out)
+  * [output/ldcox_inter_wave1_covidadmission_ldr.out](output/ldcox_inter_wave1_covidadmission_ldr.out)
   * [output/ldcox_inter_wave1_covidadmission_ldr_carecat.out](output/ldcox_inter_wave1_covidadmission_ldr_carecat.out)
   * [output/ldcox_inter_wave1_covidadmission_ldr_cat.out](output/ldcox_inter_wave1_covidadmission_ldr_cat.out)
   * [output/ldcox_inter_wave1_covidadmission_ldr_group.out](output/ldcox_inter_wave1_covidadmission_ldr_group.out)
