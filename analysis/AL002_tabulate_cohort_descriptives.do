@@ -147,6 +147,8 @@ file write tablecontent _n
 
 /* Table: Comorbidities  */
 
+tabulatevariable, variable(obese40) start(1) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
 tabulatevariable, variable(asthma_severe) start(1) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
 tabulatevariable, variable(cf) start(1) end(1) file(tablecontent) binexp(ldr)
@@ -240,6 +242,10 @@ tabulatevariable, variable(cp) start(0) end(1) file(tablecontent) binexp(ldr)
 file write tablecontent _n 
 
 
+/* Table: Comorbidities  */
+
+tabulatevariable, variable(obese40) start(1) end(1) file(tablecontent) binexp(ldr)
+file write tablecontent _n 
 	
 file close tablecontent
 
