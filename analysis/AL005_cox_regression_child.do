@@ -12,7 +12,7 @@
 *
 *	Other output:	Log file:  logs/AL005_cox_regression_child.log
 *					Estimates:	output/
-*									ldcox_covidadmission.out
+*									ldcox_covidadmission_child.out
 *
 ********************************************************************************
 *
@@ -103,7 +103,7 @@ forvalues i = 1 (1) 2 {
 			}
 			
 			* Confounders with deprivation
-			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 imd, ///
+			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 i.imd, ///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
@@ -141,7 +141,7 @@ forvalues i = 1 (1) 2 {
 			
 			* All 
 			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
-						imd resid_care_ldr obese40, 					///
+						i.imd resid_care_ldr obese40, 					///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
@@ -334,6 +334,18 @@ rename _Rate rate_per_10000
 rename _Lower rate_cl
 rename _Upper rate_cu
 
+/* Redaction  */ 
+
+** Remove event counts < 5, and complementary counts
+gen redact = inlist(events, 1, 2, 3, 4, 5)
+bysort wave outcome exposure category: egen redact_group = max(redact)
+replace events = -999 if redact_group==1 & !(exposure==6 & expcat==0 & redact==0)
+gen events_str = string(events)
+replace events_str = "<=5" if events_str=="-999"
+order events_str, after(events)
+drop events redact redact_group
+rename events_str events
+
 order wave outcome exposure category events pyr rate*
 sort wave outcome exposure expcat
 
@@ -357,6 +369,6 @@ sort wave outcome exposure category
 erase "output/output_rates_child.dta"
 erase "output/output_hrs_main_child.dta"
 
-outsheet using "output/ldcox_covidadmission.out", replace
+outsheet using "output/ldcox_covidadmission_child.out", replace
 
 log close
