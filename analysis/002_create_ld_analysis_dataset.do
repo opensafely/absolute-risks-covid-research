@@ -33,7 +33,7 @@ cap log close
 log using "logs/002_create_ld_analysis_dataset", replace t
 
 * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
-* Wave 2: i=2  (1 Sept 20 - latest)
+* Wave 2: i=2  (1 Sept 20 - 3 March 21)
 forvalues i = 1 (1) 2 {
 
 	* Open data
@@ -228,10 +228,7 @@ forvalues i = 1 (1) 2 {
 	format transplant_date %td
 
 
-
-
-
-
+	
 
 	**************************
 	*  "Ever" comorbidities  *
@@ -267,9 +264,6 @@ forvalues i = 1 (1) 2 {
 
 
 
-
-
-
 	 
 
 	************
@@ -277,8 +271,8 @@ forvalues i = 1 (1) 2 {
 	************
 
 
-	label define kidneyfn 	1 "None" 					///
-							2 "Stage 3a/3b egfr 30-60"	///
+	label define kidneyfn 	1 "None" 							///
+							2 "Stage 3a/3b egfr 30-60"			///
 							3 "Stage 4/5 egfr<30"
 					
 	* Categorise into CKD stages
@@ -291,7 +285,7 @@ forvalues i = 1 (1) 2 {
 	label values kidneyfn kidneyfn 
 
 	* Delete variables no longer needed
-	drop egfr egfr_cat
+	drop egfr_cat
 
 	* If either dialysis or kidney transplant then set kidney function to the 
 	*   lowest level
@@ -323,9 +317,6 @@ forvalues i = 1 (1) 2 {
 	replace hba1ccat = 4 if hba1c_pct >= 9    & hba1c_pct !=.
 	label values hba1ccat hba1ccat
 
-	* Delete unneeded variables
-	drop hba1c_pct 
-
 	* Create diabetes, split by control/not
 	gen     diabcat = 1 if diabetes==0
 	replace diabcat = 2 if diabetes==1 & inlist(hba1ccat, 0, 1)
@@ -337,7 +328,7 @@ forvalues i = 1 (1) 2 {
 							3 "Uncontrolled diabetes" 	///
 							4 "Diabetes, no hba1c measure"
 	label values diabcat diabetes
-
+	drop hba1ccat
 
 
 
@@ -395,22 +386,18 @@ forvalues i = 1 (1) 2 {
 	***************************************
 	*  Binary outcomes and survival time  *
 	***************************************
-
-
+	
+	* Summarise data
+	noi summ coviddeath_date covidadmission_date, format
+	
 	*** WAVE 1 CENSORING *** 31st August 2020
 	global coviddeathcensor1     = d(31Aug2020)
 	global covidadmissioncensor1 = d(31Aug2020)
 
-	*** WAVE 2 CENSORING *** last outcome date minus 7 days	
-	* COVID death
-	noi summ coviddeath_date, format
-	global coviddeathcensor2 = r(max) - 7
-		
-	* COVID hospital admission
-	noi summ covidadmission_date, format
-	global covidadmissioncensor2 = r(max) - 7
-
-
+	*** WAVE 2 CENSORING *** 3 March 2021 (same duration as first cohort)
+	global coviddeathcensor2     = d(3Mar2021)
+	global covidadmissioncensor2 = d(3Mar2021)
+	
 	gen coviddeathcensor1     = $coviddeathcensor1
 	gen covidadmissioncensor1 = $covidadmissioncensor1
 
@@ -536,6 +523,7 @@ forvalues i = 1 (1) 2 {
 	label var af					"Atrial fibrillation"
 	label var dvt					"Deep vein thrombosis/pulmonary embolism"
 	label var diabcat				"Diabetes"
+	label var hba1c_pct				"HbA1c (%)"
 	label var tia					"Transient ischemic attack"
 	label var stroke				"Stroke"
 	label var dementia				"Dementia"
@@ -544,6 +532,7 @@ forvalues i = 1 (1) 2 {
 	label var cancerHaem			"Haematological cancer"
 	label var liver					"Liver disease"
 	label var kidneyfn				"Kidney function"
+	label var egfr					"Estimated GFR"
 	label var transplant			"Organ transplant recipient"
 	label var dialysis				"Dialysis"
 	label var spleen				"Spleen problems (dysplenia, sickle cell)"
@@ -584,11 +573,11 @@ forvalues i = 1 (1) 2 {
 			ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group			///
 			age age age1 age2 age3 agegroup agebroad child male			///
 			bmi* obese* ethnicity*										/// 
-			respiratory* asthma_severe* cf* cardiac* diabcat*			///
+			respiratory* asthma_severe* cf* cardiac* diabcat* hba1c		///
 			af* dvt_pe* 												///
 			stroke* dementia* tia*										///
 			cancerExhaem* cancerHaem* 									///
-			kidneyfn* liver* transplant* 								///
+			kidneyfn* egfr liver* transplant* 							///
 			spleen* autoimmune* immunosuppression*	ibd*				///
 			smi* dialysis neuro											///
 			coviddeath* otherdeath* covidadmission* composite* noncovid*
@@ -598,10 +587,10 @@ forvalues i = 1 (1) 2 {
 			ldr ldr_cat ld_profound ldr_carecat ds cp ldr_group			///
 			age age age1 age2 age3 agegroup agebroad child male			///
 			bmi* obese* ethnicity*										/// 
-			respiratory* asthma_severe cf cardiac diabcat	 			///
+			respiratory* asthma_severe cf cardiac diabcat hba1c			///
 			af dvt_pe stroke dementia tia								///
 			cancerExhaem* cancerHaem 									///
-			kidneyfn liver transplant 									///
+			kidneyfn egfr liver transplant 								///
 			spleen autoimmune immunosuppression ibd						///
 			smi dialysis neuro											///
 			coviddeath* otherdeath* covidadmission* composite*			///
@@ -620,7 +609,7 @@ forvalues i = 1 (1) 2 {
 	    label data "Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work"
 	}
 	else if `i'==2 {
-	    label data "Analysis dataset, wave 2 (1 Sept 20 - latest), for learning disability work"
+	    label data "Analysis dataset, wave 2 (1 Sept 20 - 3 March 21), for learning disability work"
 	}
 	* Save overall dataset
 	save "analysis/data_ldanalysis_cohort`i'.dta", replace 
