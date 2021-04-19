@@ -153,7 +153,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	}
 	
 	* Confounders with deprivation
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 imd, ///
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 i.imd, ///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 		capture qui di _b[`k'.`exp']
