@@ -68,7 +68,6 @@ study = StudyDefinition(
         return_expectations={"date": {"earliest": "index_date"}},
     ),
 
-
     ### GEOGRAPHICAL AREA AND DEPRIVATION
     # RURAL/URBAN
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/37
