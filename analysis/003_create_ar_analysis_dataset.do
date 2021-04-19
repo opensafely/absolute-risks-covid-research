@@ -33,7 +33,7 @@ cap log close
 log using "logs/003_create_ar_analysis_dataset", replace t
 
 * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
-* Wave 2: i=2  (1 Sept 20 - latest)
+* Wave 2: i=2  (1 Sept 20 - 3 March 21)
 forvalues i = 1 (1) 2 {
 
 	* Open data
@@ -64,9 +64,7 @@ forvalues i = 1 (1) 2 {
 	drop if hiv_date<.
 	drop hiv_date
 	
-	* Drop people with missing ethnicity
-	drop if ethnicity_5>=.
-	
+
 	
 	
 	**************************
@@ -369,7 +367,7 @@ forvalues i = 1 (1) 2 {
 	label values kidneyfn kidneyfn 
 
 	* Delete variables no longer needed
-	drop egfr egfr_cat
+	drop egfr_cat
 
 	* If either dialysis or kidney transplant then set kidney function to the 
 	*   lowest level
@@ -401,9 +399,6 @@ forvalues i = 1 (1) 2 {
 	replace hba1ccat = 4 if hba1c_pct >= 9    & hba1c_pct !=.
 	label values hba1ccat hba1ccat
 
-	* Delete unneeded variables
-	drop hba1c_pct 
-
 	* Create diabetes, split by control/not
 	gen     diabcat = 1 if diabetes==0
 	replace diabcat = 2 if diabetes==1 & inlist(hba1ccat, 0, 1)
@@ -416,6 +411,8 @@ forvalues i = 1 (1) 2 {
 							4 "Diabetes, no hba1c measure"
 	label values diabcat diabetes
 
+	* Delete unneeded variables
+	drop hba1ccat 
 
 	
 
@@ -423,20 +420,17 @@ forvalues i = 1 (1) 2 {
 	*  Binary outcomes and survival time  *
 	***************************************
 
+	* Summarise data
+	noi summ coviddeath_date covidadmission_date, format
 
 	*** WAVE 1 CENSORING *** 31st August 2020
 	global coviddeathcensor1     = d(31Aug2020)
 	global covidadmissioncensor1 = d(31Aug2020)
 
-	*** WAVE 2 CENSORING *** last outcome date minus 7 days	
-	* COVID death
-	noi summ coviddeath_date, format
-	global coviddeathcensor2 = r(max) - 7
-		
-	* COVID hospital admission
-	noi summ covidadmission_date, format
-	global covidadmissioncensor2 = r(max) - 7
-
+	*** WAVE 2 CENSORING *** 3 March 2021 (same duration)
+	global coviddeathcensor2     = d(3Mar2021)
+	global covidadmissioncensor2 = d(3Mar2021)
+	
 
 	gen coviddeathcensor1     = $coviddeathcensor1
 	gen covidadmissioncensor1 = $covidadmissioncensor1
@@ -444,7 +438,8 @@ forvalues i = 1 (1) 2 {
 	gen coviddeathcensor2     = $coviddeathcensor2
 	gen covidadmissioncensor2 = $covidadmissioncensor2
 
-		
+			
+
 	* Composite outcome date (either COVID-19 death or hospitalisation)
 	egen composite_date = rowmin(coviddeath_date covidadmission_date)
 		
@@ -584,6 +579,7 @@ forvalues i = 1 (1) 2 {
 	label var dvt					"Deep vein thrombosis/pulmonary embolism"
 	label var pad					"Surgery for arterial disease"
 	label var diabcat				"Diabetes"
+	label var hba1c					"Hba1c"
 	label var tia					"Transient ischemic attack"
 	label var stroke				"Stroke"
 	label var dementia				"Dementia"
@@ -592,6 +588,7 @@ forvalues i = 1 (1) 2 {
 	label var cancerHaem			"Haematological cancer"
 	label var liver					"Liver disease"
 	label var kidneyfn				"Kidney function"
+	label var egfr					"Estimated GFR"
 	label var transplant			"Organ transplant recipient"
 	label var dialysis				"Dialysis"
 	label var spleen				"Spleen problems (dysplenia, sickle cell)"
@@ -646,11 +643,11 @@ forvalues i = 1 (1) 2 {
 			household* resid_care_old smoke*					 		///
 			age age age1 age2 age3 agegroup male						///
 			bmi* obese* ethnicity*										/// 
-			respiratory* asthma* cf* cardiac* diabcat*					///
+			respiratory* asthma* cf* cardiac* diabcat* hba1c			///
 			bpcat* hypertension* af* dvt_pe* pad*						///
 			stroke* dementia* tia* neuro								///
 			cancerExhaem cancerHaem 									///
-			kidneyfn* liver* transplant* dialysis						///
+			kidneyfn* egfr liver* transplant* dialysis					///
 			spleen* autoimmune* immunosuppression*	ibd*				///
 			smi ldr ds fracture*										///
 			coviddeath* otherdeath* covidadmission* composite* 			///
@@ -660,11 +657,11 @@ forvalues i = 1 (1) 2 {
 			household* resid_care_old smoke*					 		///
 			age age age1 age2 age3 agegroup male						///
 			bmi* obese* ethnicity*										/// 
-			respiratory asthma cf cardiac diabcat						///
-			bpcat hypertension af dvt_pe pad							///
+			respiratory asthma cf cardiac diabcat hba1c	 				///
+			bpcat* hypertension af dvt_pe pad							///
 			stroke dementia tia	neuro									///
 			cancerExhaem cancerHaem 									///
-			kidneyfn liver transplant dialysis							///
+			kidneyfn egfr liver transplant dialysis						///
 			spleen autoimmune immunosuppression	ibd						///
 			ldr ds smi fracture											///
 			coviddeath* otherdeath* covidadmission* composite* 			///
