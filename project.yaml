@@ -5,6 +5,18 @@ expectations:
 
 actions:
 
+  flow_chart1:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart --index-date-range "2020-03-01"
+    outputs:
+      highly_sensitive:
+        cohort: output/input_flow_chart_2020-03-01.csv
+
+  flow_chart2:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart --index-date-range "2020-09-01"
+    outputs:
+      highly_sensitive:
+        cohort: output/input_flow_chart_2020-09-01.csv
+
   generate_cohort1:
     run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2020-03-01"
     outputs:
@@ -24,6 +36,8 @@ actions:
      highly_sensitive:
         clean1: analysis/data_base_cohort1.dta
         clean2: analysis/data_base_cohort2.dta
+     moderately_sensitive:
+        log: logs/001_clean_input_data.log
 
   create_analysis:
     run: stata-mp:latest analysis/002_create_ld_analysis_dataset.do
@@ -32,7 +46,8 @@ actions:
      highly_sensitive:
         an_data1: analysis/data_ldanalysis_cohort1.dta
         an_data2: analysis/data_ldanalysis_cohort2.dta
-
+     moderately_sensitive:
+        log: logs/002_create_ld_analysis_dataset.log
 
   create_analysis_ar:
     run: stata-mp:latest analysis/003_create_ar_analysis_dataset.do
@@ -41,6 +56,8 @@ actions:
      highly_sensitive:
         an_data1: analysis/data_aranalysis_cohort1.dta
         an_data2: analysis/data_aranalysis_cohort2.dta
+     moderately_sensitive:
+        log: logs/003_create_ar_analysis_dataset.log
 
 
   describe_cohort:
@@ -284,198 +301,136 @@ actions:
         log: logs/AL005_cox_regression_child.log
         hrs: output/ldcox_covidadmission.out
 
-  cox_ldinta1:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 covidadmission ldr
+  cox_ldint_age_a1:
+    run: stata-mp:latest analysis/AL006a_cox_regression_interactions_age.do 1 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_covidadmission_ldr.log
-        hrs: output/ldcox_inter_wave1_covidadmission_ldr.out
+        log: logs/AL006a_cox_regression_inter_age_wave1_covidadmission_ldr.log
+        hrs: output/ldcox_inter_age_wave1_covidadmission_ldr.out
 
-  cox_ldinta2:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 covidadmission ldr
+  cox_ldint_age_a2:
+    run: stata-mp:latest analysis/AL006a_cox_regression_interactions_age.do 2 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_covidadmission_ldr.log
-        hrs: output/ldcox_inter_wave2_covidadmission_ldr.out
+        log: logs/AL006a_cox_regression_inter_age_wave2_covidadmission_ldr.log
+        hrs: output/ldcox_inter_age_wave2_covidadmission_ldr.out
 
-  cox_ldinta3:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 covidadmission ldr_cat
+  cox_ldint_age_d1:
+    run: stata-mp:latest analysis/AL006a_cox_regression_interactions_age.do 1 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_covidadmission_ldr_cat.log
-        hrs: output/ldcox_inter_wave1_covidadmission_ldr_cat.out
+        log: logs/AL006a_cox_regression_inter_age_wave1_coviddeath_ldr.log
+        hrs: output/ldcox_inter_age_wave1_coviddeath_ldr.out
 
-  cox_ldinta4:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 covidadmission ldr_cat
+  cox_ldint_age_d2:
+    run: stata-mp:latest analysis/AL006a_cox_regression_interactions_age.do 2 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_covidadmission_ldr_cat.log
-        hrs: output/ldcox_inter_wave2_covidadmission_ldr_cat.out
+        log: logs/AL006a_cox_regression_inter_age_wave2_coviddeath_ldr.log
+        hrs: output/ldcox_inter_age_wave2_coviddeath_ldr.out
 
-  cox_ldinta5:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 covidadmission ldr_carecat
+
+  cox_ldint_sex_a1:
+    run: stata-mp:latest analysis/AL006b_cox_regression_interactions_sex.do 1 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_covidadmission_ldr_carecat.log
-        hrs: output/ldcox_inter_wave1_covidadmission_ldr_carecat.out
+        log: logs/AL006b_cox_regression_inter_sex_wave1_covidadmission_ldr.log
+        hrs: output/ldcox_inter_sex_wave1_covidadmission_ldr.out
 
-  cox_ldinta6:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 covidadmission ldr_carecat
+  cox_ldint_sex_a2:
+    run: stata-mp:latest analysis/AL006b_cox_regression_interactions_sex.do 2 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_covidadmission_ldr_carecat.log
-        hrs: output/ldcox_inter_wave2_covidadmission_ldr_carecat.out
+        log: logs/AL006b_cox_regression_inter_sex_wave2_covidadmission_ldr.log
+        hrs: output/ldcox_inter_sex_wave2_covidadmission_ldr.out
 
-  cox_ldinta7:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 covidadmission ds
+  cox_ldint_sex_d1:
+    run: stata-mp:latest analysis/AL006b_cox_regression_interactions_sex.do 1 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_covidadmission_ds.log
-        hrs: output/ldcox_inter_wave1_covidadmission_ds.out
+        log: logs/AL006b_cox_regression_inter_sex_wave1_coviddeath_ldr.log
+        hrs: output/ldcox_inter_sex_wave1_coviddeath_ldr.out
 
-  cox_ldinta8:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 covidadmission ds
+  cox_ldint_sex_d2:
+    run: stata-mp:latest analysis/AL006b_cox_regression_interactions_sex.do 2 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_covidadmission_ds.log
-        hrs: output/ldcox_inter_wave2_covidadmission_ds.out
+        log: logs/AL006b_cox_regression_inter_sex_wave2_coviddeath_ldr.log
+        hrs: output/ldcox_inter_sex_wave2_coviddeath_ldr.out
 
-  cox_ldinta9:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 covidadmission cp
+
+  cox_ldint_imd_a1:
+    run: stata-mp:latest analysis/AL006c_cox_regression_interactions_imd.do 1 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_covidadmission_cp.log
-        hrs: output/ldcox_inter_wave1_covidadmission_cp.out
+        log: logs/AL006c_cox_regression_inter_imd_wave1_covidadmission_ldr.log
+        hrs: output/ldcox_inter_imd_wave1_covidadmission_ldr.out
 
-  cox_ldinta10:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 covidadmission cp
+  cox_ldint_imd_a2:
+    run: stata-mp:latest analysis/AL006c_cox_regression_interactions_imd.do 2 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_covidadmission_cp.log
-        hrs: output/ldcox_inter_wave2_covidadmission_cp.out
+        log: logs/AL006c_cox_regression_inter_imd_wave2_covidadmission_ldr.log
+        hrs: output/ldcox_inter_imd_wave2_covidadmission_ldr.out
 
-  cox_ldinta11:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 covidadmission ldr_group
+  cox_ldint_imd_d1:
+    run: stata-mp:latest analysis/AL006c_cox_regression_interactions_imd.do 1 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_covidadmission_ldr_group.log
-        hrs: output/ldcox_inter_wave1_covidadmission_ldr_group.out
+        log: logs/AL006c_cox_regression_inter_imd_wave1_coviddeath_ldr.log
+        hrs: output/ldcox_inter_imd_wave1_coviddeath_ldr.out
 
-  cox_ldinta12:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 covidadmission ldr_group
+  cox_ldint_imd_d2:
+    run: stata-mp:latest analysis/AL006c_cox_regression_interactions_imd.do 2 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_covidadmission_ldr_group.log
-        hrs: output/ldcox_inter_wave2_covidadmission_ldr_group.out
+        log: logs/AL006c_cox_regression_inter_imd_wave2_coviddeath_ldr.log
+        hrs: output/ldcox_inter_imd_wave2_coviddeath_ldr.out
 
 
-  cox_ldintd1:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 coviddeath ldr
+  cox_ldint_ethnicity_a1:
+    run: stata-mp:latest analysis/AL006d_cox_regression_interactions_ethnicity.do 1 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_coviddeath_ldr.log
-        hrs: output/ldcox_inter_wave1_coviddeath_ldr.out
+        log: logs/AL006d_cox_regression_inter_ethnicity_wave1_covidadmission_ldr.log
+        hrs: output/ldcox_inter_ethnicity_wave1_covidadmission_ldr.out
 
-  cox_ldintd2:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 coviddeath ldr
+  cox_ldint_ethnicity_a2:
+    run: stata-mp:latest analysis/AL006d_cox_regression_interactions_ethnicity.do 2 covidadmission ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_coviddeath_ldr.log
-        hrs: output/ldcox_inter_wave2_coviddeath_ldr.out
+        log: logs/AL006d_cox_regression_inter_ethnicity_wave2_covidadmission_ldr.log
+        hrs: output/ldcox_inter_ethnicity_wave2_covidadmission_ldr.out
 
-  cox_ldintd3:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 coviddeath ldr_cat
+  cox_ldint_ethnicity_d1:
+    run: stata-mp:latest analysis/AL006d_cox_regression_interactions_ethnicity.do 1 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_coviddeath_ldr_cat.log
-        hrs: output/ldcox_inter_wave1_coviddeath_ldr_cat.out
+        log: logs/AL006d_cox_regression_inter_ethnicity_wave1_coviddeath_ldr.log
+        hrs: output/ldcox_inter_ethnicity_wave1_coviddeath_ldr.out
 
-  cox_ldintd4:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 coviddeath ldr_cat
+  cox_ldint_ethnicity_d2:
+    run: stata-mp:latest analysis/AL006d_cox_regression_interactions_ethnicity.do 2 coviddeath ldr
     needs: [create_analysis]
     outputs:
       moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_coviddeath_ldr_cat.log
-        hrs: output/ldcox_inter_wave2_coviddeath_ldr_cat.out
-
-  cox_ldintd5:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 coviddeath ldr_carecat
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_coviddeath_ldr_carecat.log
-        hrs: output/ldcox_inter_wave1_coviddeath_ldr_carecat.out
-
-  cox_ldintd6:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 coviddeath ldr_carecat
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_coviddeath_ldr_carecat.log
-        hrs: output/ldcox_inter_wave2_coviddeath_ldr_carecat.out
-
-  cox_ldintd7:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 coviddeath ds
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_coviddeath_ds.log
-        hrs: output/ldcox_inter_wave1_coviddeath_ds.out
-
-  cox_ldintd8:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 coviddeath ds
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_coviddeath_ds.log
-        hrs: output/ldcox_inter_wave2_coviddeath_ds.out
-
-  cox_ldintd9:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 coviddeath cp
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_coviddeath_cp.log
-        hrs: output/ldcox_inter_wave1_coviddeath_cp.out
-
-  cox_ldintd10:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 coviddeath cp
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_coviddeath_cp.log
-        hrs: output/ldcox_inter_wave2_coviddeath_cp.out
-
-  cox_ldintd11:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 1 coviddeath ldr_group
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave1_coviddeath_ldr_group.log
-        hrs: output/ldcox_inter_wave1_coviddeath_ldr_group.out
-
-  cox_ldintd12:
-    run: stata-mp:latest analysis/AL006_cox_regression_interactions.do 2 coviddeath ldr_group
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL006_cox_regression_inter_wave2_coviddeath_ldr_group.log
-        hrs: output/ldcox_inter_wave2_coviddeath_ldr_group.out
+        log: logs/AL006d_cox_regression_inter_ethnicity_wave2_coviddeath_ldr.log
+        hrs: output/ldcox_inter_ethnicity_wave2_coviddeath_ldr.out
 
 
   cox_ldresta1:
@@ -493,86 +448,6 @@ actions:
       moderately_sensitive:
         log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr.log
         hrs: output/ldcox_restrict_wave2_covidadmission_ldr.out
-
-  cox_ldresta3:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_cat
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_cat.log
-        hrs: output/ldcox_restrict_wave1_covidadmission_ldr_cat.out
-
-  cox_ldresta4:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_cat
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_cat.log
-        hrs: output/ldcox_restrict_wave2_covidadmission_ldr_cat.out
-
-  cox_ldresta5:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_carecat
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_carecat.log
-        hrs: output/ldcox_restrict_wave1_covidadmission_ldr_carecat.out
-
-  cox_ldresta6:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_carecat
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_carecat.log
-        hrs: output/ldcox_restrict_wave2_covidadmission_ldr_carecat.out
-
-  cox_ldresta7:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ds
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ds.log
-        hrs: output/ldcox_restrict_wave1_covidadmission_ds.out
-
-  cox_ldresta8:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ds
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ds.log
-        hrs: output/ldcox_restrict_wave2_covidadmission_ds.out
-
-  cox_ldresta9:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission cp
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_cp.log
-        hrs: output/ldcox_restrict_wave1_covidadmission_cp.out
-
-  cox_ldresta10:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission cp
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_cp.log
-        hrs: output/ldcox_restrict_wave2_covidadmission_cp.out
-
-  cox_ldresta11:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr_group
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave1_covidadmission_ldr_group.log
-        hrs: output/ldcox_restrict_wave1_covidadmission_ldr_group.out
-
-  cox_ldresta12:
-    run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 2 covidadmission ldr_group
-    needs: [create_analysis]
-    outputs:
-      moderately_sensitive:
-        log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr_group.log
-        hrs: output/ldcox_restrict_wave2_covidadmission_ldr_group.out
 
 
   cox_ldnoncovid1:
@@ -670,6 +545,15 @@ actions:
       moderately_sensitive:
         log: logs/AL008_cox_regression_noncovid_wave2_ldr_group.log
         hrs: output/ldcox_noncovid_wave2_ldr_group.out
+
+  cox_phtest:
+    run: stata-mp:latest analysis/AL009_phtest.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL009_phtest.log
+
+
 
   cox_ar1:
     run: stata-mp:latest analysis/AAR001_cox_regression.do 1 covidadmission
