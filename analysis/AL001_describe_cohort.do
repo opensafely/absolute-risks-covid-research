@@ -111,42 +111,11 @@ forvalues i = 1 (1) 2 {
 	sum household_size, d
 	safetab resid_care_old resid_care_ldr
 	
-	* Temporary data checks
-	gen tempold = (age>=65)
-	replace tempold = . if age>=.
-	gen templdr  = (ldr == 1)
-	
-	bysort household_id: egen num_old = sum(tempold)
-	bysort household_id: egen num_ldr = sum(templdr)
-	
-	noi tab num_old
-	noi tab num_ldr
-	
-	noi tab num_old if household_id!=0
-	noi tab num_ldr if household_id!=0
-	
-	recode num_old 0/4=0 5/max=1, gen(resid_care_old2)
-	recode num_ldr 0/4=0 5/max=1, gen(resid_care_ldr2)
-
-	tab resid_care_old2
-	tab resid_care_ldr2
-	
-	tab resid_care_old2 resid_care_old
-	tab resid_care_ldr2 resid_care_ldr
- 	
-	tab resid_care_ldr2 ldr 
-	tab resid_care_ldr2 ldr_cat
-	tab resid_care_ldr2 ldr_carecat
-	
-	bysort resid_care_old: summ age
-	
-	tab resid_care_old2 if household_id!=0
-	tab resid_care_ldr2 if household_id!=0
+	safetab resid_care_old ldr,	m
+	safetab resid_care_ldr ldr,	m
 	
 	
-	tab resid_care_ldr2 ldr  if household_id!=0
-	tab resid_care_ldr2 ldr_cat if household_id!=0
-	tab resid_care_ldr2 ldr_carecat if household_id!=0
+	
 	
 	*******************************************
 	*  Describe comorbidities (adjusted for)  *
@@ -155,7 +124,16 @@ forvalues i = 1 (1) 2 {
 	* BMI
 	summ bmi, 			d
 	safetab obese40, 	m
-
+	qui gen bmi_miss = missing(bmi)
+	noi tab bmi_miss 
+	
+	* Hba1c
+	qui gen hba1c_miss = missing(hba1c)
+	noi tab hba1c_miss 
+	
+	* Estimated GFR
+	qui gen egfr_miss = missing(egfr)
+	noi tab egfr_miss 
 	
 	* Physical comorbidities, also indicators for vaccination
 	foreach var of varlist asthma_severe cf respiratory		///
