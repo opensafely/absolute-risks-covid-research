@@ -57,7 +57,7 @@ foreach out in coviddeath composite {
 		ci contrast(difference) fail
 
 	gen date = d(1/3/2020) + timevar 
-	format date %tddd_Month
+	format date %tddd_Month_YY
 
 	* Convert to % incidence scale
 	for var _at1 _at2 _at1_lci _at1_uci _at2_lci _at2_uci: replace X=100*X
@@ -67,7 +67,7 @@ foreach out in coviddeath composite {
 
 	* Graph titles
 	local title_coviddeath = "Cumulative mortality (%)"
-	local label_coviddeath = "0(0.25)1"
+	local label_coviddeath = "0(0.25)1.5"
 
 	local title_composite = "Cumulative mortality or admission (%)"
 	local label_composite = "0(0.25)1.9"
@@ -83,7 +83,7 @@ foreach out in coviddeath composite {
 				ring(0) cols(1) pos(11)) 					///
 			ylabel(`label_`out'',angle(h) format(%4.2f)) 	///
 			ytitle("`title_`out''") 						///
-			xtitle("Date in 2020")
+			xtitle("Date")
 
 	
 	* Save graph
