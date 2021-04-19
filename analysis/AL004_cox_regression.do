@@ -105,7 +105,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	/*  Fit Cox models  */
 	
 	* Confounder only model
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 	///
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 		///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 		capture qui di _b[`k'.`exp']
@@ -117,7 +117,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	}
 	
 	* Confounders with deprivation
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 imd, ///
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 i.imd, ///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 		capture qui di _b[`k'.`exp']
@@ -129,15 +129,24 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	}
 	
 	* Confounders with residential care
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
-		strata(stpcode) cluster(household_id) 
-	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-		capture qui di _b[`k'.`exp']
-		if _rc==0 {
+	*	(don't do for exposure split by residential care)
+	if "`exp'"=="ldr_carecat" {
+		forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			post `ldrresults' (`i') ("`out'") ("`exp'") 	///
-				("Confounders+Resid") 						///
-				(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
-		}		
+				("Confounders+Resid") (`k') (.) (.)
+		}
+	} 
+	else {
+		stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
+			strata(stpcode) cluster(household_id) 
+		forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+			capture qui di _b[`k'.`exp']
+			if _rc==0 {
+				post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+					("Confounders+Resid") 						///
+					(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+			}		
+		}
 	}
 	
 	* Confounders with physical comorbidities that are indicators for vaccination 
@@ -161,8 +170,15 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	}
 	
 	* All variables
+	if "`exp'"=="ldr_carecat" {
+		local rc = " "
+	}
+	else {
+		local rc = "resid_care_ldr"
+	}
+	
 	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
-				imd resid_care_ldr 						///
+				i.imd `rc'		 						///
 				obese40 								///
 				respiratory asthma_severe				///
 				cardiac af dvt_pe i.diabcat		 		///
@@ -176,7 +192,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 		capture qui di _b[`k'.`exp']
 		if _rc==0 {
 			post `ldrresults' (`i') ("`out'") ("`exp'") ///
-			("All") 						///
+			("All") 									///
 			(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
 		}
 	}
@@ -185,6 +201,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 postclose `ldrresults'
 
 use `ldrfile', clear
+
 
 *************************
 *  Tidy output for HRs  *
@@ -341,6 +358,18 @@ rename _Y pyr_10000
 rename _Rate rate_per_10000
 rename _Lower rate_cl
 rename _Upper rate_cu
+
+/* Redaction  */ 
+
+** Remove event counts < 5, and complementary counts
+gen redact = inlist(events, 1, 2, 3, 4, 5)
+bysort wave outcome exposure expcat: egen redact_group = max(redact)
+replace events = -999 if redact_group==1 & !(exposure==6 & expcat==0 & redact==0)
+gen events_str = string(events)
+replace events_str = "<=5" if events_str=="-999"
+order events_str, after(events)
+drop events redact redact_group
+rename events_str events
 
 order wave outcome exposure category events pyr rate*
 sort wave outcome exposure expcat
