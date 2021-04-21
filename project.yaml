@@ -17,6 +17,12 @@ actions:
       highly_sensitive:
         cohort: output/input_flow_chart_2020-09-01.csv
 
+  generate_flowchart:
+    run: stata-mp:latest analysis/000_flow_chart.do
+    outputs:
+     moderately_sensitive:
+        log: logs/000_flow_chart.log
+
   generate_cohort1:
     run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2020-03-01"
     outputs:
