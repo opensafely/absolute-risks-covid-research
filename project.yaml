@@ -19,9 +19,11 @@ actions:
 
   generate_flowchart:
     run: stata-mp:latest analysis/000_flow_chart.do
+    needs: [flow_chart1, flow_chart2]
     outputs:
-     moderately_sensitive:
-        log: logs/000_flow_chart.log
+      highly_sensitive:
+        cohort: logs/000_flow_chart.log
+
 
   generate_cohort1:
     run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2020-03-01"
