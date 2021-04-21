@@ -45,6 +45,23 @@ forvalues i = 1 (1) 2 {
 
 	safetab ethnicity_5
 	safetab ethnicity_5, m
+	
+	
+	* Missing BMI 
+	summ bmi, 			d
+	safetab obese40, 	m
+	qui gen bmi_miss = missing(bmi)
+	noi tab bmi_miss 
+	
+	* Missing Hba1c (among diabetics)
+	qui gen hba1c_miss = missing(hba1c)
+	noi tab hba1c_miss if diabcat!=1
+	
+	* Missing Estimated GFR
+	qui gen egfr_miss = missing(egfr)
+	noi tab egfr_miss 
+	
+	* Restrict to complete case ethnicity sample
 	drop if ethnicity_5>=.
 
 
@@ -129,7 +146,7 @@ forvalues i = 1 (1) 2 {
 	
 	* Hba1c
 	qui gen hba1c_miss = missing(hba1c)
-	noi tab hba1c_miss 
+	noi tab hba1c_miss if diabcat!=1
 	
 	* Estimated GFR
 	qui gen egfr_miss = missing(egfr)
