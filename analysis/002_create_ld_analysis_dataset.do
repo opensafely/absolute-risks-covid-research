@@ -33,7 +33,7 @@ cap log close
 log using "logs/002_create_ld_analysis_dataset", replace t
 
 * Wave 1: i=1  (1 Mar 20 - 31 Aug 20) 
-* Wave 2: i=2  (1 Sept 20 - 3 March 21)
+* Wave 2: i=2  (1 Sept 20 - 8 Feb 21)
 forvalues i = 1 (1) 2 {
 
 	* Open data
@@ -394,9 +394,9 @@ forvalues i = 1 (1) 2 {
 	global coviddeathcensor1     = d(31Aug2020)
 	global covidadmissioncensor1 = d(31Aug2020)
 
-	*** WAVE 2 CENSORING *** 3 March 2021 (same duration as first cohort)
-	global coviddeathcensor2     = d(3Mar2021)
-	global covidadmissioncensor2 = d(3Mar2021)
+	*** WAVE 2 CENSORING *** 8 Feb 21 
+	global coviddeathcensor2     = d(8Feb2021)
+	global covidadmissioncensor2 = d(8Feb2021)
 	
 	gen coviddeathcensor1     = $coviddeathcensor1
 	gen covidadmissioncensor1 = $covidadmissioncensor1
@@ -548,7 +548,7 @@ forvalues i = 1 (1) 2 {
 	label var  composite_date			"Date of first of COVID-19 hospital admission or death"
 			
 	local tag1 = "censored 31 Aug 20"
-	local tag2 = "censored latest date"
+	local tag2 = "censored 8 Feb 21"
 	
 	forvalues k = 1 (1) 2 {
 		capture label var  coviddeath`k'			"COVID-19 death (ONS), `tag`k''"
@@ -609,7 +609,7 @@ forvalues i = 1 (1) 2 {
 	    label data "Analysis dataset, wave 1 (1 Mar - 31 Aug 20), for learning disability work"
 	}
 	else if `i'==2 {
-	    label data "Analysis dataset, wave 2 (1 Sept 20 - 3 March 21), for learning disability work"
+	    label data "Analysis dataset, wave 2 (1 Sept 20 - 8 Feb 21), for learning disability work"
 	}
 	* Save overall dataset
 	save "analysis/data_ldanalysis_cohort`i'.dta", replace 
