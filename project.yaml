@@ -659,3 +659,12 @@ actions:
         log: logs/AAR002_risk_by_age_wave2_male1_coviddeath.log
         absrisk: output/ar_wave2_male1_coviddeath.out
         graph: output/ar_wave2_male1_coviddeath.svg
+
+
+  x_risk_by_age:
+    run: stata-mp:latest analysis/X_covid_outcomes_by_at_risk.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/X_covid_outcomes_by_at_risk.log
+        risk: output/X_covid_outcomes_by_at_risk.out
