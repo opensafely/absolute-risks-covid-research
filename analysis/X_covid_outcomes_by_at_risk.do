@@ -149,7 +149,7 @@ label define agegp		///
 			16 "90-99"	///
 			17 "100-105"
 label values agegp agegp
-
+drop age
 tab agegp, m
 
 
@@ -168,8 +168,8 @@ postfile `riskresults' 	age atrisk str15(outcome) natrisk	///
 			local n`j'_age`i' = r(N)
 			* Cycle over three outcomes
 			foreach out in coviddeath covidadmission composite {
-				count if atrisk==`j' & `out'==1
-				post `riskresults' (`i') (`j') ("`out'") (`n`j'_age`i'')	(r(N))
+				count if atrisk==`j' & agegp==`i' & `out'==1
+				post `riskresults' (`i') (`j') ("`out'") (`n`j'_age`i'') (r(N))
 			}
 		}
 	}	
@@ -211,6 +211,7 @@ postfile `riskresults2' age atrisk str15(outcome) rr cl cu	///
 						
 * Cycle over three outcomes
 foreach out in coviddeath covidadmission composite {
+
 	use temp, clear
 	expand 2
 	bysort age atrisk: gen case=(_n==2)
@@ -264,12 +265,13 @@ erase temp.dta
 
 
 * Some automated redaction 
-gen ncoviddeathstr = string(ncoviddeath)
-replace ncoviddeathstr = "<5" if ncoviddeath<=5
-order ncoviddeathstr, after(ncoviddeath)
-drop ncoviddeath
-rename ncoviddeathstr ncoviddeath
-
+foreach var of varlist natrisk ncoviddeath ncovidadmission ncomposite {
+	gen `var'str = string(`var')
+	replace `var'str = "<5" if `var'<=5
+	order `var'str, after(`var')
+	drop `var'
+	rename `var'str `var'
+}
 
 * Save data
 outsheet using "output/X_covid_outcomes_by_at_risk", replace
