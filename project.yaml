@@ -21,7 +21,7 @@ actions:
     run: stata-mp:latest analysis/000_flow_chart.do
     needs: [flow_chart1, flow_chart2]
     outputs:
-      highly_sensitive:
+      moderately_sensitive:
         cohort: logs/000_flow_chart.log
 
 
