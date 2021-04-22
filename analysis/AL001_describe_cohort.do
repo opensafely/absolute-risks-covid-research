@@ -63,7 +63,7 @@ forvalues i = 1 (1) 2 {
 	
 	* Restrict to complete case ethnicity sample
 	drop if ethnicity_5>=.
-
+	drop bmi_miss hba1c_miss egfr_miss
 
 
 		
