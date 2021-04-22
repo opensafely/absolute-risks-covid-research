@@ -65,6 +65,20 @@ foreach out in coviddeath composite {
 	* Print estimates
 	l date timevar _at1 _at1_lci _at1_uci _at2 _at2_lci _at2_uci if timevar<.
 
+	* Date labels
+	local datelist = ""
+	foreach date in 1mar2020 1jun2020 1sept2020 1dec2020 {
+		local datelist = "`datelist' " + string(d(`date'))
+	}
+
+	* Ticks
+	local ticklist = ""
+	foreach date in 1mar2020 1apr2020 1may2020 1jun2020 1jul2020	///
+					1aug2020 1sept2020 1oct2020 1nov2020 1dec2020	///
+					1jan2021 1feb2021 {
+		local ticklist = "`ticklist' " + string(d(`date'))
+	}
+	
 	* Graph titles
 	local title_coviddeath = "Cumulative mortality (%)"
 	local label_coviddeath = "0(0.25)1.5"
@@ -82,6 +96,7 @@ foreach out in coviddeath composite {
 			legend(order(1 "Not on LDR" 2 "On LDR") 		///
 				ring(0) cols(1) pos(11)) 					///
 			ylabel(`label_`out'',angle(h) format(%4.2f)) 	///
+			xlabel(`datelist') xmtick(`ticklist') ///
 			ytitle("`title_`out''") 						///
 			xtitle("Date")
 
