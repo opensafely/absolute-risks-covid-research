@@ -97,14 +97,14 @@ forvalues i = 1 (1) 2 {
 	* Sex: Exclude categories other than M and F
 	qui count if inlist(sex, "I", "U")
 	noi di _col(10) "- Sex not M/F:" _col(65) r(N)
-	qui drop if inlist(sex, "I", "U")
+	qui keep if inlist(sex, "M", "F")
 	qui count
-	noi di "Sex not M/F: "  _col(60) r(N)
+	noi di "Sex M/F: "  _col(60) r(N)
 
 	* STP: Missing
 	qui count if stp==""
 	noi di _col(10) "- Missing STP:" _col(65) r(N)
-	qui drop if inlist(sex, "I", "U")
+	qui drop if stp==""
 	qui count
 	noi di "STP recorded: "  _col(60) r(N)
 	
