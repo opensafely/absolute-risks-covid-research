@@ -153,7 +153,7 @@ postfile `ldrresults' 	wave str15(exposure) str20(model)	///
 				liver stroke tia dementia				///
 				i.kidneyfn								///
 				spleen transplant dialysis				///
-				immunosuppression cancerHaem			///
+				immunosuppression i.cancerHaem			///
 				autoimmune ibd cancerExhaem1yr, 		///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
@@ -178,7 +178,7 @@ postfile `ldrresults' 	wave str15(exposure) str20(model)	///
 				liver stroke tia dementia				///
 				i.kidneyfn								///
 				spleen transplant dialysis				///
-				immunosuppression cancerHaem			///
+				immunosuppression i.cancerHaem			///
 				autoimmune ibd cancerExhaem1yr, 		///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
