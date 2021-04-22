@@ -82,7 +82,7 @@ replace atrisk = 1 if transplant	==1
 * Immunosuppression
 replace atrisk = 1 if spleen			==1
 replace atrisk = 1 if immunosuppression==1
-replace atrisk = 1 if cancerHaem		==1
+replace atrisk = 1 if cancerHaem		>1
 replace atrisk = 1 if autoimmune		==1
 replace atrisk = 1 if ibd				==1
 replace atrisk = 1 if cancerExhaem1yr	==1
@@ -92,7 +92,7 @@ replace atrisk = 1 if smi			==1
 replace atrisk = 1 if ds			==1
 replace atrisk = 1 if cp			==1
 
-
+noi tab atrisk
 
 /*  Create outcome indicators  */
 
@@ -107,6 +107,10 @@ replace covidadmission_date = . if covidadmission_date > d(22feb2021)
 gen coviddeath     = (coviddeath_date<.)
 gen covidadmission = (covidadmission_date<.)
 gen composite = max(coviddeath, covidadmission)
+
+noi tab atrisk coviddeath
+noi tab atrisk covidadmission
+noi tab atrisk composite
 
 
 keep age atrisk coviddeath covidadmission composite
@@ -151,6 +155,8 @@ label define agegp		///
 label values agegp agegp
 drop age
 tab agegp, m
+
+noi tab agegp atrisk
 
 
 * Open temporary file to post results

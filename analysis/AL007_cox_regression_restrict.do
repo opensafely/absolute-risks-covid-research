@@ -120,7 +120,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 	* Immunosuppression
 	drop if spleen			==1
 	drop if immunosuppression==1
-	drop if cancerHaem		==1
+	drop if cancerHaem		>1
 	drop if autoimmune		==1
 	drop if ibd				==1
 	drop if cancerExhaem1yr	==1
