@@ -1,4 +1,4 @@
 wave	outcome	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
-1	"COVID-19 admission"	"LDR Severe vs mild"	"Not on LDR"	"No"	29635	7.1e+02	41.571	41.100	42.047	""	""	""	""	""
-1	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, mild"	"LDR, mild"	391	3.70030	105.667	95.696	116.677	"4.76 (4.32, 5.25)"	"4.3 (3.89, 4.74)"	"4.37 (3.93, 4.86)"	"4.09 (3.7, 4.51)"	"3.56 (3.21, 3.95)"
-1	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, profound"	"LDR, profound"	147	0.80178	183.342	155.975	215.510	"7.8 (6.47, 9.4)"	"7.33 (6.08, 8.82)"	"6.45 (5.34, 7.8)"	"7.33 (6.07, 8.84)"	"5.94 (4.92, 7.16)"
+1	"COVID-19 admission"	"LDR Severe vs mild"	"Not on LDR"	"No"	"29781"	7.1e+02	41.746	41.275	42.223	""	""	""	""	""
+1	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, mild"	"LDR, mild"	"391"	3.70701	105.476	95.523	116.466	"4.74 (4.3, 5.23)"	"4.27 (3.87, 4.72)"	"4.35 (3.91, 4.84)"	"4.08 (3.69, 4.5)"	"3.55 (3.19, 3.94)"
+1	"COVID-19 admission"	"LDR Severe vs mild"	"LDR, profound"	"LDR, profound"	"147"	0.80561	182.471	155.235	214.487	"7.75 (6.43, 9.33)"	"7.27 (6.04, 8.76)"	"6.41 (5.3, 7.74)"	"7.28 (6.04, 8.79)"	"5.9 (4.89, 7.11)"

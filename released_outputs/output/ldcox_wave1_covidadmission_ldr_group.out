@@ -1,7 +1,7 @@
 wave	outcome	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
-1	"COVID-19 admission"	"Combined grouping"	"No DS, no CP, no LDR"	"No"	29589	7.1e+02	41.542	41.072	42.018	""	""	""	""	""
-1	"COVID-19 admission"	"Combined grouping"	"DS but not LDR"	"DS but not LDR"	[REDACTED]	0.044984	66.690	21.509	206.778	"3.92 (1.22, 12.57)"	"3.82 (1.19, 12.24)"	"3.9 (1.22, 12.47)"	"3.56 (1.1, 11.5)"	"3.46 (1.07, 11.2)"
-1	"COVID-19 admission"	"Combined grouping"	"DS and LDR"	"DS and LDR"	[REDACTED]	0.351711	201.870	159.976	254.737	"11.57 (9.2, 14.56)"	"11.17 (8.88, 14.07)"	"9.96 (7.89, 12.56)"	"7.69 (6.1, 9.69)"	"6.55 (5.17, 8.29)"
-1	"COVID-19 admission"	"Combined grouping"	"CP but not LDR"	"CP but not LDR"	[REDACTED]	0.568894	75.585	56.057	101.916	"3.39 (2.42, 4.75)"	"3.19 (2.28, 4.46)"	"3.37 (2.4, 4.72)"	"3.34 (2.38, 4.69)"	"3.21 (2.29, 4.49)"
-1	"COVID-19 admission"	"Combined grouping"	"CP and LDR"	"CP and LDR"	[REDACTED]	0.344993	156.525	119.881	204.370	"8.22 (6, 11.27)"	"7.72 (5.65, 10.54)"	"7.04 (5.17, 9.58)"	"7.97 (5.85, 10.85)"	"6.62 (4.89, 8.95)"
-1	"COVID-19 admission"	"Combined grouping"	"LD with no DS or CP"	"LDR with no DS or CP"	[REDACTED]	3.805379	108.531	98.552	119.519	"4.69 (4.26, 5.17)"	"4.24 (3.84, 4.67)"	"4.23 (3.8, 4.7)"	"4.15 (3.77, 4.58)"	"3.56 (3.21, 3.95)"
+1	"COVID-19 admission"	"Combined grouping"	"No DS, no CP, no LDR"	"No"	"29734"	7.1e+02	41.716	41.245	42.193	""	""	""	""	""
+1	"COVID-19 admission"	"Combined grouping"	"DS but not LDR"	"DS but not LDR"	"<=5"	0.043170	69.492	22.413	215.465	"4.18 (1.31, 13.33)"	"4.05 (1.27, 12.92)"	"4.16 (1.31, 13.22)"	"3.76 (1.17, 12.08)"	"3.65 (1.13, 11.72)"
+1	"COVID-19 admission"	"Combined grouping"	"DS and LDR"	"DS and LDR"	"71"	0.351858	201.786	159.909	254.630	"11.52 (9.16, 14.49)"	"11.13 (8.84, 14.01)"	"9.91 (7.86, 12.51)"	"7.66 (6.07, 9.65)"	"6.53 (5.16, 8.26)"
+1	"COVID-19 admission"	"Combined grouping"	"CP but not LDR"	"CP but not LDR"	"44"	0.568743	77.364	57.572	103.958	"3.45 (2.47, 4.82)"	"3.25 (2.33, 4.52)"	"3.43 (2.45, 4.78)"	"3.4 (2.43, 4.76)"	"3.26 (2.33, 4.55)"
+1	"COVID-19 admission"	"Combined grouping"	"CP and LDR"	"CP and LDR"	"54"	0.346857	155.684	119.237	203.272	"8.15 (5.95, 11.17)"	"7.65 (5.6, 10.44)"	"6.98 (5.13, 9.49)"	"7.92 (5.82, 10.79)"	"6.58 (4.87, 8.89)"
+1	"COVID-19 admission"	"Combined grouping"	"LD with no DS or CP"	"LDR with no DS or CP"	"413"	3.813898	108.288	98.332	119.252	"4.67 (4.24, 5.15)"	"4.21 (3.82, 4.65)"	"4.21 (3.78, 4.68)"	"4.14 (3.75, 4.57)"	"3.54 (3.19, 3.93)"

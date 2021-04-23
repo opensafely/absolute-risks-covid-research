@@ -94,3 +94,4 @@
   * [output/ldcox_wave2_coviddeath_ldr_carecat.out](output/ldcox_wave2_coviddeath_ldr_carecat.out)
   * [output/ldcox_wave2_coviddeath_ldr_cat.out](output/ldcox_wave2_coviddeath_ldr_cat.out)
   * [output/ldcox_wave2_coviddeath_ldr_group.out](output/ldcox_wave2_coviddeath_ldr_group.out)
+  * [output/X_covid_outcomes_by_at_risk.out](output/X_covid_outcomes_by_at_risk.out)
