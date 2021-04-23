@@ -676,3 +676,47 @@ actions:
       moderately_sensitive:
         log: logs/X_covid_outcomes_by_at_risk.log
         risk: output/X_covid_outcomes_by_at_risk.out
+
+  impute_ethnicity:
+    run: stata-mp:latest analysis/AL010_MI.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL010_MI.log
+      highly_sensitive:
+        clean1: analysis/data_ldanalysis_cohort1_MI.dta
+        clean2: analysis/data_ldanalysis_cohort2_MI.dta
+
+
+  cox_lda1_MI:
+    run: stata-mp:latest analysis/AL011_cox_regression_MI.do 1 covidadmission
+    needs: [create_analysis, impute_ethnicity]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL011_cox_regression_wave1_covidadmission_MI.log
+        hrs: output/ldcox_wave1_covidadmission_mi.out
+
+  cox_lda2_MI:
+    run: stata-mp:latest analysis/AL011_cox_regression_MI.do 2 covidadmission
+    needs: [create_analysis, impute_ethnicity]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL011_cox_regression_wave2_covidadmission_MI.log
+        hrs: output/ldcox_wave2_covidadmission_mi.out
+
+
+  cox_ldd1_MI:
+    run: stata-mp:latest analysis/AL011_cox_regression_MI.do 1 coviddeath
+    needs: [create_analysis, impute_ethnicity]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL011_cox_regression_wave1_coviddeath_MI.log
+        hrs: output/ldcox_wave1_coviddeath_mi.out
+
+  cox_ldd2_MI:
+    run: stata-mp:latest analysis/AL011_cox_regression_MI.do 2 coviddeath
+    needs: [create_analysis, impute_ethnicity]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL011_cox_regression_wave2_coviddeath_MI.log
+        hrs: output/ldcox_wave2_coviddeath_mi.out
