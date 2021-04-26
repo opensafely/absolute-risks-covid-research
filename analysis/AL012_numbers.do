@@ -1,6 +1,6 @@
 ********************************************************************************
 *
-*	Do-file:		AL004_cox_regression.do
+*	Do-file:		AL012_numbers.do
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
@@ -10,18 +10,13 @@
 *
 *	Data created:	None
 *
-*	Other output:	Log file:  logs/AL004_cox_regression_wave`i'_`out'_MI.log
-*					Estimates:	output/
-*									ldcox_wave`i'_`out'_MI.out
+*	Other output:	Log file:  logs/AL012_numbers.log
 *
-* 						i = Wave (1 or 2)
-*						out = outcome (coviddeath covidadmission)
 *
 ********************************************************************************
 *
-*	Purpose:		This do-file fits a series of adjusted Cox models for the
-*					learning disability work and obtains the crude rates
-*					in the multiply imputed data (for ethnicity).
+*	Purpose:		This do-file counts patients, follow-up and event rates for
+*					the learing disability analysis.
 *  
 ********************************************************************************
 
