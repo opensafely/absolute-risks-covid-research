@@ -83,6 +83,12 @@ actions:
         log: logs/AL002_tabulate_cohort_descriptives.log
         model: output/basetable1.txt
 
+  numbers:
+    run: stata-mp:latest analysis/AL012_numbers.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL012_numbers.log
 
   describe_cohort_ar:
     run: stata-mp:latest analysis/AAR001_describe_cohort.do
