@@ -307,7 +307,7 @@ actions:
     outputs:
       moderately_sensitive:
         log: logs/AL005_cox_regression_child.log
-        hrs: output/ldcox_covidadmission.out
+        hrs: output/ldcox_covidadmission_child.out
 
   cox_ldint_age_a1:
     run: stata-mp:latest analysis/AL006a_cox_regression_interactions_age.do 1 covidadmission ldr
