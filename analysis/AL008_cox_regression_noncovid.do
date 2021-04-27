@@ -128,7 +128,7 @@ postfile `ldrresults' 	wave str15(exposure) str20(model)	///
 	*	(don't do for exposure split by residential care)
 	if "`exp'"=="ldr_carecat" {
 		forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-			post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+			post `ldrresults' (`i')  ("`exp'") 	///
 				("Confounders+Resid") (`k') (.) (.)
 		}
 	} 
