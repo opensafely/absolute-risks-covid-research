@@ -1,0 +1,11 @@
+wave	outcome	exposure	ethnicity_5	category	hr_conf	hr_all	expcat
+2	"COVID-19 admission"	"Learning disability register"	"White"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"White"	"Yes"	"4.5 (4.21, 4.82)"	"3.29 (3.04, 3.57)"	1
+2	"COVID-19 admission"	"Learning disability register"	"Mixed"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"Mixed"	"Yes"	"1.8 (.74, 4.37)"	"1.46 (.6, 3.55)"	1
+2	"COVID-19 admission"	"Learning disability register"	"Asian or Asian British"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"Asian or Asian British"	"Yes"	"3.52 (2.83, 4.38)"	"3.04 (2.44, 3.78)"	1
+2	"COVID-19 admission"	"Learning disability register"	"Black"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"Black"	"Yes"	"2.45 (1.43, 4.19)"	"1.98 (1.15, 3.4)"	1
+2	"COVID-19 admission"	"Learning disability register"	"Other"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"Other"	"Yes"	"3.02 (1.23, 7.44)"	"2.22 (.91, 5.45)"	1

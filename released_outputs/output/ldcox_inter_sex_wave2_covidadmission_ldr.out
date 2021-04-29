@@ -1,0 +1,5 @@
+wave	outcome	exposure	male	category	hr_conf	hr_all	expcat
+2	"COVID-19 admission"	"Learning disability register"	"Female"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"Female"	"Yes"	"4.98 (4.54, 5.47)"	"3.46 (3.13, 3.82)"	1
+2	"COVID-19 admission"	"Learning disability register"	"Male"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"Male"	"Yes"	"3.92 (3.6, 4.26)"	"3.04 (2.77, 3.34)"	1

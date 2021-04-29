@@ -1,4 +1,4 @@
 wave	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
-2	"LDR Severe vs mild"	"Not on LDR"	"No"	53701	6.0e+02	89.583	88.829	90.344	""	""	""	""	""
-2	"LDR Severe vs mild"	"LDR, mild"	"LDR, mild"	353	3.14579	112.214	101.098	124.552	"3.56 (3.22, 3.94)"	"3.25 (2.94, 3.6)"	"3.36 (3, 3.76)"	"3.3 (2.98, 3.66)"	"2.97 (2.67, 3.32)"
-2	"LDR Severe vs mild"	"LDR, profound"	"LDR, profound"	117	0.68347	171.186	142.816	205.193	"5.57 (4.65, 6.66)"	"5.23 (4.37, 6.26)"	"4.91 (4.01, 6.01)"	"5.51 (4.61, 6.59)"	"4.84 (3.99, 5.88)"
+2	"LDR Severe vs mild"	"Not on LDR"	"No"	"58021"	6.3e+02	92.525	91.775	93.281	""	""	""	""	""
+2	"LDR Severe vs mild"	"LDR, mild"	"LDR, mild"	"392"	3.29431	118.993	107.778	131.375	"3.6 (3.27, 3.97)"	"3.28 (2.97, 3.61)"	"3.42 (3.08, 3.81)"	"3.34 (3.03, 3.68)"	"3.02 (2.72, 3.34)"
+2	"LDR Severe vs mild"	"LDR, profound"	"LDR, profound"	"132"	0.71775	183.909	155.065	218.117	"5.7 (4.8, 6.76)"	"5.34 (4.5, 6.33)"	"5.11 (4.22, 6.19)"	"5.65 (4.77, 6.71)"	"5.02 (4.17, 6.04)"

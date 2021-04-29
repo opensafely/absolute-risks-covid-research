@@ -1,4 +1,4 @@
 wave	outcome	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
-1	"COVID-19 death"	"LDR by residential care"	"Not on LDR"	"No"	13698	7.1e+02	19.196	18.877	19.520	""	""	""	""	""
-1	"COVID-19 death"	"LDR by residential care"	"LDR, not in residential care"	"LDR, community"	182	4.11462	44.232	38.251	51.149	"7.82 (6.77, 9.02)"	"6.94 (6, 8.02)"	"7.83 (6.78, 9.03)"	"6.38 (5.51, 7.39)"	"5.96 (5.14, 6.91)"
-1	"COVID-19 death"	"LDR by residential care"	"LDR, in residential care"	"LDR, residential care"	39	0.40055	97.365	71.138	133.261	"10.42 (6.88, 15.78)"	"9.47 (6.26, 14.35)"	"1.3 (.68, 2.48)"	"8.33 (5.45, 12.73)"	"2.47 (1.3, 4.7)"
+1	"COVID-19 death"	"LDR by residential care"	"Not on LDR"	"No"	"13737"	7.1e+02	19.237	18.918	19.561	""	""	""	""	""
+1	"COVID-19 death"	"LDR by residential care"	"LDR, not in residential care"	"LDR, community"	"182"	4.12490	44.122	38.156	51.022	"7.81 (6.77, 9.02)"	"6.93 (5.99, 8.01)"	". (., .)"	"6.39 (5.52, 7.4)"	"5.96 (5.14, 6.9)"
+1	"COVID-19 death"	"LDR by residential care"	"LDR, in residential care"	"LDR, residential care"	"40"	0.40076	99.810	73.213	136.069	"10.65 (7.08, 16.03)"	"9.68 (6.44, 14.55)"	". (., .)"	"8.53 (5.62, 12.95)"	"8.09 (5.32, 12.28)"

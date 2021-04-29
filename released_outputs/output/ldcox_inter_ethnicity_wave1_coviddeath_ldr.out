@@ -1,0 +1,11 @@
+wave	outcome	exposure	ethnicity_5	category	hr_conf	hr_all	expcat
+1	"COVID-19 death"	"Learning disability register"	"White"	"No"	""	""	0
+1	"COVID-19 death"	"Learning disability register"	"White"	"Yes"	"7.87 (6.8, 9.11)"	"5.26 (4.45, 6.22)"	1
+1	"COVID-19 death"	"Learning disability register"	"Mixed"	"No"	""	""	0
+1	"COVID-19 death"	"Learning disability register"	"Mixed"	"Yes"	"7.28 (1.01, 52.65)"	"5.05 (.69, 36.99)"	1
+1	"COVID-19 death"	"Learning disability register"	"Asian or Asian British"	"No"	""	""	0
+1	"COVID-19 death"	"Learning disability register"	"Asian or Asian British"	"Yes"	"17.12 (10.44, 28.08)"	"13.02 (7.67, 22.07)"	1
+1	"COVID-19 death"	"Learning disability register"	"Black"	"No"	""	""	0
+1	"COVID-19 death"	"Learning disability register"	"Black"	"Yes"	"6.49 (2.14, 19.68)"	"5.57 (1.96, 15.83)"	1
+1	"COVID-19 death"	"Learning disability register"	"Other"	"No"	""	""	0
+1	"COVID-19 death"	"Learning disability register"	"Other"	"Yes"	"17.78 (4.31, 73.38)"	"12.59 (3, 52.75)"	1

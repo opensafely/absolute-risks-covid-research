@@ -1,5 +1,6 @@
 # Table of contents
 
+* [.gitignore](.gitignore)
 * output
   * [output/ar_wave1_male0_covidadmission.out](output/ar_wave1_male0_covidadmission.out)
   * [output/ar_wave1_male0_covidadmission.svg](output/ar_wave1_male0_covidadmission.svg)
@@ -29,6 +30,21 @@
   * [output/hr_wave2_male1_coviddeath.txt](output/hr_wave2_male1_coviddeath.txt)
   * [output/ldcox_covidadmission.out](output/ldcox_covidadmission.out)
   * [output/ldcox_covidadmission.txt](output/ldcox_covidadmission.txt)
+  * [output/ldcox_covidadmission_child.out](output/ldcox_covidadmission_child.out)
+  * [output/ldcox_inter_age_wave1_coviddeath_ldr.out](output/ldcox_inter_age_wave1_coviddeath_ldr.out)
+  * [output/ldcox_inter_age_wave2_coviddeath_ldr.out](output/ldcox_inter_age_wave2_coviddeath_ldr.out)
+  * [output/ldcox_inter_ethnicity_wave1_covidadmission_ldr.out](output/ldcox_inter_ethnicity_wave1_covidadmission_ldr.out)
+  * [output/ldcox_inter_ethnicity_wave1_coviddeath_ldr.out](output/ldcox_inter_ethnicity_wave1_coviddeath_ldr.out)
+  * [output/ldcox_inter_ethnicity_wave2_covidadmission_ldr.out](output/ldcox_inter_ethnicity_wave2_covidadmission_ldr.out)
+  * [output/ldcox_inter_ethnicity_wave2_coviddeath_ldr.out](output/ldcox_inter_ethnicity_wave2_coviddeath_ldr.out)
+  * [output/ldcox_inter_imd_wave1_covidadmission_ldr.out](output/ldcox_inter_imd_wave1_covidadmission_ldr.out)
+  * [output/ldcox_inter_imd_wave1_coviddeath_ldr.out](output/ldcox_inter_imd_wave1_coviddeath_ldr.out)
+  * [output/ldcox_inter_imd_wave2_covidadmission_ldr.out](output/ldcox_inter_imd_wave2_covidadmission_ldr.out)
+  * [output/ldcox_inter_imd_wave2_coviddeath_ldr.out](output/ldcox_inter_imd_wave2_coviddeath_ldr.out)
+  * [output/ldcox_inter_sex_wave1_covidadmission_ldr.out](output/ldcox_inter_sex_wave1_covidadmission_ldr.out)
+  * [output/ldcox_inter_sex_wave1_coviddeath_ldr.out](output/ldcox_inter_sex_wave1_coviddeath_ldr.out)
+  * [output/ldcox_inter_sex_wave2_covidadmission_ldr.out](output/ldcox_inter_sex_wave2_covidadmission_ldr.out)
+  * [output/ldcox_inter_sex_wave2_coviddeath_ldr.out](output/ldcox_inter_sex_wave2_coviddeath_ldr.out)
   * [output/ldcox_inter_wave1_covidadmission_cp.out](output/ldcox_inter_wave1_covidadmission_cp.out)
   * [output/ldcox_inter_wave1_covidadmission_ds.out](output/ldcox_inter_wave1_covidadmission_ds.out)
   * [output/ldcox_inter_wave1_covidadmission_ldr.out](output/ldcox_inter_wave1_covidadmission_ldr.out)
