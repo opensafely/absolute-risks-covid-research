@@ -37,8 +37,8 @@ drop if ethnicity_5>=.
 keep if child==0
 
 * Cycle over outcomes: mortality, composite (hospitalisation or mortality) 
-foreach out in coviddeath composite {
-
+foreach out in  composite {
+* coviddeath
 	/*  Declare data to be survival  */
 
 	stset stime_`out'2, fail(`out'2) 
@@ -84,7 +84,7 @@ foreach out in coviddeath composite {
 	local label_coviddeath = "0(0.25)1.5"
 
 	local title_composite = "Cumulative mortality or admission (%)"
-	local label_composite = "0(0.25)1.9"
+	local label_composite = "0(0.5)3.5"
 	
 	
 	* Graph
