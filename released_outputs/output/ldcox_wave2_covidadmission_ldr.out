@@ -1,3 +1,3 @@
 wave	outcome	exposure	expcat	category	events	pyr_10000	rate_per_10000	rate_cl	rate_cu	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all
-2	"COVID-19 admission"	"Learning disability register"	0	"No"	27228	447.6536	60.824	60.106	61.551	""	""	""	""	""
-2	"COVID-19 admission"	"Learning disability register"	1	"Yes"	383	2.8585	133.986	121.217	148.099	"3.64 (3.28, 4.03)"	"3.29 (2.96, 3.65)"	"3.35 (2.99, 3.75)"	"3.23 (2.92, 3.59)"	"2.81 (2.51, 3.14)"
+2	"COVID-19 admission"	"Learning disability register"	0	"No"	"63053"	626.2944	100.676	99.894	101.465	""	""	""	""	""
+2	"COVID-19 admission"	"Learning disability register"	1	"Yes"	"1004"	4.0002	250.987	235.932	267.002	"4.32 (4.05, 4.61)"	"3.91 (3.66, 4.18)"	"3.87 (3.59, 4.18)"	"3.8 (3.56, 4.05)"	"3.21 (2.98, 3.46)"

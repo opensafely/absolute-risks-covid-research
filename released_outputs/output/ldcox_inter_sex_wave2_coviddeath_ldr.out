@@ -1,0 +1,5 @@
+wave	outcome	exposure	male	category	hr_conf	hr_all	expcat
+2	"COVID-19 death"	"Learning disability register"	"Female"	"No"	""	""	0
+2	"COVID-19 death"	"Learning disability register"	"Female"	"Yes"	"8.83 (7.42, 10.51)"	"6.6 (5.5, 7.91)"	1
+2	"COVID-19 death"	"Learning disability register"	"Male"	"No"	""	""	0
+2	"COVID-19 death"	"Learning disability register"	"Male"	"Yes"	"6.28 (5.34, 7.39)"	"4.89 (4.1, 5.83)"	1

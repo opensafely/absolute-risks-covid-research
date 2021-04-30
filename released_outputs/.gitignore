@@ -1,0 +1,11 @@
+
+output/ldcox_covidadmission_UNREDACTED.txt
+output/ldcox_wave1_covidadmission_ldr_group_UNREDACTED.out
+output/ldcox_wave1_coviddeath_ldr_group_UNREDACTED.out
+output/ldcox_wave2_covidadmission_ldr_group_UNREDACTED.out
+output/output_rates_2_covidadmission_ldr_group.out
+output/output_hrs_main.out
+output/output_hrs_main_2_covidadmission_ldr_group.out
+output/output_hrs_main_2_coviddeath_ldr_group.out
+output/output_rates.out
+output/output_rates_2_coviddeath_ldr_group.out
