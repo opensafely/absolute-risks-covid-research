@@ -1,0 +1,7 @@
+wave	outcome	exposure	agebroad	category	hr_conf	hr_all	expcat
+2	"COVID-19 admission"	"Learning disability register"	"16-<65"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"16-<65"	"Yes"	"4.15 (3.83, 4.5)"	"3.05 (2.79, 3.32)"	1
+2	"COVID-19 admission"	"Learning disability register"	"65-<75"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"65-<75"	"Yes"	"5.67 (4.99, 6.45)"	"4.14 (3.6, 4.75)"	1
+2	"COVID-19 admission"	"Learning disability register"	"75+"	"No"	""	""	0
+2	"COVID-19 admission"	"Learning disability register"	"75+"	"Yes"	"3.35 (2.8, 4)"	"2.73 (2.26, 3.29)"	1
