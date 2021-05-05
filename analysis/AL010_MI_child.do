@@ -9,16 +9,16 @@
 *							data_ldanalysis_cohort2.dta
 *
 *	Data created:	analysis/
-*							data_ldanalysis_cohort1_MI.dta
-*							data_ldanalysis_cohort2_MI.dta
+*							data_ldanalysis_cohort1_MI_child.dta
+*							data_ldanalysis_cohort2_MI_child.dta
 *
-*	Other output:	Log file:  logs/AL010_MI.log
+*	Other output:	Log file:  logs/AL010_MI_child.log
 *
 ********************************************************************************
 *
 *	Purpose:		This do-file uses multiple imputation to handle missing 
 *					data in the ethnicity variable for the learning disability 
-*					work, for adults.
+*					work, for children.
 *  
 ********************************************************************************
 
@@ -29,7 +29,7 @@ set more off
 
 * Open a log file
 cap log close
-log using "logs/AL010_MI", replace t
+log using "logs/AL010_MI_child", replace t
 
 
 
@@ -41,14 +41,14 @@ forvalues i = 1 (1) 2 {
 	use "analysis/data_ldanalysis_cohort`i'.dta", clear 
 	
 	* Only keep adults
-	drop if child==1
+	keep if child==1
 	
 	
 	* Ethnicity variable
 	drop ethnicity_16
 	replace ethnicity_5 = . if ethnicity_5>=.
 	
-	foreach out in covidadmission coviddeath {
+	foreach out in covidadmission {
 			
 		/*  Declare data to be survival  */
 
@@ -60,32 +60,22 @@ forvalues i = 1 (1) 2 {
 		replace cumhgp_`out' = cumhgp_`out' + 1
 	}
 	
-	tab cumhgp_coviddeath, m
 	tab cumhgp_covidadmission, m
 
 	mi set wide
 	mi register imputed ethnicity_5
 
 	* Check estimated cumulative hazards are non-missing
-	count if cumhgp_coviddeath>=.
-	replace cumhgp_coviddeath = 0 if cumhgp_coviddeath==.
 	count if cumhgp_covidadmission>=.
 	replace cumhgp_covidadmission = 0 if cumhgp_covidadmission==.
 
 	* Check relevant variables are fully observed 
 	recode asthma_severe .=0
 	foreach var of varlist stp						///
-		cumhgp_coviddeath cumhgp_covidadmission		///
-		coviddeath`i' covidadmission`i' 			///
+		cumhgp_covidadmission						///
+		covidadmission`i' 							///
 		ldr_cat resid_care_ldr ds cp				///
-		age1 age2 age3 male obese40 				///
-		respiratory asthma_severe					///
-		cardiac af dvt_pe diabcat		 			///
-		liver stroke tia dementia					///
-		kidneyfn									///
-		spleen transplant dialysis					///
-		immunosuppression cancerHaem				///
-		autoimmune ibd cancerExhaem1yr {
+		age1 age2 age3 male obese40  {
 			assert `var'<.
 	}
 		
@@ -93,21 +83,14 @@ forvalues i = 1 (1) 2 {
 	* Multinomial logistic regression model for ethnicity
 	mi impute mlogit ethnicity_5					///
 		= i.stp										///
-		i.cumhgp_coviddeath	i.cumhgp_covidadmission	///
-		coviddeath`i' covidadmission`i' 			///
+		i.cumhgp_covidadmission						///
+		covidadmission`i' 							///
 		i.ldr_cat resid_care_ldr ds cp				///
-		age1 age2 age3 male obese40 				///
-		respiratory asthma_severe					///
-		cardiac af dvt_pe i.diabcat		 			///
-		liver stroke tia dementia					///
-		i.kidneyfn									///
-		spleen transplant dialysis					///
-		immunosuppression i.cancerHaem				///
-		autoimmune ibd cancerExhaem1yr,				///
+		age1 age2 age3 male obese40,				///
 		add(10) rseed(3040985) augment
 		
 	* Save imputed dataset
-	save "analysis/data_ldanalysis_cohort`i'_MI.dta", replace 
+	save "analysis/data_ldanalysis_cohort`i'_MI_child.dta", replace 
 
 }
 

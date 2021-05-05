@@ -1,6 +1,6 @@
 ********************************************************************************
 *
-*	Do-file:		AL011_cox_regression_MI.do
+*	Do-file:		AL011_cox_regression_MI.do                        
 *
 *	Programmed by:	Fizz & Krishnan & John
 *
@@ -12,7 +12,7 @@
 *
 *	Other output:	Log file:  logs/AL011_cox_regression_wave`i'_`out'_MI.log
 *					Estimates:	output/
-*									ldcox_wave`i'_`out'_MI.out
+*									ldcox_wave`i'_`out'_mi.out
 *
 * 						i = Wave (1 or 2)
 *						out = outcome (coviddeath covidadmission)
@@ -81,37 +81,7 @@ postfile `ldrresults' 	wave str15(outcome) str15(exposure) str20(model)	///
 						expcat lnhr sehr using `ldrfile'
 
 
-	* Open dataset (complete case ethnicity)
-	use "analysis/data_ldanalysis_cohort`i'.dta", clear 
-	
-*/	
-
-	
-local i= 1
-local out = "coviddeath"
-local exp = "ldr"
-	
-	
-	use "analysis/data_ldanalysis_cohort1.dta", clear
-
-	* Only keep data for adults
-	keep if child==0
-
-	/*  Declare data to be survival  */
-	
-	stset stime_`out'`i', fail(`out'`i') scale(365.25)
-		
-		
-	/*  Obtain rates  */
-		
-	strate ldr, 											///
-			output(output/data_temp`i'_`out'_mi, replace) 	///
-			per(10000)
-			
-	
-	
-	
-	use "analysis/data_ldanalysis_cohort1_MI.dta", clear
+	use "analysis/data_ldanalysis_cohort`i'_MI.dta", clear
 
 	* Only keep data for adults
 	keep if child==0
@@ -126,8 +96,8 @@ local exp = "ldr"
 
 	
 	* Confounder only model
-	mi estimate, eform post: 									///
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5_adult, 		///
+	mi estimate, eform post: 								///
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 		///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 		capture qui di _b[`k'.`exp']
@@ -139,8 +109,8 @@ local exp = "ldr"
 	}
 	
 	* Confounders with deprivation
-	mi estimate, eform post: 										///
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5_adult i.imd, 	///
+	mi estimate, eform post: 								///
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5 i.imd, 	///
 		strata(stpcode) cluster(household_id) 
 	forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 		capture qui di _b[`k'.`exp']
@@ -161,7 +131,7 @@ local exp = "ldr"
 	} 
 	else {
 		mi estimate, eform post: 								///
-		stcox i.`exp' age1 age2 age3 male i.ethnicity_5_adult	///
+		stcox i.`exp' age1 age2 age3 male i.ethnicity_5			///
 			resid_care_ldr, 									///
 			strata(stpcode) cluster(household_id) 
 		forvalues k = `lo_`exp'' (1) `hi_`exp'' {
@@ -176,7 +146,7 @@ local exp = "ldr"
 	
 	* Confounders with physical comorbidities that are indicators for vaccination 
 	mi estimate, eform post: 								///
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5_adult 	///
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5		 	///
 				obese40 									///
 				respiratory asthma_severe					///
 				cardiac af dvt_pe i.diabcat		 			///
@@ -204,7 +174,7 @@ local exp = "ldr"
 	}
 	
 	mi estimate, eform post: 								///
-	stcox i.`exp' age1 age2 age3 male i.ethnicity_5_adult 	///
+	stcox i.`exp' age1 age2 age3 male i.ethnicity_5		 	///
 				i.imd `rc'		 							///
 				obese40 									///
 				respiratory asthma_severe					///
@@ -318,106 +288,7 @@ order wave outcome exposure category hr*
 sort wave outcome exposure expcat
 
 * Save data
-save "output/ldhrs_wave`i'_`out'_mi", replace
-
-
-
-***************************
-*  Tidy output for rates  *
-***************************
-
-
-use "output/data_temp`i'_`out'_mi", clear
-gen wave = `i'
-gen exp = "`exp'"
-gen out = "`out'"
-erase "output/data_temp`i'_`out'_mi.dta"
-
-
-* Outcome
-gen outcome 	= 1 if out=="coviddeath"
-replace outcome = 2 if out=="covidadmission"
-replace outcome = 3 if out=="composite"
-
-label define outcome 	1 "COVID-19 death" 		///
-						2 "COVID-19 admission"	///
-						3 "Composite"
-label values outcome outcome
-drop out
-
-* Exposure
-gen 	exposure = 1 if exp=="ldr"
-replace exposure = 2 if exp=="ldr_cat"
-replace exposure = 3 if exp=="ldr_carecat"
-replace exposure = 4 if exp=="ds"
-replace exposure = 5 if exp=="cp"
-replace exposure = 6 if exp=="ldr_group"
-
-label define exposure 	1 "Learning disability register"	///
-						2 "LDR Severe vs mild"				///
-						3 "LDR by residential care"			///
-						4 "Down's syndrome"					///
-						5 "Cerebral Palsy"					///
-						6 "Combined grouping"				
-label values exposure exposure						
-drop exp
-
-* Categories of exposure
-rename `exp' expcat
-gen category     = "No" 					if expcat==0
-replace category = "Yes" 					if inlist(exposure, 1, 4, 5) & expcat==1
-
-replace category = "LDR, mild" 				if inlist(exposure, 2) & expcat==1
-replace category = "LDR, profound" 			if inlist(exposure, 2) & expcat==2
-
-replace category = "LDR, community" 		if inlist(exposure, 3) & expcat==1
-replace category = "LDR, residential care" 	if inlist(exposure, 3) & expcat==2
-
-replace category = "DS but not LDR" 		if inlist(exposure, 6) & expcat==1
-replace category = "DS and LDR" 			if inlist(exposure, 6) & expcat==2
-replace category = "CP but not LDR" 		if inlist(exposure, 6) & expcat==3
-replace category = "CP and LDR" 			if inlist(exposure, 6) & expcat==4
-replace category = "LDR with no DS or CP" 	if inlist(exposure, 6) & expcat==5
-
-* Rename remaining variables
-rename _D events
-rename _Y pyr_10000
-rename _Rate rate_per_10000
-rename _Lower rate_cl
-rename _Upper rate_cu
-
-/* Redaction  */ 
-
-** Remove event counts < 5, and complementary counts
-gen redact = inlist(events, 1, 2, 3, 4, 5)
-bysort wave outcome exposure expcat: egen redact_group = max(redact)
-replace events = -999 if redact_group==1 & !(exposure==6 & expcat==0 & redact==0)
-gen events_str = string(events)
-replace events_str = "<=5" if events_str=="-999"
-order events_str, after(events)
-drop events redact redact_group
-rename events_str events
-
-order wave outcome exposure category events pyr rate*
-sort wave outcome exposure expcat
-
-
-* Save data
-save "output/ldrates_wave`i'_`out'_mi", replace
-
-
-
-******************************
-*  Put output data together  *
-******************************
-
-use "output/ldrates_wave`i'_`out'_mi.dta", clear
-merge 1:1 outcome exposure expcat using ///
-	"output/ldhrs_wave`i'_`out'_mi.dta", assert(match) nogen
-order wave outcome exposure expcat
 outsheet using "output/ldcox_wave`i'_`out'_mi.out", replace
-erase "output/ldrates_wave`i'_`out'_mi.dta"
-erase "output/ldhrs_wave`i'_`out'_mi.dta"
 
 log close
 
