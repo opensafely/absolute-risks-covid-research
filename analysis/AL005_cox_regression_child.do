@@ -102,30 +102,42 @@ forvalues i = 1 (1) 2 {
 				}
 			}
 			
+			
 			* Confounders with deprivation
 			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 i.imd, ///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-			    capture qui di _b[`k'.`exp']
+				capture qui di _b[`k'.`exp']
 				if _rc==0 {
-				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+					post `ldrresults' (`i') ("`out'") ("`exp'") 	///
 						("Confounders+IMD") 						///
 						(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
 				}		
 			}
 			
-			* Confounders with residential care
-			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
-				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
-			    capture qui di _b[`k'.`exp']
-				if _rc==0 {
-				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
-						("Confounders+Resid") 						///
-						(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
-				}		
-			}
 			
+			* Confounders with residential care
+			*	(don't do for exposure split by residential care)
+			if "`exp'"=="ldr_carecat" {
+				forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+					post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+						("Confounders+Resid") (`k') (.) (.)
+				}
+			} 
+			else {
+				capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
+					strata(stpcode) cluster(household_id) 
+				forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+					capture qui di _b[`k'.`exp']
+					if _rc==0 {
+						post `ldrresults' (`i') ("`out'") ("`exp'") 	///
+							("Confounders+Resid") 						///
+							(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
+					}		
+				}
+			}
+
+	
 			* Confounders with physical comorbidities that are indicators for vaccination 
 			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
 						obese40, 										///
@@ -139,9 +151,17 @@ forvalues i = 1 (1) 2 {
 				}
 			}
 			
-			* All 
+			
+			* All variables
+			if "`exp'"=="ldr_carecat" {
+				local rc = " "
+			}
+			else {
+				local rc = "resid_care_ldr"
+			}
+
 			capture stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
-						i.imd resid_care_ldr obese40, 					///
+						i.imd  `rc' obese40, 							///
 				strata(stpcode) cluster(household_id) 
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
