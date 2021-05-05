@@ -56,7 +56,7 @@ set more off
 
 * Open a log file
 cap log close
-log using "logs/AL004_cox_regression_CC_BMI_wave`i'_`out'_`exp'", replace t
+log using "logs/AL012_cox_regression_CC_BMI_wave`i'_`out'_`exp'", replace t
 
 
 * Categories of various exposures
