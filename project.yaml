@@ -5,6 +5,11 @@ expectations:
 
 actions:
 
+
+#########################
+#  LD study flow chart  #
+#########################
+
   flow_chart1:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart --index-date-range "2020-03-01"
     outputs:
@@ -24,6 +29,10 @@ actions:
       moderately_sensitive:
         cohort: logs/000_flow_chart.log
 
+
+##############################
+#  Create analysis datasets  #
+##############################
 
   generate_cohort1:
     run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2020-03-01"
@@ -67,6 +76,9 @@ actions:
      moderately_sensitive:
         log: logs/003_create_ar_analysis_dataset.log
 
+########################
+#  Basic descriptives  #
+########################
 
   describe_cohort:
     run: stata-mp:latest analysis/AL001_describe_cohort.do
@@ -113,6 +125,13 @@ actions:
         log: logs/AL003_cumulative_incidence.log
         graph1: output/cumincidence_coviddeath.svg
         graph2: output/cumincidence_composite.svg
+
+
+###############################################
+#  LD main analysis: Cox regression (adults)  #
+###############################################
+
+# Outcome = COVID-19 hospital admission
 
   cox_lda1:
     run: stata-mp:latest analysis/AL004_cox_regression.do 1 covidadmission ldr
@@ -210,6 +229,7 @@ actions:
         log: logs/AL004_cox_regression_wave2_covidadmission_ldr_group.log
         hrs: output/ldcox_wave2_covidadmission_ldr_group.out
 
+# Outcome = COVID-19 death
 
   cox_ldd1:
     run: stata-mp:latest analysis/AL004_cox_regression.do 1 coviddeath ldr
@@ -307,6 +327,11 @@ actions:
         log: logs/AL004_cox_regression_wave2_coviddeath_ldr_group.log
         hrs: output/ldcox_wave2_coviddeath_ldr_group.out
 
+
+#################################################
+#  LD main analysis: Cox regression (children)  #
+#################################################
+
   cox_regression_child:
     run: stata-mp:latest analysis/AL005_cox_regression_child.do
     needs: [create_analysis]
@@ -314,6 +339,13 @@ actions:
       moderately_sensitive:
         log: logs/AL005_cox_regression_child.log
         hrs: output/ldcox_covidadmission_child.out
+
+
+#####################################
+#  LD main analysis: Interactions   #
+#####################################
+
+# Interactions with age
 
   cox_ldint_age_a1:
     run: stata-mp:latest analysis/AL006a_cox_regression_interactions_age.do 1 covidadmission ldr
@@ -348,6 +380,8 @@ actions:
         hrs: output/ldcox_inter_age_wave2_coviddeath_ldr.out
 
 
+# Interactions with sex
+
   cox_ldint_sex_a1:
     run: stata-mp:latest analysis/AL006b_cox_regression_interactions_sex.do 1 covidadmission ldr
     needs: [create_analysis]
@@ -380,6 +414,7 @@ actions:
         log: logs/AL006b_cox_regression_inter_sex_wave2_coviddeath_ldr.log
         hrs: output/ldcox_inter_sex_wave2_coviddeath_ldr.out
 
+# Interactions with deprivation (IMD)
 
   cox_ldint_imd_a1:
     run: stata-mp:latest analysis/AL006c_cox_regression_interactions_imd.do 1 covidadmission ldr
@@ -413,6 +448,7 @@ actions:
         log: logs/AL006c_cox_regression_inter_imd_wave2_coviddeath_ldr.log
         hrs: output/ldcox_inter_imd_wave2_coviddeath_ldr.out
 
+# Interactions with ethnicity
 
   cox_ldint_ethnicity_a1:
     run: stata-mp:latest analysis/AL006d_cox_regression_interactions_ethnicity.do 1 covidadmission ldr
@@ -447,6 +483,10 @@ actions:
         hrs: output/ldcox_inter_ethnicity_wave2_coviddeath_ldr.out
 
 
+#############################################################
+#  LD main analysis: Restricting population to "low risk"   #
+#############################################################
+
   cox_ldresta1:
     run: stata-mp:latest analysis/AL007_cox_regression_restrict.do 1 covidadmission ldr
     needs: [create_analysis]
@@ -463,6 +503,10 @@ actions:
         log: logs/AL007_cox_regression_restrict_wave2_covidadmission_ldr.log
         hrs: output/ldcox_restrict_wave2_covidadmission_ldr.out
 
+
+#########################################
+#  LD main analysis: Non-COVID deaths   #
+#########################################
 
   cox_ldnoncovid1:
     run: stata-mp:latest analysis/AL008_cox_regression_noncovid.do 1 ldr
@@ -560,6 +604,12 @@ actions:
         log: logs/AL008_cox_regression_noncovid_wave2_ldr_group.log
         hrs: output/ldcox_noncovid_wave2_ldr_group.out
 
+
+
+#############################
+#  Model checking: PH test  #
+#############################
+
   cox_phtest:
     run: stata-mp:latest analysis/AL009_phtest.do
     needs: [create_analysis]
@@ -568,6 +618,11 @@ actions:
         log: logs/AL009_phtest.log
 
 
+
+
+###############################
+#  Models for absolute risks  #
+###############################
 
   cox_ar1:
     run: stata-mp:latest analysis/AAR001_cox_regression.do 1 covidadmission
@@ -683,6 +738,11 @@ actions:
         log: logs/X_covid_outcomes_by_at_risk.log
         risk: output/X_covid_outcomes_by_at_risk.out
 
+
+#################################################
+#  Sensitivity anaysis:  Multiple Imputation    #
+#################################################
+
   impute_ethnicity:
     run: stata-mp:latest analysis/AL010_MI.do
     needs: [create_analysis]
@@ -693,6 +753,15 @@ actions:
         clean1: analysis/data_ldanalysis_cohort1_MI.dta
         clean2: analysis/data_ldanalysis_cohort2_MI.dta
 
+  impute_ethnicity_child:
+    run: stata-mp:latest analysis/AL010_MI_child.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL010_MI_child.log
+      highly_sensitive:
+        clean1: analysis/data_ldanalysis_cohort1_MI_child.dta
+        clean2: analysis/data_ldanalysis_cohort2_MI_child.dta
 
   cox_lda1_MI:
     run: stata-mp:latest analysis/AL011_cox_regression_MI.do 1 covidadmission
@@ -710,7 +779,6 @@ actions:
         log: logs/AL011_cox_regression_wave2_covidadmission_MI.log
         hrs: output/ldcox_wave2_covidadmission_mi.out
 
-
   cox_ldd1_MI:
     run: stata-mp:latest analysis/AL011_cox_regression_MI.do 1 coviddeath
     needs: [create_analysis, impute_ethnicity]
@@ -726,3 +794,40 @@ actions:
       moderately_sensitive:
         log: logs/AL011_cox_regression_wave2_coviddeath_MI.log
         hrs: output/ldcox_wave2_coviddeath_mi.out
+
+
+############################################################
+#  Sensitivity anaysis:  Complete case analysis for BMI    #
+############################################################
+
+  cox_lda1_CC_BMI:
+    run: stata-mp:latest analysis/AL012_cox_regression_CC_BMI.do 1 covidadmission ldr
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL012_cox_regression_CC_BMI_wave1_covidadmission_ldr.log
+        hrs: output/ldcox_wave1_covidadmission_ldr_CC_BMI.out
+
+  cox_lda2_CC_BMI:
+    run: stata-mp:latest analysis/AL012_cox_regression_CC_BMI.do 2 covidadmission ldr
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL012_cox_regression_CC_BMI_wave2_covidadmission_ldr.log
+        hrs: output/ldcox_wave2_covidadmission_ldr_CC_BMI.out
+
+  cox_ldd1_CC_BMI:
+    run: stata-mp:latest analysis/AL012_cox_regression_CC_BMI.do 1 coviddeath ldr
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL012_cox_regression_CC_BMI_wave1_coviddeath_ldr.log
+        hrs: output/ldcox_wave1_coviddeath_ldr_CC_BMI.out
+
+  cox_ldd2_CC_BMI:
+    run: stata-mp:latest analysis/AL012_cox_regression_CC_BMI.do 2 coviddeath ldr
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL012_cox_regression_CC_BMI_wave2_coviddeath_ldr.log
+        hrs: output/ldcox_wave2_coviddeath_ldr_CC_BMI.out
