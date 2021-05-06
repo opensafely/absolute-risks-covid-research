@@ -95,6 +95,14 @@ actions:
         log: logs/AL002_tabulate_cohort_descriptives.log
         model: output/basetable1.txt
 
+  tabulate_cohort_all:
+    run: stata-mp:latest analysis/AL002_tabulate_cohort_descriptives_nonCC.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL002_tabulate_cohort_descriptives_nonCC.log
+        model: output/basetable1_all.txt
+
   numbers:
     run: stata-mp:latest analysis/AL012_numbers.do
     needs: [create_analysis]
@@ -794,6 +802,14 @@ actions:
       moderately_sensitive:
         log: logs/AL011_cox_regression_wave2_coviddeath_MI.log
         hrs: output/ldcox_wave2_coviddeath_mi.out
+
+  cox_MI_child:
+    run: stata-mp:latest analysis/AL011_cox_regression_MI_child.do
+    needs: [create_analysis, impute_ethnicity_child]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL011_cox_regression_MI_child.log
+        hrs: output/ldcox_covidadmission_child_mi.out
 
 
 ############################################################
