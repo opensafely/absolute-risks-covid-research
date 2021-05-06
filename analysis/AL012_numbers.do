@@ -16,7 +16,7 @@
 ********************************************************************************
 *
 *	Purpose:		This do-file counts patients, follow-up and event rates for
-*					the learing disability analysis.
+*					the learning disability analysis.
 *  
 ********************************************************************************
 
