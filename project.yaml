@@ -811,6 +811,13 @@ actions:
         log: logs/AL011_cox_regression_MI_child.log
         hrs: output/ldcox_covidadmission_child_mi.out
 
+  cox_MI_numbers:
+    run: stata-mp:latest analysis/AL012_MI_numbers.do
+    needs: [create_analysis, impute_ethnicity_child]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL012_MI_numbers.log
+
 
 ############################################################
 #  Sensitivity anaysis:  Complete case analysis for BMI    #
