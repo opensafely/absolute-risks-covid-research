@@ -62,7 +62,6 @@ forvalues i = 1 (1) 2 {
 
 	* Open dataset (complete case ethnicity)
 	use "analysis/data_ldanalysis_cohort`i'_MI_child.dta", clear 
-	drop if ethnicity_5>=.
 
 	* Only keep data for children (under 16)
 	keep if child==1
