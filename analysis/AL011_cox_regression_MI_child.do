@@ -88,6 +88,9 @@ forvalues i = 1 (1) 2 {
 			capture mi estimate, eform post: 					///
 			stcox i.`exp' age1 age2 age3 male i.ethnicity_5, 	///
 				strata(stpcode) cluster(household_id) 
+				if _rc==0 {
+				    stcox
+				}
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
 				if _rc==0 {
@@ -104,6 +107,9 @@ forvalues i = 1 (1) 2 {
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
 				if _rc==0 {
+				    stcox
+				}
+				if _rc==0 {
 				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
 						("Confounders+IMD") 						///
 						(`k') (_b[`k'.`exp']) (_se[`k'.`exp'])
@@ -114,7 +120,10 @@ forvalues i = 1 (1) 2 {
 			capture mi estimate, eform post: 								///
 			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 resid_care_ldr, ///
 				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+				if _rc==0 {
+				    stcox
+				}
+				forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
 				if _rc==0 {
 				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
@@ -128,7 +137,10 @@ forvalues i = 1 (1) 2 {
 			 stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
 						obese40, 								///
 				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+				if _rc==0 {
+				    stcox
+				}
+				forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
 				if _rc==0 {
 				    post `ldrresults' (`i') ("`out'") ("`exp'") 	///
@@ -142,7 +154,10 @@ forvalues i = 1 (1) 2 {
 			stcox i.`exp' age1 age2 age3 male i.ethnicity_5 	///
 						i.imd resid_care_ldr obese40, 			///
 				strata(stpcode) cluster(household_id) 
-			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+				if _rc==0 {
+				    stcox
+				}
+				forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 			    capture qui di _b[`k'.`exp']
 				if _rc==0 {
 				    post `ldrresults' (`i') ("`out'") ("`exp'") 		///
