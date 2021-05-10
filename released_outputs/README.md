@@ -103,6 +103,7 @@
   * [output/ldcox_wave1_coviddeath_ldr_CC_BMI.out](output/ldcox_wave1_coviddeath_ldr_CC_BMI.out)
   * [output/ldcox_wave1_coviddeath_ldr_group.out](output/ldcox_wave1_coviddeath_ldr_group.out)
   * [output/ldcox_wave1_coviddeath_ldr_group.txt](output/ldcox_wave1_coviddeath_ldr_group.txt)
+  * [output/ldcox_wave1_coviddeath_mi.out](output/ldcox_wave1_coviddeath_mi.out)
   * [output/ldcox_wave2_covidadmission_cp.out](output/ldcox_wave2_covidadmission_cp.out)
   * [output/ldcox_wave2_covidadmission_ds.out](output/ldcox_wave2_covidadmission_ds.out)
   * [output/ldcox_wave2_covidadmission_ldr.out](output/ldcox_wave2_covidadmission_ldr.out)
@@ -118,4 +119,5 @@
   * [output/ldcox_wave2_coviddeath_ldr_cat.out](output/ldcox_wave2_coviddeath_ldr_cat.out)
   * [output/ldcox_wave2_coviddeath_ldr_CC_BMI.out](output/ldcox_wave2_coviddeath_ldr_CC_BMI.out)
   * [output/ldcox_wave2_coviddeath_ldr_group.out](output/ldcox_wave2_coviddeath_ldr_group.out)
+  * [output/ldcox_wave2_coviddeath_mi.out](output/ldcox_wave2_coviddeath_mi.out)
   * [output/X_covid_outcomes_by_at_risk.out](output/X_covid_outcomes_by_at_risk.out)
