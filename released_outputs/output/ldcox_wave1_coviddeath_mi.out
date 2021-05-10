@@ -1,0 +1,3 @@
+wave	outcome	exposure	category	hr_conf	hr_conf_imd	hr_conf_resid	hr_conf_comorb	hr_all	expcat
+1	"COVID-19 death"	"Learning disability register"	"No"	""	""	""	""	""	0
+1	"COVID-19 death"	"Learning disability register"	"Yes"	"8.11 (7.14, 9.22)"	"7.26 (6.37, 8.27)"	"6.72 (5.67, 7.97)"	"6.65 (5.84, 7.58)"	"5.47 (4.71, 6.35)"	1
