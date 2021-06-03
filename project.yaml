@@ -134,6 +134,15 @@ actions:
         graph1: output/cumincidence_coviddeath.svg
         graph2: output/cumincidence_composite.svg
 
+  fup_summary:
+    run: stata-mp:latest analysis/AL004_cox_regression_FUP_summaries.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL004_cox_regression_FUP_summaries.log
+        hrs: output/AL004_cox_regression_FUP_summaries.out
+
+
 
 ###############################################
 #  LD main analysis: Cox regression (adults)  #
