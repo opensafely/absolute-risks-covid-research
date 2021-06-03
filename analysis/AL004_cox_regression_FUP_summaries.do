@@ -39,11 +39,29 @@ set more off
 cap log close
 log using "logs/AL004_cox_regression_FUP_summaries", replace t
 
+
+
+* Categories of various exposures
+local lo_ldr 		= 0
+local hi_ldr 		= 1
+local lo_ldr_cat 	= 0
+local hi_ldr_cat 	= 2
+local hi_ldr 		= 1
+local lo_ldr_carecat= 0
+local hi_ldr_carecat= 2
+local lo_ds 		= 0
+local hi_ds 		= 1
+local lo_cp 		= 0
+local hi_cp 		= 1
+local lo_ldr_group 	= 0
+local hi_ldr_group 	= 5
+
+
 * Open temporary file to post results
 tempfile ldrfile
 tempname ldrresults
 
-postfile `ldrresults' 	wave str15(outcome) child ///
+postfile `ldrresults' 	wave str15(outcome) str15(exp) child ///
 						p25 p50 p75 total using `ldrfile'
 
 * Cycle over waves
@@ -62,16 +80,22 @@ forvalues i = 1 (1) 2 {
 		gen fup = ( _t - _t0)
 		
 		
-		/*  Summarise follow-up time  */
-		
-		* Adults
-		summ fup if child==0, detail
-		post `ldrresults' (`i') ("`out'") (0) (r(p25)) (r(p50)) (r(p75)) (r(sum))
-		
-		* Children
-		summ fup if child==1, detail
-		post `ldrresults' (`i') ("`out'") (1) (r(p25)) (r(p50)) (r(p75)) (r(sum))
-		
+		foreach exp in ldr ldr_cat ldr_carecat ds cp ldr_group  {
+
+			/*  Summarise follow-up time  */
+			
+			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
+				* Adults
+				summ fup if child==0 & `exp'==`k', detail
+				post `ldrresults' (`i') ("`out'") ("`exp'") (0) (r(p25)) (r(p50)) (r(p75)) (r(sum))
+				
+				* Children
+				summ fup if child==1 & `exp'==`k', detail
+				post `ldrresults' (`i') ("`out'") ("`exp'") (1) (r(p25)) (r(p50)) (r(p75)) (r(sum))
+			}
+			
+		}
+
 		drop fup
 	}
 }
