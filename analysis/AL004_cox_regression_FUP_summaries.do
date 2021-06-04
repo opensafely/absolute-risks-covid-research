@@ -61,7 +61,7 @@ local hi_ldr_group 	= 5
 tempfile ldrfile
 tempname ldrresults
 
-postfile `ldrresults' 	wave str15(outcome) str15(exp) child ///
+postfile `ldrresults' 	wave str15(outcome) str15(exposure) expcat child ///
 						p25 p50 p75 total using `ldrfile'
 
 * Cycle over waves
@@ -87,11 +87,11 @@ forvalues i = 1 (1) 2 {
 			forvalues k = `lo_`exp'' (1) `hi_`exp'' {
 				* Adults
 				summ fup if child==0 & `exp'==`k', detail
-				post `ldrresults' (`i') ("`out'") ("`exp'") (0) (r(p25)) (r(p50)) (r(p75)) (r(sum))
+				post `ldrresults' (`i') ("`out'") ("`exp'") (`k') (0) (r(p25)) (r(p50)) (r(p75)) (r(sum))
 				
 				* Children
 				summ fup if child==1 & `exp'==`k', detail
-				post `ldrresults' (`i') ("`out'") ("`exp'") (1) (r(p25)) (r(p50)) (r(p75)) (r(sum))
+				post `ldrresults' (`i') ("`out'") ("`exp'") (`k') (1) (r(p25)) (r(p50)) (r(p75)) (r(sum))
 			}
 			
 		}
@@ -106,6 +106,68 @@ postclose `ldrresults'
 
 use `ldrfile', clear
 outsheet using "output/AL004_cox_regression_FUP_summaries.out", replace
+
+
+
+
+
+
+
+
+
+*************************
+*  Tidy output for HRs  *
+*************************
+
+* Outcome
+rename outcome out
+gen outcome 	= 1 if out=="coviddeath"
+replace outcome = 2 if out=="covidadmission"
+
+label define outcome 	1 "COVID-19 death" 		///
+						2 "COVID-19 admission"	
+label values outcome outcome
+drop out
+
+* Exposure
+rename exposure exp
+gen 	exposure = 1 if exp=="ldr"
+replace exposure = 2 if exp=="ldr_cat"
+replace exposure = 3 if exp=="ldr_carecat"
+replace exposure = 4 if exp=="ds"
+replace exposure = 5 if exp=="cp"
+replace exposure = 6 if exp=="ldr_group"
+
+label define exposure 	1 "Learning disability register"	///
+						2 "LDR Severe vs mild"				///
+						3 "LDR by residential care"			///
+						4 "Down's syndrome"					///
+						5 "Cerebral Palsy"					///
+						6 "Combined grouping"				
+label values exposure exposure						
+drop exp
+
+* Categories of exposure
+gen category     = "No" 					if expcat==0
+replace category = "Yes" 					if inlist(exposure, 1, 4, 5) & expcat==1
+
+replace category = "LDR, mild" 				if inlist(exposure, 2) & expcat==1
+replace category = "LDR, profound" 			if inlist(exposure, 2) & expcat==2
+
+replace category = "LDR, community" 		if inlist(exposure, 3) & expcat==1
+replace category = "LDR, residential care" 	if inlist(exposure, 3) & expcat==2
+
+replace category = "DS but not LDR" 		if inlist(exposure, 6) & expcat==1
+replace category = "DS and LDR" 			if inlist(exposure, 6) & expcat==2
+replace category = "CP but not LDR" 		if inlist(exposure, 6) & expcat==3
+replace category = "CP and LDR" 			if inlist(exposure, 6) & expcat==4
+replace category = "LDR with no DS or CP" 	if inlist(exposure, 6) & expcat==5
+
+
+order wave outcome exposure category total p*
+sort wave outcome exposure expcat
+
+
 
 
 log close
