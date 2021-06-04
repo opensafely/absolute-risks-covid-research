@@ -2,6 +2,7 @@
 
 * [.gitignore](.gitignore)
 * output
+  * [output/AL004_cox_regression_FUP_summaries.out](output/AL004_cox_regression_FUP_summaries.out)
   * [output/ar_wave1_male0_covidadmission.out](output/ar_wave1_male0_covidadmission.out)
   * [output/ar_wave1_male0_covidadmission.svg](output/ar_wave1_male0_covidadmission.svg)
   * [output/ar_wave1_male0_coviddeath.out](output/ar_wave1_male0_coviddeath.out)
