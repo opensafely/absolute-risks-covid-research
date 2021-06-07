@@ -45,21 +45,34 @@ forvalues i = 1 (1) 2 {
 	* Open dataset (complete case ethnicity)
 	use "analysis/data_ldanalysis_cohort`i'.dta", clear 
 	
+	noi di _n(3) "____________________________________________________________"
+	noi di _col(25) "Wave `i':"
+	noi di "____________________________________________________________"
+	
+	noi di _n(1) "*** All data (irrespective of missing ethnicity data) ***"
+	noi di _n(1)
+	
 	* Cycle over outcomes 
-	foreach out in covidadmission coviddeath {
-		* Children
-		noi tab `out'`i' ldr if child==0
+	foreach out in covidadmission coviddeath noncoviddeath {
 		* Adults
+		noi di "Adults: `out'"
+		noi tab `out'`i' ldr if child==0
+		* Children
+		noi di "Children: `out'"
 		tab `out'`i' ldr if child==1		
 	}
 	
 	drop if ethnicity_5>=.
-
+	noi di _n(1) "*** Complete case ethnicity data ***"
+	noi di _n(1)
+	
 	* Cycle over outcomes 
-	foreach out in covidadmission coviddeath {
-		* Children
-		noi tab `out'`i' ldr if child==0
+	foreach out in covidadmission coviddeath noncoviddeath {
 		* Adults
+		noi di "Adults: `out'"
+		noi tab `out'`i' ldr if child==0
+		* Children
+		noi di "Children: `out'"
 		tab `out'`i' ldr if child==1		
 	}
 }
