@@ -142,6 +142,12 @@ actions:
         log: logs/AL004_cox_regression_FUP_summaries.log
         hrs: output/AL004_cox_regression_FUP_summaries.out
 
+  fup_summary2:
+    run: stata-mp:latest analysis/AL004_cox_regression_FUP_summaries_2.do
+    needs: [create_analysis]
+    outputs:
+      moderately_sensitive:
+        log: logs/AL004_cox_regression_FUP_summaries_2.log
 
 
 ###############################################
