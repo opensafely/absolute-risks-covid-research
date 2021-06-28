@@ -1,6 +1,6 @@
 # OpenSAFELY Absolute Risks repository
 
-This repository explores absolute risks of various COVID-19 outcomes (mortality, hospitalisation) using the OpenSAFELY data.
+This repository explores absolute risks of various COVID-19 outcomes (mortality, hospitalisation) using the OpenSAFELY data. A key part of this explores risks of COVID-19 mortality and hospitalisation among people with learning disability.
 
 # Absolute risks of COVID-19 outcomes
 
